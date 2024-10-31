@@ -1,5 +1,6 @@
 import { RouteObject, Navigate, createBrowserRouter } from "react-router-dom";
-import App from "../App";
+import App from "../../App";
+import ForgetPassword from "../../features/user/forgetPassword/ForgetPassword";
 
 export const routes: RouteObject[] = [
     {
@@ -10,7 +11,7 @@ export const routes: RouteObject[] = [
       //  {path:"/home",  element: <Home />},
       //  {path:"/login",  element: <Login />},
       //  {path:"/register",  element: <Register />},
-      //  {path:"/password-recovery",  element:<PasswordRecovery />},
+       {path:"/forget-password",  element:<ForgetPassword />},
       //  {path:"not-found",  element: <PageNotFound />},
        { path: "*", element: <Navigate replace to="not-found" /> },
       ],

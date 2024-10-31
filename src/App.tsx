@@ -3,7 +3,6 @@ import './App.css'
 
 function App() {
   const location = useLocation();
-  console.log("Hello world")
   return (
     <>
       {location.pathname === "/" ? (
