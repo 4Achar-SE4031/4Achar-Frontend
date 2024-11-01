@@ -26,7 +26,7 @@
         register: (user: UserFormValues) =>
             requests.post<User>("/account/register", user),
         forget: (user: UserForgetFormValues) => requests.post<User>("/account/forget", user),
-        verify: (num: number) => requests.post<number>("/account/verify", num)
+        verify: (num: string) => requests.post<number>("/account/verify", num)
     };
 
     const agent = {
