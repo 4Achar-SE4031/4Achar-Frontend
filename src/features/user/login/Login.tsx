@@ -3,9 +3,10 @@ import "./login.css";
 
 import { ToastContainer, toast } from 'react-toastify';
 import {useNavigate} from 'react-router-dom';
-import { useGoogleLogin, TokenResponse } from '@react-oauth/google';
-import axios from 'axios';
+// import { useGoogleLogin, TokenResponse } from '@react-oauth/google';
+// import axios from 'axios';
 
+import googleLogo from "/google-logo.png";
 import 'react-toastify/dist/ReactToastify.css';
 import { useAuth } from "./authProvider.tsx";
 
@@ -42,23 +43,23 @@ const Login : React.FC = () => {
     };
 
  
-    const loginWithGoogle = useGoogleLogin({
-        onSuccess: async (tokenResponse: TokenResponse) => {
-          try {
-            const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
-              headers: {
-                Authorization: `Bearer ${tokenResponse.access_token}`,
-              },
-            });
-            toast.success("!با موفقیت وارد شدید");
-            setTimeout(() => {
-              navigator('/home');
-            }, 4000);
-          } catch (err) {
-            console.error(err); // برای مدیریت خطاها
-          }
-        },
-      });
+    // const loginWithGoogle = useGoogleLogin({
+    //     onSuccess: async (tokenResponse: TokenResponse) => {
+    //       try {
+    //         const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+    //           headers: {
+    //             Authorization: `Bearer ${tokenResponse.access_token}`,
+    //           },
+    //         });
+    //         toast.success("!با موفقیت وارد شدید");
+    //         setTimeout(() => {
+    //           navigator('/home');
+    //         }, 4000);
+    //       } catch (err) {
+    //         console.error(err); // برای مدیریت خطاها
+    //       }
+    //     },
+    //   });
 
 
     const loginHandler = async (event: React.MouseEvent<HTMLButtonElement>, action: string) => {
@@ -224,11 +225,11 @@ const Login : React.FC = () => {
                                 <hr className="custom-hr"/>
                             </div>
                           </div>
-                          <button className="google-login-button" style={{display: "flex" ,justifyContent: "center" ,alignItems: "center",marginLeft:"120px"}} onClick={() => loginWithGoogle()}>
+                          <button className="google-login-button" style={{display: "flex" ,justifyContent: "center" ,alignItems: "center",marginLeft:"120px"}}>
                               <div className="row">
                                   <div style={{marginTop: "2px"}}>
                                       <img 
-                                          src={require("../../assets/google-logo.png")}
+                                          src={ googleLogo}
                                           style={{width: "25px", height: "25px",paddingTop:"1px"}}
                                           alt="Google Logo"
                                       />
