@@ -1,6 +1,7 @@
 import { RouteObject, Navigate, createBrowserRouter } from "react-router-dom";
 import App from "../../App";
 import ForgetPassword from "../../features/user/forgetPassword/ForgetPassword";
+import Login from "../../features/user/login/Login";
 
 export const routes: RouteObject[] = [
     {
@@ -9,7 +10,7 @@ export const routes: RouteObject[] = [
       children: [
       //  {path:"/" , element: <Landing />},
       //  {path:"/home",  element: <Home />},
-      //  {path:"/login",  element: <Login />},
+       {path:"/login",  element: <Login />},
       //  {path:"/register",  element: <Register />},
        {path:"/forget-password",  element:<ForgetPassword />},
       //  {path:"not-found",  element: <PageNotFound />},
