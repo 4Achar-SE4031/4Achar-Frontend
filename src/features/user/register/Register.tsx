@@ -141,7 +141,13 @@ const Register: React.FC = () => {
                                                 </div>
                                             </div>
 
-                                            <button type="submit" className="btn mt-4">عضویت</button>
+                                            <button type="submit" className="btn mt-4">عضویت در کنسرتیفای</button>
+
+                                            <p className="message">
+                                                قبلا عضو شده‌اید؟{" "}
+                                                <a href="/login">
+                                                    وارد شوید                          </a>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
