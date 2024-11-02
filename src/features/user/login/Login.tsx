@@ -171,7 +171,7 @@ const Login : React.FC = () => {
 
 
     return(
-    <form className="signin">
+    <form className="signin" lang="fa">
        <ToastContainer closeOnClick  className="toastify-container"position="top-right" toastStyle={{backgroundColor: "#2b2c38", fontFamily: "iransansweb", color: "#ffeba7"}} pauseOnHover={false} autoClose={3000} />
       <div className="section">
         <div className="container">
@@ -209,7 +209,7 @@ const Login : React.FC = () => {
                           </div>
                           {!loginPasswordValidation && showViolations &&(<p className="mb-0 mt-2 validationMsg">{loginPasswordValidationMsg}</p>)}
                           <p className="mb-0 mt-2">
-                            <a className="link" href="/password-recovery">بازیابی رمز عبور</a>
+                            <a className="link" href="/forget-password">بازیابی رمز عبور</a>
                           </p>
                           <button
                             type="submit"
