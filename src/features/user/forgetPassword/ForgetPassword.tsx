@@ -44,7 +44,7 @@ const ForgetPassword: React.FC = () => {
     });
 
     return (
-        <form onSubmit={formik.handleSubmit} className="signin">
+        <form onSubmit={formik.handleSubmit} className="signin" lang="fa">
             <ToastContainer
                 closeOnClick
                 className="toastify-container"
