@@ -27,9 +27,7 @@ export interface UserForgetFormValues {
 }
 
 export interface UserResponse {
-    data: {
         token?: string;
         expires?: string;
         message?: string;
-    }
 }
