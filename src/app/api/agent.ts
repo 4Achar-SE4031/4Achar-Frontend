@@ -1,5 +1,5 @@
     import axios, { AxiosResponse } from "axios";
-    import { User, UserForgetFormValues, UserFormValues } from "../models/user";
+    import { User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
 
 
     const sleep = (delay: number) => {
@@ -8,7 +8,7 @@
         });
     };
 
-    axios.defaults.baseURL = "http://localhost:5000/api";
+    axios.defaults.baseURL = "http://localhost:5000";
 
     const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -22,7 +22,7 @@
 
     const Account = {
         current: () => requests.get<User>("/account"),
-        login: (user: UserFormValues) => requests.post<User>("/account/login", user),
+        login: (user: UserFormValues) => requests.post<UserResponse>("/account/jwt/create", user),
         register: (user: UserFormValues) =>
             requests.post<User>("/account/register", user),
         forget: (user: UserForgetFormValues) => requests.post<User>("/account/forget", user),

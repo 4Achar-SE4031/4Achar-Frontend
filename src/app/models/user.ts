@@ -19,9 +19,17 @@ export interface UserFormValues {
 }
 
 export interface UserForgetFormValues {
-    email: string;
-    username?: string;
-    password?: string;
+    username: string;
+    password: string;
+    email?: string;
     firstName?: string;
     lastName?: string;
+}
+
+export interface UserResponse {
+    data: {
+        token?: string;
+        expires?: string;
+        message?: string;
+    }
 }
