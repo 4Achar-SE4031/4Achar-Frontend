@@ -17,7 +17,7 @@ export const routes: RouteObject[] = [
       //  {path:"/" , element: <Landing />},
       //  {path:"/home",  element: <Home />},
        {path:"/login",  element: <Login />},
-      //  {path:"/register",  element: <Register />},
+       {path:"/register",  element: <Register />},
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
       //  {path:"not-found",  element: <PageNotFound />},
