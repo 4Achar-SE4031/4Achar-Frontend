@@ -12,16 +12,16 @@ export interface User{
 
 export interface UserFormValues {
     username: string;
-    password?: string;
+    password: string;
     email?: string;
     firstName?: string;
     lastName?: string;
 }
 
 export interface UserForgetFormValues {
-    username: string;
-    password: string;
-    email?: string;
+    email: string;
+    username?: string;
+    password?: string;
     firstName?: string;
     lastName?: string;
 }

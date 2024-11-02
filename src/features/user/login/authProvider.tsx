@@ -1,7 +1,7 @@
 import { useContext, createContext, useState, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import agent from "../../../app/api/agent";
-import { UserForgetFormValues } from "../../../app/models/user";
+import { UserFormValues } from "../../../app/models/user";
 
 interface AuthContextType {
   token: string;
@@ -15,8 +15,7 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
 
-  const loginAction = async (data: UserForgetFormValues): Promise<string | boolean> => {
-    console.log("hello")
+  const loginAction = async (data: UserFormValues): Promise<string | boolean> => {
     try {
       const response = await agent.Account.login(data);
       if (response && response.data) {
