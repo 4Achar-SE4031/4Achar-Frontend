@@ -71,7 +71,7 @@ const Register: React.FC = () => {
       />
 
       <div className="section text-center">
-        <h4 className="mb-3 pb-3">عضویت در ایونتیفای</h4>
+        <h4 className="mb-3 pb-3">عضویت در کنسرتیفای</h4>
         
         {/* Username Field */}
         <div className={`form-group mt-2 ${formik.touched.username && formik.errors.username ? "invalid" : ""}`}>

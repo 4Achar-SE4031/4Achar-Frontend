@@ -24,7 +24,7 @@
         current: () => requests.get<User>("/account"),
         login: (user: UserFormValues) => requests.post<UserResponse>("/account/jwt/create", user),
         register: (user: UserFormValues) =>
-            requests.post<User>("/account/register", user),
+            requests.post<User>("/account/signup", user),
         forget: (user: UserForgetFormValues) => requests.post<User>("/account/forget", user),
         verify: (num: string) => requests.post<number>("/account/verify", num)
     };

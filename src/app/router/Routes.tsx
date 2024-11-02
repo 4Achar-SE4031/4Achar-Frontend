@@ -4,6 +4,7 @@ import ForgetPassword from "../../features/user/forgetPassword/ForgetPassword";
 import Verification from "../../features/user/verification/Verification";
 import Login from "../../features/user/login/Login";
 import AuthProvider from "../../features/user/login/authProvider";
+import Register from "../../features/user/register/Register";
 
 export const routes: RouteObject[] = [
     {
