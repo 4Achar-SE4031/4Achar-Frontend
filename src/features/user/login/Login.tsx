@@ -209,7 +209,7 @@ const Login : React.FC = () => {
                           </div>
                           {!loginPasswordValidation && showViolations &&(<p className="mb-0 mt-2 validationMsg">{loginPasswordValidationMsg}</p>)}
                           <p className="mb-0 mt-2">
-                            <a className="link" href="/password-recovery">بازیابی رمز عبور</a>
+                            <a className="link" href="/forget-password">بازیابی رمز عبور</a>
                           </p>
                           <button
                             type="submit"
