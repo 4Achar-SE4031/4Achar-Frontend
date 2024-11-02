@@ -18,11 +18,11 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loginAction = async (data: UserFormValues): Promise<string | boolean> => {
     try {
       const response = await agent.Account.login(data);
-      if (response && response.data) {
-        setToken(response.data.token!);
-        localStorage.setItem("token", response.data.token!);
+      if (response.token) {
+        setToken(response.token);
+        localStorage.setItem("token", response.token);
         return "Data received successfully";
-      } else if (response.data.message === 'username does not exist') {
+      } else if (response.message === 'username does not exist') {
         return "username does not exist";
       } else {
         return "password incorrect";
