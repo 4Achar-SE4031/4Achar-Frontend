@@ -1,263 +1,142 @@
-import React, { useState, useEffect } from "react";
-import "./Register";
-
+import React from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
 import 'react-toastify/dist/ReactToastify.css';
-import axios from "axios";
 import { useAuth } from "../Authentication/authProvider";
+import "./Register.css"
+import agent from "../../../app/api/agent";
 
-let x = 0;
+// Define validation schema using Yup
+const validationSchema = Yup.object({
+  username: Yup.string()
+    .matches(/^[a-zA-Z][a-zA-Z0-9._]{2,29}$/, "نام کاربری شامل 3 تا 30 کاراکتر است و باید با حروف انگلیسی شروع شود")
+    .required("نام کاربری الزامی است"),
+  first_name: Yup.string()
+    .matches(/^[\u0600-\u06FF\s]+$|^[a-zA-Z\s]+$/, "نام باید شامل حروف فارسی یا انگلیسی باشد")
+    .min(5, "نام و نام خانوادگی باید حداقل 5 کاراکتر باشد")
+    .max(30, "نام و نام خانوادگی باید حداکثر 30 کاراکتر باشد")
+    .required("نام و نام خانوادگی الزامی است"),
+  email: Yup.string()
+    .email("فرمت ایمیل نادرست است")
+    .required("ایمیل الزامی است"),
+  password: Yup.string()
+    .min(8, "رمزعبور حداقل باید شامل 8 کاراکتر باشد")
+    .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-+_!@#$%^&*., ?]).+$/, "رمزعبور باید شامل حروف کوچک و بزرگ، اعداد و نشانه‌های خاص باشد")
+    .required("رمزعبور الزامی است"),
+  confirmPassword: Yup.string()
+    .oneOf([Yup.ref('password')], "رمزعبور و تکرار آن باید یکسان باشند")
+    .required("تکرار رمزعبور الزامی است")
+});
 
 const Register: React.FC = () => {
   const navigator = useNavigate();
   const auth = useAuth();
 
-  const [enteredRegisterUserName, setEnteredRegisterUserName] = useState<string>("");
-  const [enteredRegisterEmail, setEnteredRegisterEmail] = useState<string>("");
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      first_name: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationSchema,
+    onSubmit: async (values) => {
+      const { username, first_name, email, password } = values;
+      const userData = { username, first_name, email, password };
 
-  const [enteredRegisterPassword, setEnteredRegisterPassword] = useState<string>("");
-  const [enteredRegisterPassword2, setEnteredRegisterPassword2] = useState<string>("");
-  const [enteredName, setEnteredName] = useState<string>("");
-
-  const [autoHeight, setAutoHeight] = useState<number>(510);
-
-  const [showRegisterPassword, setShowRegisterPassword] = useState<boolean>(false);
-  const [showRegisterPassword2, setShowRegisterPassword2] = useState<boolean>(false);
-
-  const [showViolations, setShowViolation] = useState<boolean>(false);
-  const [registerUserNameValidation, setRegisterUserNameValidation] = useState<boolean>(false);
-  const [registerUserNameValidationMsg, setRegisterUserNameValidationMsg] = useState<string>("نام کاربری شامل 3 تا 30 کاراکتر است و باید با حروف انگلیسی شروع شود");
-  const [registerEmailValidation, setRegisterEmailValidation] = useState<boolean>(false);
-  const [registerEmailValidationMsg, setRegisterEmailValidationMsg] = useState<string>("فرمت ایمیل نادرست است");
-
-  const [registerPasswordValidation, setRegisterPasswordValidation] = useState<boolean>(false);
-  const [registerPasswordValidationMsg, setRegisterPasswordValidationMsg] = useState<string>("رمزعبور حداقل باید شامل 8 کاراکتر باشد");
-
-  const [registerPasswordValidation2, setRegisterPasswordValidation2] = useState<boolean>(false);
-  const [registerPasswordValidationMsg2, setRegisterPasswordValidationMsg2] = useState<string>("رمز عبور حداقل باید شامل 8 کاراکتر باشد");
-  const [nameValidation, setNameValidation] = useState<boolean>(false);
-
-  const regUserName = /^[a-zA-Z][a-zA-Z0-9._]{2,29}$/;
-  const registerUserNameHandler = (event) => {
-    if (showViolations === true) {
-      setAutoHeight(autoHeight - 20 * x);
-    }
-    setShowViolation(false)
-    setEnteredRegisterUserName(event.target.value);
-    if (event.target.value.length < 3 || event.target.value.length > 30) {
-      setRegisterUserNameValidation(false);
-      setRegisterUserNameValidationMsg("نام کاربری شامل3 تا 30 کاراکتر است و باید با حروف انگلیسی شروع شود")
-    }
-    else {
-      if (regUserName.test(event.target.value)) {
-        setRegisterUserNameValidation(true);
-      } else {
-        setRegisterUserNameValidation(false);
-        setRegisterUserNameValidationMsg("نام کاربری باید با حروف انگلیسی شروع شود و شامل حروف و اعداد انگلیسی است")
+      try {
+        await  agent.Account.register(userData);
+        toast.success("!با موفقیت حساب کاربری خود را ساختید");
+        setTimeout(() => {
+          navigator('/home');
+        }, 4000);
+      } catch (error) {
+        toast.error("خطا در برقراری ارتباط با سرور");
       }
-    }
-  }
-
-
-
-  useEffect(() => {
-    document.title = "عضویت در ایونتیفای";
-  }, []);
-
-  const toggleRegisterPasswordVisibility = () => {
-    setShowRegisterPassword(!showRegisterPassword);
-  };
-
-  const toggleRegisterPasswordVisibility2 = () => {
-    setShowRegisterPassword2(!showRegisterPassword2);
-  };
-
-  const autoLogin = async () => {
-    const userData = {
-      username: enteredRegisterUserName,
-      password: enteredRegisterPassword,
-    };
-    try {
-      await auth.loginAction(userData);
-      toast.success("!با موفقیت حساب کاربری خود را ساختید");
-      setTimeout(() => {
-        navigator('/home');
-      }, 4000);
-    } catch (error) {
-      toast.error("خطا در برقرای ارتباط با سرور");
-    }
-  };
-
-  const registerHandler = (event: React.MouseEvent<HTMLButtonElement>, action: string) => {
-    event.preventDefault();
-    x = 0;
-    if (!registerUserNameValidation) x++;
-    if (!registerEmailValidation) x++;
-    if (!registerPasswordValidation) x++;
-    if (!registerPasswordValidation2) x++;
-    if (!nameValidation) x++;
-
-    if (!showViolations && x > 0) {
-      setAutoHeight(autoHeight + x * 20);
-    }
-    setShowViolation(true);
-
-    const userData = {
-      username: enteredRegisterUserName,
-      first_name: enteredName,
-      email: enteredRegisterEmail,
-      password: enteredRegisterPassword,
-    };
-
-    if (registerUserNameValidation && registerEmailValidation && registerPasswordValidation && registerPasswordValidation2 && nameValidation) {
-      axios.post('https://eventify.liara.run/auth/users/', userData)
-        .then(response => {
-          setShowViolation(false);
-          autoLogin();
-        })
-        .catch(error => {
-          try {
-            const jsonObject = JSON.parse(error.response.request.responseText);
-            if (jsonObject.username && jsonObject.email) {
-              toast.error("نام کاربری و ایمیل در سیستم موجود است");
-            } else if (jsonObject.username) {
-              toast.error("نام کاربری تکراری است");
-            } else if (jsonObject.email) {
-              toast.error("ایمیل تکراری است");
-            } else if (jsonObject.password) {
-              toast.error("رمزعبور انتخابی ضعیف است");
-            } else {
-              toast.error("خطا در برقراری ارتباط با سرور");
-            }
-          } catch (parseError) {
-            toast.error("خطا در برقراری ارتباط با سرور");
-          }
-        });
-    }
-  };
-
-  // Register validation functions...
+    },
+  });
 
   return (
-    <form className="signin">
-    <ToastContainer closeOnClick  className="toastify-container" position="top-right" toastStyle={{ backgroundColor: "#2b2c38", fontFamily: "iransansweb", color: "#ffeba7" }} pauseOnHover={false} autoClose={3000} />
-    <div className="section">
-      <div className="container">
-        <div className="row full-height justify-content-center">
-          <div className="col-12 text-center align-self-center py-5">
-            <div className="section pb-5 pt-5 pt-sm-2 text-center">
-              <div className="card-3d-wrap mx-auto " style={{ height: autoHeight.toString() + "px" }}>
+    <form className="signin" onSubmit={formik.handleSubmit} lang="fa">
+      <ToastContainer
+        closeOnClick
+        className="toastify-container"
+        position="top-right"
+        toastStyle={{ backgroundColor: "#2b2c38", fontFamily: "iransansweb", color: "#ffeba7" }}
+        pauseOnHover={false}
+        autoClose={3000}
+      />
 
-                <div className="card-back">
-                  <div className="center-wrap">
-                    <div className="section text-center">
-                      <h4 className="mb-3 pb-3">عضویت در ایونتیفای</h4>
-                      <div className={`form-group mt-2 ${(!registerUserNameValidation && showViolations) ? "invalid" : ""}`}>
-                        <input
-                          dir="rtl"
-                          type="text"
-                          className="form-style"
-                          placeholder="نام کاربری"
-                          value={enteredRegisterUserName}
-                          onChange={registerUserNameHandler}
-                        />
-                        <i className="input-icon uil uil-user"></i>
-                      </div>
-                      {!registerUserNameValidation && showViolations && (<p className="mb-0 mt-2 validationMsg">{registerUserNameValidationMsg}</p>)}
-
-                      <div className={`form-group mt-2 ${!nameValidation && showViolations ? "invalid" : ""}`}>
-                        <input
-                          dir="rtl"
-                          type="text"
-                          className="form-style"
-                          placeholder="نام و نام خانوادگی"
-                          value={enteredName}
-                          onChange={nameHandler}
-                        />
-                        <i className="input-icon uil uil-user"></i>
-                      </div>
-                      {!nameValidation && showViolations && (<p className="mb-0 mt-2 validationMsg">نام و نام خانوادگی باید بین 5 تا 30 کاراکتر فارسی و یا انگلیسی باشد</p>)}
-                      <div className={`form-group mt-2 ${!registerEmailValidation && showViolations ? "invalid" : ""}`}>
-                        <input
-                          dir="rtl"
-                          type="email"
-                          className="form-style"
-                          placeholder="ایمیل"
-                          autoComplete="on"
-                          value={enteredRegisterEmail}
-                          onChange={registerEmailHandler}
-                        />
-                        <i className="input-icon uil uil-at"></i>
-                      </div>
-                      {!registerEmailValidation && showViolations && (<p className="mb-0 mt-2 validationMsg">{registerEmailValidationMsg}</p>)}
-                      <div className={`form-group mt-2 ${!registerPasswordValidation && showViolations ? "invalid" : ""}`}>
-                        <i class={showRegisterPassword ? "bi bi-eye" : "bi bi-eye-slash"} onClick={toggleRegisterPasswordVisibility} style={{ fontSize: "20px", position: "absolute", top: "40%", transform: "translateY(-50%)", paddingLeft: "10px" }}></i>
-                        <input
-                          dir="rtl"
-                          type={showRegisterPassword ? "text" : "password"}
-                          className="form-style"
-                          placeholder="رمز عبور"
-                          autoComplete="on"
-                          value={enteredRegisterPassword}
-                          onChange={registerPasswordHandler}
-                        />
-                        <i className="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      {!registerPasswordValidation && showViolations && (<p className="mb-0 mt-2 validationMsg">{registerPasswordValidationMsg}</p>)}
-                      <div className={`form-group mt-2 ${!registerPasswordValidation2 && showViolations ? "invalid" : ""}`}>
-                        <i class={showRegisterPassword2 ? "bi bi-eye" : "bi bi-eye-slash"} onClick={toggleRegisterPasswordVisibility2} style={{ fontSize: "20px", position: "absolute", top: "40%", transform: "translateY(-50%)", paddingLeft: "10px" }}></i>
-                        <input
-                          dir="rtl"
-                          type={showRegisterPassword2 ? "text" : "password"}
-                          className="form-style"
-                          placeholder="تایید رمز عبور"
-                          autoComplete="on"
-                          value={enteredRegisterPassword2}
-                          onChange={registerPasswordHandler2}
-                        />
-                        <i className="input-icon uil uil-lock-alt"></i>
-                      </div>
-                      {!registerPasswordValidation2 && showViolations && (<p className="mb-0 mt-2 validationMsg">{registerPasswordValidationMsg2}</p>)}
-                      {/* <div className="form-group mt-2">
-                          <input
-                            dir="rtl"
-                            type="text"
-                            className="form-style"
-                            placeholder="تاریخ تولد"
-                            onFocus={(e) => (e.target.type = "date")}
-                            onBlur={(e) => (e.target.type = "text")}
-                            // value={enteredBirthDate}
-                            // onChange={birthDateHandler}
-                          />
-                          <i className="input-icon uil uil-calendar-alt"></i>
-                        </div> */}
-                      <button
-                        type="submit"
-                        className="btn mt-4"
-                        onClick={(e) => registerHandler(e, "register")}
-                      >
-                        عضویت در ایونتیفای
-                      </button>
-                      <p className="message">
-                        قبلا عضو شده‌اید؟{" "}
-                        <a href="/login">
-                          ورود کاربران
-                        </a>
-                      </p>
-
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+      <div className="section text-center">
+        <h4 className="mb-3 pb-3">عضویت در ایونتیفای</h4>
+        
+        {/* Username Field */}
+        <div className={`form-group mt-2 ${formik.touched.username && formik.errors.username ? "invalid" : ""}`}>
+          <input
+            type="text"
+            className="form-style"
+            placeholder="نام کاربری"
+            {...formik.getFieldProps("username")}
+          />
+          <i className="input-icon uil uil-user"></i>
+          {formik.touched.username && formik.errors.username && <p className="validationMsg">{formik.errors.username}</p>}
         </div>
+
+        {/* Full Name Field */}
+        <div className={`form-group mt-2 ${formik.touched.first_name && formik.errors.first_name ? "invalid" : ""}`}>
+          <input
+            type="text"
+            className="form-style"
+            placeholder="نام و نام خانوادگی"
+            {...formik.getFieldProps("first_name")}
+          />
+          <i className="input-icon uil uil-user"></i>
+          {formik.touched.first_name && formik.errors.first_name && <p className="validationMsg">{formik.errors.first_name}</p>}
+        </div>
+
+        {/* Email Field */}
+        <div className={`form-group mt-2 ${formik.touched.email && formik.errors.email ? "invalid" : ""}`}>
+          <input
+            type="email"
+            className="form-style"
+            placeholder="ایمیل"
+            {...formik.getFieldProps("email")}
+          />
+          <i className="input-icon uil uil-at"></i>
+          {formik.touched.email && formik.errors.email && <p className="validationMsg">{formik.errors.email}</p>}
+        </div>
+
+        {/* Password Field */}
+        <div className={`form-group mt-2 ${formik.touched.password && formik.errors.password ? "invalid" : ""}`}>
+          <input
+            type="password"
+            className="form-style"
+            placeholder="رمز عبور"
+            {...formik.getFieldProps("password")}
+          />
+          <i className="input-icon uil uil-lock-alt"></i>
+          {formik.touched.password && formik.errors.password && <p className="validationMsg">{formik.errors.password}</p>}
+        </div>
+
+        {/* Confirm Password Field */}
+        <div className={`form-group mt-2 ${formik.touched.confirmPassword && formik.errors.confirmPassword ? "invalid" : ""}`}>
+          <input
+            type="password"
+            className="form-style"
+            placeholder="تکرار رمز عبور"
+            {...formik.getFieldProps("confirmPassword")}
+          />
+          <i className="input-icon uil uil-lock-alt"></i>
+          {formik.touched.confirmPassword && formik.errors.confirmPassword && <p className="validationMsg">{formik.errors.confirmPassword}</p>}
+        </div>
+
+        <button type="submit" className="btn mt-4">عضویت</button>
       </div>
-    </div>
-  </form>
+    </form>
   );
-}
+};
 
 export default Register;
