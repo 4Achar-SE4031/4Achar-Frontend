@@ -1,6 +1,7 @@
 import { useContext, createContext, useState, ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import agent from "../../../app/api/agent";
+import { UserForgetFormValues } from "../../../app/models/user";
 
 interface AuthContextType {
   token: string;
@@ -14,12 +15,13 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const navigate = useNavigate();
 
-  const loginAction = async (data: any): Promise<string | boolean> => {
+  const loginAction = async (data: UserForgetFormValues): Promise<string | boolean> => {
+    console.log("hello")
     try {
-      const response = await axios.post('https://eventify.liara.run/auth/jwt/create', data);
-      if (response.data) {
-        setToken(response.data.access);
-        localStorage.setItem("token", response.data.access);
+      const response = await agent.Account.login(data);
+      if (response && response.data) {
+        setToken(response.data.token!);
+        localStorage.setItem("token", response.data.token!);
         return "Data received successfully";
       } else if (response.data.message === 'username does not exist') {
         return "username does not exist";
