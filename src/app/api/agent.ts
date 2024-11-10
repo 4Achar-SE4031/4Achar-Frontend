@@ -26,7 +26,14 @@
         register: (user: UserFormValues) =>
             requests.post<User>("/account/signup", user),
         forget: (user: UserForgetFormValues) => requests.post<User>("/account/forget", user),
-        verify: (num: string) => requests.post<number>("/account/verify", num)
+        verify: (num: string) => requests.post<number>("/account/verify", num),
+        updateUser: (formData: FormData, token: string) =>
+            axios.patch('/account/me/', formData, {
+              headers: {
+                'Authorization': `JWT ${token}`,
+                'Content-Type': 'multipart/form-data'
+              }
+            }).then(responseBody),
     };
 
     const agent = {

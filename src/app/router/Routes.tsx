@@ -5,6 +5,7 @@ import Verification from "../../features/user/verification/Verification";
 import Login from "../../features/user/login/Login";
 import AuthProvider from "../../features/user/login/authProvider";
 import Register from "../../features/user/register/Register";
+import UserInfo from "../../features/user/Profile/UserInfo";
 
 export const routes: RouteObject[] = [
     {
@@ -21,6 +22,7 @@ export const routes: RouteObject[] = [
        {path:"/register",  element: <Register />},
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
+       {path:"/user-info", element: <UserInfo />},
       //  {path:"not-found",  element: <PageNotFound />},
        { path: "*", element: <Navigate replace to="not-found" /> },
       ],
