@@ -1,6 +1,6 @@
     import axios, { AxiosResponse } from "axios";
     import { User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
-
+    import { Event } from "../models/event";
 
     const sleep = (delay: number) => {
         return new Promise((resolve) => {
@@ -36,8 +36,13 @@
             }).then(responseBody),
     };
 
+    const Events = {
+        list: (): Promise<Event[]> => requests.get<Event[]>('/events'),
+      };
+
     const agent = {
         Account,
+        Events
     };
     
     export default agent;
