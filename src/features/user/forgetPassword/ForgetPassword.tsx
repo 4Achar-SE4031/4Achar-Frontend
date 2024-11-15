@@ -83,7 +83,7 @@ const ForgetPassword: React.FC = () => {
           <div className="row full-height justify-content-center">
             <div className="col-12 text-center align-self-center py-5">
               <div className="section pb-5 pt-5 pt-sm-2 text-center">
-                <div className="card-3d-wrap mx-auto " style={{ height: "310px" }}>
+                <div className="card-3d-wrap mx-auto " style={{ height: "280px" }}>
                   <div className="card-front ">
                     <div className="center-wrap">
                       <div className="section text-center">
@@ -104,7 +104,6 @@ const ForgetPassword: React.FC = () => {
                         <p className="mb-0 mt-2">
                           <a className="link cancel" href="/login">بازگشت</a>
                         </p>
-                        <br />
                         <button
                           type="submit"
                           className="btn mt-2"

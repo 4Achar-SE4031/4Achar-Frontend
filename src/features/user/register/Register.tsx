@@ -302,7 +302,7 @@ const Register: React.FC = () => {
                         </div>
                         {!registerEmailValidation && showViolations && (<p className="mb-0 mt-2 validationMsg">{registerEmailValidationMsg}</p>)}
                         <div className={`form-group mt-2 ${!registerPasswordValidation && showViolations ? "invalid" : ""}`}>
-                          <i className={showRegisterPassword ? "bi bi-eye" : "bi bi-eye-slash"} onClick={toggleRegisterPasswordVisibility} style={{ fontSize: "20px", position: "absolute", top: "40%", transform: "translateY(-50%)", paddingLeft: "10px" }}></i>
+                          <i className={showRegisterPassword ? "bi bi-eye" : "bi bi-eye-slash"} onClick={toggleRegisterPasswordVisibility} style={{ fontSize: "20px", position: "absolute", top: "55%", transform: "translateY(-50%)", paddingLeft: "10px" }}></i>
                           <input
                             dir="rtl"
                             type={showRegisterPassword ? "text" : "password"}
@@ -316,7 +316,7 @@ const Register: React.FC = () => {
                         </div>
                         {!registerPasswordValidation && showViolations && (<p className="mb-0 mt-2 validationMsg">{registerPasswordValidationMsg}</p>)}
                         <div className={`form-group mt-2 ${!registerPasswordValidation2 && showViolations ? "invalid" : ""}`}>
-                          <i className={showRegisterPassword2 ? "bi bi-eye" : "bi bi-eye-slash"} onClick={toggleRegisterPasswordVisibility2} style={{ fontSize: "20px", position: "absolute", top: "40%", transform: "translateY(-50%)", paddingLeft: "10px" }}></i>
+                          <i className={showRegisterPassword2 ? "bi bi-eye" : "bi bi-eye-slash"} onClick={toggleRegisterPasswordVisibility2} style={{ fontSize: "20px", position: "absolute", top: "55%", transform: "translateY(-50%)", paddingLeft: "10px" }}></i>
                           <input
                             dir="rtl"
                             type={showRegisterPassword2 ? "text" : "password"}

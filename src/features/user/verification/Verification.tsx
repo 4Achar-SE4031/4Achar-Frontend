@@ -12,13 +12,13 @@ const Verification: React.FC = () => {
   const navigator = useNavigate();
   const auth = useAuth();
   const [otp, setOtp] = useState<string[]>(["", "", "", "","",""]);
-  const [isRunning, setIsRunning] = useState(false);
-
+  const [isRunning1, setisRunning1] = useState(false);
+  const [isRunning2, setisRunning2] = useState(false);
   const location = useLocation();
 
-  const username = location.state.username
-  const password = location.state.password
-  const email = location.state.email
+  const username = location.state.username || " "
+  const password = location.state.password || " "
+  const email = location.state.email || " "
   useEffect(() => {
     // disable vertical scrollbar
     // document.documentElement.style.overflowY = 'hidden';
@@ -45,8 +45,8 @@ const Verification: React.FC = () => {
   const checkVerificationCode = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
 
-    if (!isRunning){
-        setIsRunning(true)
+    if (!isRunning1){
+        setisRunning1(true)
         // console.log(otp.join(""))
         console.log({confirmationToken:otp.join(""),email:email})
         console.log(location)
@@ -63,7 +63,30 @@ const Verification: React.FC = () => {
             console.log(error)
             toast.error("کد وارد شده اشتباه است");
         });
-        setIsRunning(false)
+        setisRunning1(false)
+
+    }
+  }
+
+  const resendVerificationCode = (event: React.MouseEvent<HTMLAnchorElement>) => {
+    event.preventDefault();
+
+    if (!isRunning2){
+        setisRunning2(true)
+        
+        axios
+        .post("http://localhost:5000/Account/send_confirmation_email", {email:email},{headers:{
+            "Content-Type": "application/json",
+            accept: "application/json",
+        }})
+        .then(() => {
+          toast.success("کد تایید جدید ارسال شد");
+        })
+        .catch((error) => {
+            console.log(error)
+            toast.error("خطا در ارسال کد تایید");
+        });
+        setisRunning1(false)
 
     }
   }
@@ -86,22 +109,20 @@ const Verification: React.FC = () => {
                         <div className={`form-group mt-2}`}>
                             <OTPInput otp={otp} setOtp={setOtp} />
                         </div>
-
-                        {/* <p className="mb-0 mt-2">
+                        <p className="mb-0 mt-2">
                           <a className="link cancel" href="/register">تغییر ایمیل</a>
-                        </p> */}
-                        <br />
+                        </p>
                         <button
                           type="submit"
                           className="btn mt-2"
                           onClick={(e) => checkVerificationCode(e)}
-                          disabled={isRunning}
+                          disabled={isRunning1}
                         >
                             تایید کد
                         </button>
                         <p className="message">
                               کد تایید را دریافت نکردید؟{" "}
-                            <a href="/register">
+                            <a onClick={(e) => resendVerificationCode(e)}>
                             ارسال مجدد
                             </a>
                         </p>
