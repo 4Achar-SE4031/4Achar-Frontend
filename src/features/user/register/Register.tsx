@@ -9,8 +9,9 @@ import axios from "axios";
 import { useAuth } from "../Authentication/authProvider";
 
 interface UserData {
-  username: string;
-  first_name: string;
+  userName: string;
+  firstName: string;
+  lastName:string;
   email: string;
   password: string;
 }
@@ -92,8 +93,9 @@ const Register: React.FC = () => {
     setShowViolation(true);
 
     const userData: UserData = {
-      username: enteredRegisterUserName,
-      first_name: enteredName,
+      userName: enteredRegisterUserName,
+      firstName: enteredName,
+      lastName: enteredName,
       email: enteredRegisterEmail,
       password: enteredRegisterPassword,
     };
@@ -106,22 +108,25 @@ const Register: React.FC = () => {
       nameValidation
     ) {
       axios
-        .post("https://eventify.liara.run/auth/users/", userData)
+        .post("http://localhost:5000/Account/signup", userData,{headers:{
+            "Content-Type": "application/json",
+            accept: "application/json",
+        }})
         .then(() => {
           setShowViolation(false);
-          autoLogin();
+          navigator('/verify', { state: { username: enteredRegisterUserName, password: enteredRegisterPassword, email:enteredRegisterEmail } })
+        //   autoLogin();
         })
         .catch((error) => {
+            console.log(error)
           try {
-            const jsonObject = JSON.parse(error.response.request.responseText);
-            if (jsonObject.username && jsonObject.email) {
-              toast.error("نام کاربری و ایمیل در سیستم موجود است");
-            } else if (jsonObject.username) {
+            const errorMsg = error.response.request.responseText
+            console.log(errorMsg)
+            console.log("**************")
+            if (errorMsg.includes("Username")) {
               toast.error("نام کاربری تکراری است");
-            } else if (jsonObject.email) {
+            }else if (errorMsg.includes("Email")) {
               toast.error("ایمیل تکراری است");
-            } else if (jsonObject.password) {
-              toast.error("رمزعبور انتخابی ضعیف است");
             } else {
               toast.error("خطا در برقراری ارتباط با سرور");
             }
@@ -200,6 +205,9 @@ const Register: React.FC = () => {
     setShowViolation(false)
     setEnteredRegisterPassword2(event.target.value);
     if (event.target.value !== enteredRegisterPassword) {
+        console.log("--------------------------------")
+        console.log(enteredRegisterPassword)
+        console.log(event.target.value)
       setRegisterPasswordValidation2(false);
       setRegisterPasswordValidationMsg2("رمزعبور و تکرار آن باید یکسان باشند");
     } else {
@@ -256,7 +264,7 @@ const Register: React.FC = () => {
                       <div className="section text-center">
                         <h4 className="mb-3 pb-3">عضویت در کنسرتیفای</h4>
                         <div className={`form-group mt-2 ${(!registerUserNameValidation && showViolations) ? "invalid" : ""}`}>
-                          <input
+                          <input 
                             dir="rtl"
                             type="text"
                             className="form-style"
