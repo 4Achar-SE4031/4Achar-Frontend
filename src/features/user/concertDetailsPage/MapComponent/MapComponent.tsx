@@ -7,8 +7,8 @@ import{
 //   Tooltip,
 } from "react-leaflet";
 
-import {MapContainer} from 'react-leaflet'
-import useMapEvents from 'react-leaflet'
+// import {MapContainer} from 'react-leaflet'
+// import useMapEvents from 'react-leaflet'
 
 import { Icon, LatLng, LeafletMouseEvent } from "leaflet";
 import redPin from "../../assets/red pin.png";
@@ -38,16 +38,16 @@ interface LocationMarkerProps {}
 const LocationMarker: FC<LocationMarkerProps> = () => {
   const [position, setPosition] = useState<LatLng | null>(null);
 
-  useMapEvents({
-    click() {
-      const map = useMapEvents({});
-      map.locate();
-    },
-    locationfound(e) {
-      setPosition(e.latlng);
-      e.target.flyTo(e.latlng, e.target.getZoom());
-    },
-  });
+//   useMapEvents({
+//     click() {
+//       const map = useMapEvents({});
+//       map.locate();
+//     },
+//     locationfound(e) {
+//       setPosition(e.latlng);
+//       e.target.flyTo(e.latlng, e.target.getZoom());
+//     },
+//   });
 
   return position === null ? null : (
     <Marker position={position} icon={redIcon}>
@@ -77,12 +77,12 @@ interface MapEventsHandlerProps {
 }
 
 // MapEventsHandler Component
-const MapEventsHandler: FC<MapEventsHandlerProps> = ({ handleMapClick }) => {
-  useMapEvents({
-    click: handleMapClick,
-  });
-  return null;
-};
+// const MapEventsHandler: FC<MapEventsHandlerProps> = ({ handleMapClick }) => {
+//   useMapEvents({
+//     click: handleMapClick,
+//   });
+//   return null;
+// };
 
 // Main MapComponent
 const MapComponent: FC<MapComponentProps> = ({
@@ -139,7 +139,7 @@ const MapComponent: FC<MapComponentProps> = ({
 
   return (
     <div className={`map-component ${classes} col-md-12 col-sm-12 col-12`}>
-      <MapContainer className="map-component__map" {...mapOptions}>
+      {/* <MapContainer className="map-component__map" {...mapOptions}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -151,7 +151,7 @@ const MapComponent: FC<MapComponentProps> = ({
             <Popup>{markerItem.popUp}</Popup>
           </Marker>
         ))}
-      </MapContainer>
+      </MapContainer> */}
     </div>
   );
 };

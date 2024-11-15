@@ -7,6 +7,9 @@ import AuthProvider from "../../features/user/login/authProvider";
 import Register from "../../features/user/register/Register";
 import UserInfo from "../../features/user/Profile/UserInfo";
 import EventsList from "../../features/events/EventsList";
+import EventDetails from "../../features/user/concertDetailsPage/concertDetail";
+import PageNotFound from '../../features/user/concertDetailsPage/PageNotFound/PageNotFound'
+
 
 export const routes: RouteObject[] = [
     {
@@ -20,12 +23,13 @@ export const routes: RouteObject[] = [
       //  {path:"/" , element: <Landing />},
       //  {path:"/home",  element: <Home />},
        {path:"/login",  element: <Login />},
+       {path:"/concertDetail",  element: <EventDetails />},
        {path:"/register",  element: <Register />},
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
        {path:"/user-info", element: <UserInfo />},
        {path:"/events", element: <EventsList />},
-      //  {path:"not-found",  element: <PageNotFound />},
+       {path:"not-found",  element: <PageNotFound />},
        { path: "*", element: <Navigate replace to="not-found" /> },
       ],
     },
