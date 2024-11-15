@@ -8,7 +8,6 @@ import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
 import { useAuth } from "../Authentication/authProvider";
 
-// تعریف نوع داده‌های کاربر
 interface UserData {
   username: string;
   first_name: string;
@@ -51,7 +50,7 @@ const Register: React.FC = () => {
   const [nameValidation, setNameValidation] = useState<boolean>(false);
 
   useEffect(() => {
-    document.title = "عضویت در ایونتیفای";
+    document.title = "عضویت در کنسرتیفای";
   }, []);
 
   const toggleRegisterPasswordVisibility = () => {
@@ -255,7 +254,7 @@ const Register: React.FC = () => {
                   <div className="card-back">
                     <div className="center-wrap">
                       <div className="section text-center">
-                        <h4 className="mb-3 pb-3">عضویت در ایونتیفای</h4>
+                        <h4 className="mb-3 pb-3">عضویت در کنسرتیفای</h4>
                         <div className={`form-group mt-2 ${(!registerUserNameValidation && showViolations) ? "invalid" : ""}`}>
                           <input
                             dir="rtl"
