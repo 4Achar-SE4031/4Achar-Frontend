@@ -7,6 +7,7 @@ import AuthProvider from "../../features/user/login/authProvider";
 import Register from "../../features/user/register/Register";
 import UserInfo from "../../features/user/Profile/UserInfo";
 import EventsList from "../../features/events/EventsList";
+import FiveEvents from "../../features/events/FiveEvents";
 
 export const routes: RouteObject[] = [
     {
@@ -24,7 +25,9 @@ export const routes: RouteObject[] = [
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
        {path:"/user-info", element: <UserInfo />},
-       {path:"/events", element: <EventsList />},
+       {path:"/events/recent", element: <EventsList sortType="recent"/>},
+       {path:"/events/popular", element: <EventsList sortType="popular"/>},
+       {path:"/events", element: <FiveEvents />},
       //  {path:"not-found",  element: <PageNotFound />},
        { path: "*", element: <Navigate replace to="not-found" /> },
       ],
