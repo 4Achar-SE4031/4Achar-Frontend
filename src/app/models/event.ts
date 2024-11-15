@@ -4,10 +4,11 @@ export interface Event {
     start_date: string;
     attendance: string;
     photo: string | null;
-    province?: string;
+    province?: string | null;
     city?: string;
     category: string;
     is_paid: boolean;
     ticket_price?: number;
+    rating: number;
   }
   
