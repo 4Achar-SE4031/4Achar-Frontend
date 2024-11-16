@@ -36,3 +36,10 @@ export interface ChangePassword {
     oldPassword: string;
     newPassword: string;
 }
+
+export interface UpdateUser {
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
+    email?: string;
+}

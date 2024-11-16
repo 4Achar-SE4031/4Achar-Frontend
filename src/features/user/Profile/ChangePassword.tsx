@@ -34,8 +34,8 @@ const ChangePassword = () => {
     validationSchema: changePasswordValidation,
     onSubmit: (values) => {
       agent.Account.updatePassword({
-      oldPassword: values.newPassword,
-      newPassword: values.password,
+      oldPassword: values.password,
+      newPassword: values.newPassword,
     })
     },
   });

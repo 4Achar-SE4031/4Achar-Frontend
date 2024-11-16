@@ -11,7 +11,7 @@ import { useFormik } from 'formik';
 import { useAuth } from '../Authentication/authProvider';
 import * as Yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
-import { User } from '../../../app/models/user';
+import { UpdateUser, User } from '../../../app/models/user';
 import agent from '../../../app/api/agent';
 import ChangePassword from './ChangePassword';
 import { userInfoValidation } from './UserInfoValidation';
@@ -54,14 +54,16 @@ const UserInfo: React.FC = () => {
     onSubmit: async (values) => {
       try {
         const formData = new FormData();
-        formData.append('user[username]', values.username);
-        formData.append('gender', selectedGender);
-        formData.append('city', selectedCity);
-        formData.append('province', selectedProvince);
-        formData.append('birth_date', dateValue);
-        if (file) formData.append('profile_picture', file);
-
-        await agent.Account.updateUser(formData);
+        // formData.append('username', values.username);
+        // formData.append('gender', selectedGender);
+        // formData.append('city', selectedCity);
+        // formData.append('province', selectedProvince);
+        // formData.append('birth_date', dateValue);
+        // if (file) formData.append('profile_picture', file);
+        const data: UpdateUser = {
+          userName: values.username
+        }
+        await agent.Account.updateUser(data);
         toast.success('Profile updated successfully');
         setTimeout(() => navigate('/home'), 3000);
       } catch (error) {
