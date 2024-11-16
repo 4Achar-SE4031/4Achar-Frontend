@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       {location.pathname === "/" ? (
-        <div> gh</div>
+        <div></div>
       ) : (
         <>
         <AuthProvider>
