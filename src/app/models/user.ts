@@ -1,13 +1,13 @@
 export interface User {
     email: string;
-    username: string;
+    userName: string;
     firstName: string;
     lastName: string;
-    gender: string;
-    birthDate: string;
-    province: string;
-    city: string;
-    profilePictureUrl: string;
+    gender?: string;
+    birthDate?: string;
+    province?: string;
+    city?: string;
+    profilePictureUrl?: string;
 }
 
 export interface UserFormValues {
