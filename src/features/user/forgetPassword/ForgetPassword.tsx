@@ -28,31 +28,41 @@ const ForgetPassword: React.FC = () => {
         if (recoveryEmailValidation === true) {
             
             setIsRunning(true);
-            axios.post('http://localhost:8080/api', { email: enteredRecoveryEmail })
+            axios.post('http://localhost:5000/Account/send_reset_password_email', { email: enteredRecoveryEmail })
                 .then(response => {
                 setShowViolation(false);
-                if (response.data['message'] === "Email sent successfully") {
-                    // setEnteredRecoveryEmail("");
-                    toast.success("ایمیل بازیابی با موفقیت برای شما ارسال شد");
-                    setTimeout(() => {
-                    navigator('/login');
-                    setIsRunning(false);
-                    }, 4000);
-                } else if (response.data['message'] === `username does not exist`) {
-                    setIsRunning(false);
-                    setShowViolation(true);
-                    setRecoveryEmailValidation(false);
-                    setRecoveryEmailValidationMsg("حسابی با ایمیل وارد شده در سایت ساخته نشده");
-                }
+                console.log(response)
+                toast.success("ایمیل بازیابی با موفقیت برای شما ارسال شد");
+                setTimeout(() => {
+                  navigator('/login');
+                  setIsRunning(false);
+                  }, 4000);
+                // if (response.data['message'] === "Email sent successfully") {
+                //     // setEnteredRecoveryEmail("");
+
+                    
+                // } else if (response.data['message'] === `username does not exist`) {
+                //     setIsRunning(false);
+                //     setShowViolation(true);
+                //     setRecoveryEmailValidation(false);
+                //     setRecoveryEmailValidationMsg("حسابی با ایمیل وارد شده در سایت ساخته نشده");
+                // }
                 })
                 .catch(error => {
-                console.error('Error sending data:', error);
-
-                toast.success("ایمیل بازیابی به صورت آزمایشی ارسال شد");
-                setTimeout(() => {
-                    navigator('/login');
+                  console.log(error)
+                    try {
+                      const errorMsg = error.response.request.responseText
+                      console.log(errorMsg)
+                      console.log("**************")
+                      if (errorMsg.includes("User not found!")) {
+                        toast.error("ایمیل معتبر نمی باشد");
+                      }else {
+                        toast.error("خطا در برقراری ارتباط با سرور");
+                      }
+                    } catch {
+                      toast.error("خطا در برقراری ارتباط با سرور");
+                    }
                     setIsRunning(false);
-                }, 4000);
             });
         }
         
@@ -115,7 +125,6 @@ const ForgetPassword: React.FC = () => {
                       </div>
                     </div>
                   </div>
-
                 </div>
               </div>
             </div>
