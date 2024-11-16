@@ -3,7 +3,7 @@ import { Footer, FooterBrand, FooterCopyright, FooterDivider, FooterLink, Footer
 import { BsInstagram } from "react-icons/bs";
 import "./Footer.css"
 
-export function FooterComponent() {
+export default function FooterComponent() {
     return (
         <Footer container className="footer">
             <div className="w-full text-center">
