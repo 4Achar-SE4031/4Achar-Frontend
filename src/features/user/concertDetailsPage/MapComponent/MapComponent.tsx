@@ -1,14 +1,16 @@
 import React, { useEffect, useState, FC } from "react";
 import "leaflet/dist/leaflet.css";
 import{
-  TileLayer,
-  Marker,
-  Popup,
+    MapContainer,
+    useMapEvents,
+    TileLayer,
+    Marker,
+    Popup,
 //   Tooltip,
 } from "react-leaflet";
 
-// import {MapContainer} from 'react-leaflet'
-// import useMapEvents from 'react-leaflet'
+// import {MapContainer} from 'react-leaflet';
+// import {useMapEvents} from 'react-leaflet';
 
 import { Icon, LatLng, LeafletMouseEvent } from "leaflet";
 import redPin from "../../assets/red pin.png";
@@ -58,8 +60,8 @@ const LocationMarker: FC<LocationMarkerProps> = () => {
 
 // Interface for individual marker data
 interface MarkerData {
-  geocode: [number, number];
-  popUp: string;
+  geocode?: [number?, number?];
+  popUp?: string;
 }
 
 // Interface for MapComponent props
@@ -107,7 +109,7 @@ const MapComponent: FC<MapComponentProps> = ({
 
   // Map options with proper typing
   const mapOptions: {
-    center: [number, number];
+    center: [number?, number?];
     zoom: number;
   } = {
     center: [lati, long],

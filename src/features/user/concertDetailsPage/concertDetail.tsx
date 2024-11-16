@@ -13,7 +13,7 @@ import './eventdetails_old.css';
 import moment from 'moment-jalaali';
 import animationData from "./Animation - 1715854965467.json";
 import Lottie from "react-lottie";
-// import MapComponent from "./MapComponent/MapComponent";
+import MapComponent from "./MapComponent/MapComponent";
 import { useAuth } from "../Authentication/authProvider";
 
 interface EventDateTime {
