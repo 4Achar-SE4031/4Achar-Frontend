@@ -31,7 +31,7 @@ export const routes: RouteObject[] = [
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
        {path:"/user-info", element: <UserInfo />},
-       {path:"/events", element: <EventsList />},
+       {path:"/events", element: <EventsList sortType={"recent"} />},
        {path:"not-found",  element: <PageNotFound />},
        {path:"/events/recent", element: <EventsList sortType="recent"/>},
        {path:"/events/popular", element: <EventsList sortType="popular"/>},
