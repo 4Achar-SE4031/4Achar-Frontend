@@ -61,7 +61,7 @@ const UserInfo: React.FC = () => {
         formData.append('birth_date', dateValue);
         if (file) formData.append('profile_picture', file);
 
-        await agent.Account.updateUser(formData, auth.token);
+        await agent.Account.updateUser(formData);
         toast.success('Profile updated successfully');
         setTimeout(() => navigate('/home'), 3000);
       } catch (error) {

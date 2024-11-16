@@ -1,4 +1,4 @@
-export interface User{
+export interface User {
     email: string;
     username: string;
     firstName: string;
@@ -27,7 +27,12 @@ export interface UserForgetFormValues {
 }
 
 export interface UserResponse {
-        token?: string;
-        expires?: string;
-        message?: string;
+    token?: string;
+    expires?: string;
+    message?: string;
+}
+
+export interface ChangePassword {
+    oldPassword: string;
+    newPassword: string;
 }

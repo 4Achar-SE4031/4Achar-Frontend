@@ -18,7 +18,9 @@ const AuthProvider = ({ children }: { children: ReactNode }) => {
   const loginAction = async (data: UserFormValues): Promise<string | boolean> => {
     try {
       const response = await agent.Account.login(data);
+      console.log(response)
       if (response.token) {
+        console.log(response.token)
         setToken(response.token);
         localStorage.setItem("token", response.token);
         return "Data received successfully";
