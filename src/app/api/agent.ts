@@ -33,7 +33,7 @@ const requests = {
 };
 
 const Account = {
-    current: () => requests.get<User>("/account"),
+    current: () => requests.get<User>("/account/me"),
     login: (user: UserFormValues) => requests.post<UserResponse>("/account/jwt/create", user),
     register: (user: UserFormValues) =>
         requests.post<User>("/account/signup", user),
