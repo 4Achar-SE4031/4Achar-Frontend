@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { ChangePassword, User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
+import { ChangePassword, UpdateUser, User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
 import { Event } from "../models/event";
 import { useAuth } from "../../features/user/login/authProvider";
 const sleep = (delay: number) => {
@@ -12,7 +12,7 @@ axios.interceptors.request.use((config) => {
     try {
         const token = localStorage.getItem('token');
         console.log(token);
-        if (token) config.headers.Authorization = `JWT ${token}`;
+        if (token) config.headers.Authorization = `Bearer ${token}`;
     } catch (error) {
         console.log("error token");
     }
@@ -39,7 +39,7 @@ const Account = {
         requests.post<User>("/account/signup", user),
     forget: (user: UserForgetFormValues) => requests.post<User>("/account/forget", user),
     verify: (num: string) => requests.post<number>("/account/verify", num),
-    updateUser: (formData: FormData,) =>
+    updateUser: (formData: UpdateUser,) =>
         requests.put<any>('/account/me/update', formData).then(responseBody),
     updatePassword: (passwords: ChangePassword) => requests.put<any>("/account/me/change_password", passwords).then(responseBody),
 };
