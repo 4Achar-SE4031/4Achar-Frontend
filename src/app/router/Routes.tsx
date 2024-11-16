@@ -9,6 +9,7 @@ import UserInfo from "../../features/user/Profile/UserInfo";
 import EventsList from "../../features/events/EventsList";
 import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
+import Home from "../layout/Home";
 
 export const routes: RouteObject[] = [
     {
@@ -30,6 +31,7 @@ export const routes: RouteObject[] = [
        {path:"/events/popular", element: <EventsList sortType="popular"/>},
        {path:"/events", element: <FiveEvents />},
        {path:"/account/reset_password", element: <ResetPassword />},
+       {path: "/home", element: <Home />},
       //  {path:"not-found",  element: <PageNotFound />},
        { path: "*", element: <Navigate replace to="not-found" /> },
       ],

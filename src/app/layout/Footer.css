@@ -1,0 +1,7 @@
+.footer{
+    background: radial-gradient(ellipse at bottom, #303131 0%, #333540 100%) !important; 
+    direction: rtl;
+    .text span{
+        color: rgb(246, 241, 241) !important;
+    }
+}

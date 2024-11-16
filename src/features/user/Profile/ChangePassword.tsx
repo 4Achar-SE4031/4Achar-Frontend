@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import { changePasswordValidation } from "./UserInfoValidation";
 import axios from "axios";
+import agent from "../../../app/api/agent";
 const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -32,9 +33,9 @@ const ChangePassword = () => {
     initialValues: InitialValues,
     validationSchema: changePasswordValidation,
     onSubmit: (values) => {
-      axios.post(`https://eventify.liara.run/auth/users/set_password/`,{
-      new_password: values.newPassword,
-      current_password: values.password,
+      agent.Account.updatePassword({
+      oldPassword: values.newPassword,
+      newPassword: values.password,
     })
     },
   });
