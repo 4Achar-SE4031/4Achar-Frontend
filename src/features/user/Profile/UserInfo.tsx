@@ -11,7 +11,7 @@ import { useFormik } from 'formik';
 import { useAuth } from '../Authentication/authProvider';
 import * as Yup from 'yup';
 import 'react-toastify/dist/ReactToastify.css';
-import { User } from '../../../app/models/user';
+import { UpdateUser, User } from '../../../app/models/user';
 import agent from '../../../app/api/agent';
 import ChangePassword from './ChangePassword';
 import { userInfoValidation } from './UserInfoValidation';
@@ -38,6 +38,13 @@ const UserInfo: React.FC = () => {
         setSelectedProvince(response.province || '');
         setSelectedCity(response.city || '');
         setImagePreviewUrl(response.profilePictureUrl || imagePreviewUrl);
+        formik.setValues({
+          userName: response.userName || '',
+          firstName: response.firstName || '',
+          lastName: response.lastName || '',
+          email: response.email || ''
+        });
+        console.log(response)
       } catch (error) {
         console.error('Error fetching user data:', error);
       }
@@ -48,24 +55,34 @@ const UserInfo: React.FC = () => {
 
   const formik = useFormik({
     initialValues: {
-      username: userData?.username || ''
+      userName: userData?.userName || '',
+      firstName: userData?.firstName || '',
+      lastName: userData?.lastName || '',
+      email: userData?.email || ''
     },
+    validateOnChange: true, 
+    validateOnBlur: true,   
     validationSchema: userInfoValidation,
     onSubmit: async (values) => {
       try {
-        const formData = new FormData();
-        formData.append('user[username]', values.username);
-        formData.append('gender', selectedGender);
-        formData.append('city', selectedCity);
-        formData.append('province', selectedProvince);
-        formData.append('birth_date', dateValue);
-        if (file) formData.append('profile_picture', file);
-
-        await agent.Account.updateUser(formData);
-        toast.success('Profile updated successfully');
+        // const formData = new FormData();
+        // formData.append('username', values.username);
+        // formData.append('gender', selectedGender);
+        // formData.append('city', selectedCity);
+        // formData.append('province', selectedProvince);
+        // formData.append('birth_date', dateValue);
+        // if (file) formData.append('profile_picture', file);
+        const data: UpdateUser = {
+          userName: values.userName,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email
+        }
+        await agent.Account.updateUser(data);
+        toast.success('پروفایل با موفقیت به‌روز شد');
         setTimeout(() => navigate('/home'), 3000);
       } catch (error) {
-        toast.error('Error updating profile');
+        toast.error('خطا در به‌روزرسانی پروفایل');
       }
     },
   });
@@ -112,18 +129,35 @@ const UserInfo: React.FC = () => {
                                     <input
                                       id="username"
                                       type="text"
-                                      {...formik.getFieldProps('username')}
-                                      className={formik.touched.username && formik.errors.username ? 'input-error' : ''}
+                                      {...formik.getFieldProps('userName')}
+                                      className={formik.touched.userName && formik.errors.userName ? 'input-error' : ''}
                                     />
-                                    {formik.touched.username && formik.errors.username ? (
-                                      <div className="error">{formik.errors.username}</div>
+                                    {formik.touched.userName && formik.errors.userName ? (
+                                      <div className="error">{formik.errors.userName}</div>
                                     ) : null}
                                   <i className="input-icon uil uil-user"></i>
                                   </div>
                                 </div>
                               </div>
-
-                              <div className="userinfo__content__gender">
+                              {/* Firstname */}
+                              <div className="userinfo__content__firstname mt-3">
+                                <div className="col-10 text-right">
+                                  <label>تغییر نام</label>
+                                  <div className={`form-group mt-1`}>
+                                    <input
+                                      id="firstname"
+                                      type="text"
+                                      {...formik.getFieldProps('firstName')}
+                                      className={formik.touched.firstName && formik.errors.firstName ? 'input-error' : ''}
+                                    />
+                                    {formik.touched.firstName && formik.errors.firstName ? (
+                                      <div className="error">{formik.errors.firstName}</div>
+                                    ) : null}
+                                    <i className="input-icon uil uil-user"></i>
+                                  </div>
+                                </div>
+                              </div>
+                              {/* <div className="userinfo__content__gender">
                                 <div className="col-10 text-right">
                                   <label>جنسیت</label>
                                   <div className={`form-group mt-1`}>
@@ -138,8 +172,8 @@ const UserInfo: React.FC = () => {
                                     </select>
                                   </div>
                                 </div>
-                              </div>
-                              <div className="userinfo__content__birthdate">
+                              </div> */}
+                              {/* <div className="userinfo__content__birthdate">
                                 <div className="col-10 text-right">
                                   <label>تاریخ تولد</label>
                                   <div className={`form-group mt-1`}>
@@ -154,10 +188,48 @@ const UserInfo: React.FC = () => {
                                   <i className="input-icon uil uil-calendar-alt"></i>
                                   </div>
                                 </div>
+                              </div> */}
+
+                               {/* Lastname */}
+                               <div className="userinfo__content__lastname mt-3">
+                                <div className="col-10 text-right">
+                                  <label>تغییر نام خانوادگی</label>
+                                  <div className={`form-group mt-1`}>
+                                    <input
+                                      id="lastname"
+                                      type="text"
+                                      {...formik.getFieldProps('lastName')}
+                                      className={formik.touched.lastName && formik.errors.lastName ? 'input-error' : ''}
+                                    />
+                                    {formik.touched.lastName && formik.errors.lastName ? (
+                                      <div className="error">{formik.errors.lastName}</div>
+                                    ) : null}
+                                    <i className="input-icon uil uil-user"></i>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* Email */}
+                              <div className="userinfo__content__email mt-3">
+                                <div className="col-10 text-right">
+                                  <label>تغییر ایمیل</label>
+                                  <div className={`form-group mt-1 `}>
+                                    <input
+                                      id="email"
+                                      type="email"
+                                      {...formik.getFieldProps('email')}
+                                      className={formik.touched.email && formik.errors.email ? 'input-error' : ''}
+                                    />
+                                    {formik.touched.email && formik.errors.email ? (
+                                      <div className="error">{formik.errors.email}</div>
+                                    ) : null}
+                                    <i className="input-icon uil-envelope"></i>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                           
-                          <div className="column col-md-8 pull-left col-lg-5">
+                          {/* <div className="column col-md-8 pull-left col-lg-5">
                             <div className="userinfo__content__profile">
                               <div className="custom-file-upload">
                                 <input type="file" onChange={handleFileChange} />
@@ -166,20 +238,20 @@ const UserInfo: React.FC = () => {
                                 </div>)}
                               </div>
                             </div>
+                          </div> */}
                           </div>
-                          </div>
-                          <div className="userinfo__content__city">
+                          {/* <div className="userinfo__content__city">
                             <div className="col-lg-10 col-md-10 text-right">
                               <div className="text-right mt-2">
-                                {/* <CityList
+                                <CityList
                               selectedProvince={selectedProvince}
                               setSelectedProvince={setSelectedProvince}
                               selectedCity={selectedCity}
                               setSelectedCity={setSelectedCity}
-                            /> */}
+                            />
                               </div>
                             </div>
-                          </div>
+                          </div> */}
                           <br></br>
                           <br></br>
 

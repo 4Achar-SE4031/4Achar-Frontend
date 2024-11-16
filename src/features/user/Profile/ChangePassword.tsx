@@ -34,8 +34,8 @@ const ChangePassword = () => {
     validationSchema: changePasswordValidation,
     onSubmit: (values) => {
       agent.Account.updatePassword({
-      oldPassword: values.newPassword,
-      newPassword: values.password,
+      oldPassword: values.password,
+      newPassword: values.newPassword,
     })
     },
   });
@@ -73,7 +73,7 @@ const ChangePassword = () => {
                               style={{
                                 fontSize: "20px",
                                 position: "absolute",
-                                top: "40%",
+                                top: "55%",
                                 left: "18%",
                                 transform: "translateY(-50%)",
                                 marginLeft: "20px",
@@ -109,7 +109,7 @@ const ChangePassword = () => {
                               style={{
                                 fontSize: "20px",
                                 position: "absolute",
-                                top: "40%",
+                                top: "55%",
                                 left: "18%",
                                 transform: "translateY(-50%)",
                                 marginLeft: "20px",
@@ -145,7 +145,7 @@ const ChangePassword = () => {
                               style={{
                                 fontSize: "20px",
                                 position: "absolute",
-                                top: "40%",
+                                top: "55%",
                                 left: "18%",
                                 transform: "translateY(-50%)",
                                 marginLeft: "20px",
