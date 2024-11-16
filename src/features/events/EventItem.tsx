@@ -10,7 +10,8 @@ interface EventItemProps {
 const EventItem: React.FC<EventItemProps> = ({ event }) => {
   return (
     <div className="item mb-3">
-      <Link to={`/event-details/${event.id}`}>
+      {/* <Link to={`/concertdetail/${event.id}`}></Link> */}
+      <Link to={`/concertdetail`}>
         <div className="event-img">
           <img
             alt={event.title}
@@ -19,7 +20,9 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
           />
         </div>
       </Link>
-      <Link to={`/event-details/${event.id}`}>
+      
+      {/* <Link to={`/concertdetail/${event.id}`}></Link> */}
+      <Link to={`/concertdetail`}>
         <div className="event-info">
           <h1>{event.title}</h1>
           <h4>تاریخ: {event.start_date}</h4>
