@@ -10,7 +10,7 @@ import axios from "axios";
 import { useAuth } from "../Authentication/authProvider";
 
 interface UserData {
-    userEmail:string;
+  userName:string;
     newPassword: string;
     confirmNewPassword:string;
   passwordResetToken:string;
@@ -23,7 +23,7 @@ const ResetPassword: React.FC = () => {
 
   const queryParams = new URLSearchParams(location.search);
   const token: string = queryParams.get("PasswordResetToken") || "NoTokenProvided";
- 
+  const username: string = queryParams.get("username") || "NoUsernameProvided";
   const [enteredRegisterPassword, setEnteredRegisterPassword] = useState<string>("");
   const [enteredRegisterPassword2, setEnteredRegisterPassword2] = useState<string>("");
 
@@ -62,7 +62,7 @@ const ResetPassword: React.FC = () => {
 
 
 
-  const registerHandler = (event: FormEvent<HTMLButtonElement>) => {
+  const reset = (event: FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
     x = 0;
     if (!registerPasswordValidation) x++;
@@ -74,7 +74,7 @@ const ResetPassword: React.FC = () => {
     setShowViolation(true);
 
     const userData: UserData = {
-      userEmail:"aaghz1381@gmail.com",
+      userName:username,
       newPassword: enteredRegisterPassword,
       confirmNewPassword : enteredRegisterPassword2,
       passwordResetToken:replaceSpacesWithPlus(token),
@@ -236,7 +236,7 @@ const ResetPassword: React.FC = () => {
                         <button
                           type="submit"
                           className="btn mt-4"
-                          onClick={(e) => registerHandler(e)}
+                          onClick={(e) => reset(e)}
                         >
                             تایید
                         </button>
