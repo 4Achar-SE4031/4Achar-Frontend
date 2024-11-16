@@ -1,4 +1,3 @@
-// src/components/EventsList.tsx
 import React, { useState, useEffect } from "react";
 import { Event } from "../../app/models/event";
 import agent from "../../app/api/agent";
@@ -9,12 +8,21 @@ import Lottie from "react-lottie";
 import animationData from "../../app/common/lottie/Animation - 1715854965467.json";
 import "./EventsList.css";
 import EventItem from "./EventItem";
+import mockEvents from "../../app/common/Mock Data/MOCK_DATA.json";
 
-const EventsList: React.FC = () => {
+
+interface EventsListProps {
+  sortType: "recent" | "popular";
+}
+
+const EventsList: React.FC<EventsListProps> = ({ sortType }) => {
   const [posts, setPosts] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [index, setIndex] = useState<number>(1);
+  const [title, setTitle] = useState<string>();
+
 
   const defaultOptions = {
     loop: true,
@@ -22,45 +30,69 @@ const EventsList: React.FC = () => {
     animationData,
   };
 
-  useEffect(() => {
-    const fetchEvents = async () => {
-      setLoading(true);
-      try {
-        const response = await agent.Events.list();
-        setPosts(response); // Assuming pagination data comes from API if needed
-        setTotalPages(Math.ceil(response.length / 12)); // Adjust for real pagination logic
-        setLoading(false);
-      } catch (error) {
-        console.error("Failed to fetch events", error);
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchEvents = async () => {
+  //     setLoading(true);
+  //     try {
+  //       const response = await agent.Events.list();
+  //       setPosts(response);
+  //       setTotalPages(Math.ceil(response.length / 12));
+  //       setLoading(false);
+  //     } catch (error) {
+  //       console.error("Failed to fetch events", error);
+  //       setLoading(false);
+  //     }
+  //   };
 
-    fetchEvents();
-  }, [currentPage]);
+  //   fetchEvents();
+  // }, [currentPage]);
+  useEffect(() => {
+    setLoading(true);
+    // Mock data handling instead of API call
+    let sortedEvents = [...mockEvents];
+    if (sortType === "recent") {
+      sortedEvents = sortedEvents.sort((a, b) => Date.parse(b.start_date) - Date.parse(a.start_date));
+      setTitle("جدیدترین رویدادها")
+    } else if (sortType === "popular") {
+      sortedEvents = sortedEvents.sort((a, b) => b.rating - a.rating);
+      setTitle("محبوب ترین رویدادها")
+    }
+
+    setPosts(sortedEvents.slice(15 * (index - 1), 15 * index));
+    setTotalPages(Math.ceil(sortedEvents.length / 15));
+    setLoading(false);
+  }, [sortType, currentPage]);
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
+    setIndex(value)
+    window.scrollTo(0, 0);
+
   };
 
   return (
     <Card className="events-list">
-      <div className="container-fluid">
-        <div className="items">
+      <div className="container-fluid mb-1" lang="fa">
+        <div className="text-right mb-2 mt-4">
+          <h2 className="section-title" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
+            {title}
+          </h2>
+        </div>
+        <div className="items pb-5">
           {loading && (
             <div className="loading">
               <Lottie options={defaultOptions} />
             </div>
           )}
           {posts.map((event) => (
-            <div key={event.id} className="col-xl-3 col-lg-4 col-md-6 col-sm-12">
+            <div key={event.id} className="col-xl-2 col-lg-3 col-md-5 col-sm-12">
               <EventItem event={event} />
             </div>
           ))}
+          <Stack spacing={2}>
+            <Pagination count={totalPages} color="primary" onChange={handleChangePage} />
+          </Stack>
         </div>
-        <Stack spacing={2}>
-          <Pagination count={totalPages} color="primary" onChange={handleChangePage} />
-        </Stack>
       </div>
     </Card>
   );

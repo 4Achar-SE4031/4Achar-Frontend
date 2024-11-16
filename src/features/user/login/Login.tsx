@@ -38,6 +38,8 @@ const Login : React.FC = () => {
 
     }, []);
 
+    
+
     const toggleLoginPasswordVisibility = () => {
         setShowLoginPassword(!showLoginPassword);
     };
@@ -184,7 +186,7 @@ const Login : React.FC = () => {
                         <div className="section text-center">
                           <h4 className="mb-4 pb-3">ورود کاربران</h4>
                           <div className={`form-group mt-2 ${(!loginUserNameValidation && showViolations) ? "invalid" : ""}`}>
-                            <input
+                            <input 
                               dir="rtl"
                               type="text"
                               className="form-style"
@@ -196,8 +198,8 @@ const Login : React.FC = () => {
                           </div>
                           {!loginUserNameValidation && showViolations &&(<p className="mb-0 mt-2 validationMsg">{loginUserNameValidationMsg}</p>)}
                           <div className={`form-group mt-2 ${!loginPasswordValidation && showViolations ? "invalid" : ""}`}>
-                            <i className={showLoginPassword ? "bi bi-eye":"bi bi-eye-slash"} onClick={toggleLoginPasswordVisibility} style={{ fontSize: "20px", position: "absolute", top: "40%", transform: "translateY(-50%)", paddingLeft: "10px"  }}></i>
-                            <input
+                            <i className={showLoginPassword ? "bi bi-eye":"bi bi-eye-slash"} onClick={toggleLoginPasswordVisibility} style={{ fontSize: "20px", position: "absolute", top: "55%", transform: "translateY(-50%)", paddingLeft: "10px"  }}></i>
+                            <input lang="fa"
                               dir="rtl"
                               type={showLoginPassword ? "text":"password"}
                               className="form-style"

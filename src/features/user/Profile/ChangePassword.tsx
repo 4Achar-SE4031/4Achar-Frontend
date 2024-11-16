@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useFormik } from "formik";
 import { changePasswordValidation } from "./UserInfoValidation";
 import axios from "axios";
+import agent from "../../../app/api/agent";
 const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -32,9 +33,9 @@ const ChangePassword = () => {
     initialValues: InitialValues,
     validationSchema: changePasswordValidation,
     onSubmit: (values) => {
-      axios.post(`https://eventify.liara.run/auth/users/set_password/`,{
-      new_password: values.newPassword,
-      current_password: values.password,
+      agent.Account.updatePassword({
+      oldPassword: values.password,
+      newPassword: values.newPassword,
     })
     },
   });
@@ -72,7 +73,7 @@ const ChangePassword = () => {
                               style={{
                                 fontSize: "20px",
                                 position: "absolute",
-                                top: "40%",
+                                top: "55%",
                                 left: "18%",
                                 transform: "translateY(-50%)",
                                 marginLeft: "20px",
@@ -108,7 +109,7 @@ const ChangePassword = () => {
                               style={{
                                 fontSize: "20px",
                                 position: "absolute",
-                                top: "40%",
+                                top: "55%",
                                 left: "18%",
                                 transform: "translateY(-50%)",
                                 marginLeft: "20px",
@@ -144,7 +145,7 @@ const ChangePassword = () => {
                               style={{
                                 fontSize: "20px",
                                 position: "absolute",
-                                top: "40%",
+                                top: "55%",
                                 left: "18%",
                                 transform: "translateY(-50%)",
                                 marginLeft: "20px",

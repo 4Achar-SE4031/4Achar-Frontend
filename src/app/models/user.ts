@@ -1,13 +1,13 @@
-export interface User{
+export interface User {
     email: string;
-    username: string;
+    userName: string;
     firstName: string;
     lastName: string;
-    gender: string;
-    birthDate: string;
-    province: string;
-    city: string;
-    profilePictureUrl: string;
+    gender?: string;
+    birthDate?: string;
+    province?: string;
+    city?: string;
+    profilePictureUrl?: string;
 }
 
 export interface UserFormValues {
@@ -27,7 +27,19 @@ export interface UserForgetFormValues {
 }
 
 export interface UserResponse {
-        token?: string;
-        expires?: string;
-        message?: string;
+    token?: string;
+    expires?: string;
+    message?: string;
+}
+
+export interface ChangePassword {
+    oldPassword: string;
+    newPassword: string;
+}
+
+export interface UpdateUser {
+    firstName?: string;
+    lastName?: string;
+    userName?: string;
+    email?: string;
 }
