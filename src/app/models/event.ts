@@ -8,7 +8,6 @@ export interface Event {
     province?: string | null;
     city?: string;
     category: string;
-    is_paid: boolean;
     ticket_price?: number;
     rating: number;
   }

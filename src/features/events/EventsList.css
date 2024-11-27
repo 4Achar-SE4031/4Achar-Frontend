@@ -40,7 +40,7 @@ button:hover {
   /* background-color: #1f2029; */
   overflow: auto;
   position: relative;
-  border-radius: 10px;
+  /* border-radius: 10px; */
   column-gap: 30px;
   margin-bottom: 20px;
   position: relative;
@@ -227,6 +227,23 @@ button:hover {
     padding-top: 5px;
     font-size: 2.5vh;
   } */
+  
+}
+
+.custom-container {
+  max-width: 1322px;
+  width: 100%;
+}
+@media (max-width: 1366px) {
+  .custom-container {
+    max-width: 90%; /* Adjust as needed for responsiveness */
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-container {
+    max-width: 100%; /* Full width on small devices */
+  }
 }
 
 @media screen and (max-width: 1200px) {
@@ -237,7 +254,26 @@ button:hover {
 
 @media screen and (max-width: 700px) {
   .items {
-    column-gap: 10px;
+    column-gap: 0px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .items {
+    column-gap: 0px;
+    .item {
+      height: 245px;
+      width: 191px;
+    }
+    .event-img img {
+      transition: all 0.2s;
+      transform: scale(0.95);
+      height: 259px;
+      width: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s, filter 0.3s;
+    }
   }
 }
 /* @media screen and (max-width: 700px) {

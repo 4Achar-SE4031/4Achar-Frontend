@@ -83,9 +83,9 @@ const EventsList: React.FC = () => {
 
   return (
     <Card className="events-list">
-      <div className="container-fluid mb-1" lang="fa">
+      <div className="container custom-container mb-1" lang="fa">
         <div className="text-right mb-2 mt-4">
-          <h2 className="section-title" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
+          <h2 className="section-title pb-5" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
             {title}
           </h2>
         </div>
@@ -96,11 +96,11 @@ const EventsList: React.FC = () => {
             </div>
           )}
           {posts.map((event) => (
-            <div key={event.id} className="col-xl-2 col-lg-3 col-md-5 col-sm-12">
+            <div key={event.id} className="col-xl-2 col-lg-3 col-md-5 col-sm-5">
               <EventItem event={event} />
             </div>
           ))}
-          <Stack spacing={2}>
+          <Stack spacing={2} className="pt-5">
             <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
           </Stack>
         </div>
