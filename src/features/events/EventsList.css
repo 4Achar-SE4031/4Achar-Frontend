@@ -36,15 +36,20 @@ button:hover {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%);
-  background-color: #1f2029;
+  /* background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%); */
+  /* background-color: #1f2029; */
   overflow: auto;
   position: relative;
-  border-radius: 30px;
+  /* border-radius: 10px; */
   column-gap: 30px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+
   .item {
-    height: 21em;
-    width: 16em;
+    height: 275px;
+    width: 214px;
     font-family: "iransansweb";
     overflow: hidden;
     display: flex;
@@ -60,23 +65,38 @@ button:hover {
     direction: rtl;
     cursor: pointer;
     background-color: #4b4b4b;
-    border-radius: 30px;
-    border: 1px solid #ffeba7;
+    border-radius: 10px;
+    /* border: 1px solid #ffeba7; */
   }
-
+  .slider-arrow {
+    color: white;
+    transition: all 0.3s ease;
+  }
+  
+  .slider-arrow:hover {
+    background: rgba(0,0,0,0.7) !important;
+  }
   .item:hover {
     transition: all 0.2s;
     transform: scale(1.01);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
   }
 
   .item:hover .event-img img {
     transition: all 0.2s;
-    transform: scale(0.97);
+    transform: scale(0.9);
+    filter: brightness(80%);
+    height: 269px;
+    width: 204px;
   }
 
   .item:hover .event-info {
     transition: all 0.2s;
     transform: scale(1.01);
+    bottom: 0px;
+    background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%);
+    display: flex;
+    flex-direction: column;
   }
 
   a {
@@ -86,36 +106,43 @@ button:hover {
   .event-img img {
     transition: all 0.2s;
     transform: scale(0.95);
-    height: 10em;
-    width: auto;
+    height: 289px;
+    width: 224px;
     object-fit: cover;
     border-radius: 10px;
+    transition: transform 0.3s, filter 0.3s;
   }
 
   .event-info {
-    display: flex;
-    flex-direction: column;
+    position: absolute;
+    display: none;
+
     gap: 1rem;
     align-items: center;
+    height: 140px;
+    left: -120px;
+    bottom: -240px;
+    width: calc(100%);
   }
   .items h2 {
     color: #ffeba7;
   }
   .item h1 {
     color: #ffeba7 !important;
-    font-size: 19px;
+    font-size: 16px;
     margin: 0 1rem;
+    margin-top: 10px;
   }
 
   .item h4 {
     color: #ffeba7;
-    font-size: 11px;
+    font-size: 9px;
     font-weight: 300;
     margin: 5px 1rem;
   }
   .item h5 {
     color: #ffeba7;
-    font-size: 10px;
+    font-size: 9px;
     font-weight: 300;
     margin: 5px 1rem;
   }
@@ -123,23 +150,26 @@ button:hover {
   .event-info {
     align-items: start;
     margin-left: 120px;
+    gap: 0.3rem;
   }
-  .event-info__price {
+  .event-info__hour {
     font-size: 1rem;
     font-weight: 400;
     color: #ffeba7;
   }
   .event-info__title {
-    margin: 1px;
-    margin-right: 17px;
-    padding: 3px;
-    border-bottom: 2px solid black;
-    background: radial-gradient(ellipse at bottom, #303131 0%, #0e0e1254 100%);
+    /* margin: 1px; */
+    /* margin-right: 1px; */
+    /* padding: 3px; */
+    /* border-bottom: 2px solid black; */
+    /* background: radial-gradient(ellipse at bottom, #303131 0%, #0e0e1254 100%); */
     border-radius: 10px;
-    width: 105%;
+    /* width: 100%; */
   }
   i {
-    height: 1px;
+    height: 0.5px;
+    transform: scale(0.5);
+    top: 4px;
   }
   .input-icon {
     color: #ffeba7;
@@ -149,16 +179,17 @@ button:hover {
   .event-info__date {
     display: flex;
     flex-direction: row-reverse;
+    justify-content: center;
   }
   .event-info__address {
     display: flex;
     flex-direction: row-reverse;
   }
-  .event-info__category {
+  .event-info__details {
     display: flex;
     flex-direction: row-reverse;
   }
-  .event-info__price {
+  .event-info__hour {
     display: flex;
     flex-direction: row-reverse;
   }
@@ -172,19 +203,19 @@ button:hover {
     color: #ffeba7;
   }
 
-  .bi-bookmark-plus-fill {
+  /* .bi-bookmark-plus-fill {
     font-size: 3vh;
     justify-content: center;
   }
   .bi-bookmark-plus {
     font-size: 3vh;
     color: white;
-    /* margin-bottom: 3vh; */
+    margin-bottom: 3vh;
   }
 
   .bi-bookmark-plus:hover {
     color: #ffeba7;
-    /* background-color: red; */
+    background-color: red;
   }
 
   .bi-bookmark-plus,
@@ -195,6 +226,54 @@ button:hover {
     vertical-align: top !important;
     padding-top: 5px;
     font-size: 2.5vh;
+  } */
+  
+}
+
+.custom-container {
+  max-width: 1322px;
+  width: 100%;
+}
+@media (max-width: 1366px) {
+  .custom-container {
+    max-width: 90%; /* Adjust as needed for responsiveness */
+  }
+}
+
+@media (max-width: 768px) {
+  .custom-container {
+    max-width: 100%; /* Full width on small devices */
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .items {
+    column-gap: 35px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .items {
+    column-gap: 0px;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .items {
+    column-gap: 0px;
+    .item {
+      height: 245px;
+      width: 191px;
+    }
+    .event-img img {
+      transition: all 0.2s;
+      transform: scale(0.95);
+      height: 259px;
+      width: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.3s, filter 0.3s;
+    }
   }
 }
 /* @media screen and (max-width: 700px) {

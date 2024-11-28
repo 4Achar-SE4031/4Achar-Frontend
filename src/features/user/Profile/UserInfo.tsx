@@ -15,6 +15,7 @@ import { UpdateUser, User } from '../../../app/models/user';
 import agent from '../../../app/api/agent';
 import ChangePassword from './ChangePassword';
 import { userInfoValidation } from './UserInfoValidation';
+import Footer from '../../../app/layout/Footer';
 
 const UserInfo: React.FC = () => {
   const [userData, setUserData] = useState<User | null>(null);
@@ -80,7 +81,7 @@ const UserInfo: React.FC = () => {
         }
         await agent.Account.updateUser(data);
         toast.success('پروفایل با موفقیت به‌روز شد');
-        setTimeout(() => navigate('/home'), 3000);
+        // setTimeout(() => navigate('/home'), 3000);
       } catch (error) {
         toast.error('خطا در به‌روزرسانی پروفایل');
       }
@@ -266,6 +267,7 @@ const UserInfo: React.FC = () => {
           </div>
         </form>
         <ChangePassword />
+      <Footer />
       </div>
     </center>
   );

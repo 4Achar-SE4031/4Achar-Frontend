@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from "react";
-import { Event } from "../../app/models/event";
-import agent from "../../app/api/agent";
 import Card from "../../app/common/Card/Card";
-import Pagination from "@mui/material/Pagination";
+// import Pagination from "@mui/material/Pagination";
 import Stack from "@mui/material/Stack";
 import Lottie from "react-lottie";
+import { observer } from "mobx-react-lite";
+
+import { Event } from "../../app/models/event";
+import agent from "../../app/api/agent";
 import animationData from "../../app/common/lottie/Animation - 1715854965467.json";
 import "./EventsList.css";
 import EventItem from "./EventItem";
 import mockEvents from "../../app/common/Mock Data/MOCK_DATA.json";
+import { useStore } from "../../app/store/Store";
+import { useLocation } from "react-router-dom";
+import Pagination from "../../app/common/Pagination";
 
 
-interface EventsListProps {
-  sortType: "recent" | "popular";
-}
-
-const EventsList: React.FC<EventsListProps> = ({ sortType }) => {
+const EventsList: React.FC = () => {
   const [posts, setPosts] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [index, setIndex] = useState<number>(1);
   const [title, setTitle] = useState<string>();
+  const { eventStore } = useStore()
+  const { eventType, setEventType } = eventStore
+  // const [sortType, setSortType] = useState<string | undefined>(eventType)
+  const location = useLocation()
 
 
   const defaultOptions = {
@@ -49,19 +54,25 @@ const EventsList: React.FC<EventsListProps> = ({ sortType }) => {
   useEffect(() => {
     setLoading(true);
     // Mock data handling instead of API call
+    // setSortType(eventType)
+    // console.log(sortType)
     let sortedEvents = [...mockEvents];
-    if (sortType === "recent") {
+    if (!eventType){
+      setEventType(location.pathname.split("/")[2])
+    }
+    if (eventType === "recent") {
       sortedEvents = sortedEvents.sort((a, b) => Date.parse(b.start_date) - Date.parse(a.start_date));
       setTitle("جدیدترین رویدادها")
-    } else if (sortType === "popular") {
+    } else if (eventType === "popular") {
       sortedEvents = sortedEvents.sort((a, b) => b.rating - a.rating);
       setTitle("محبوب ترین رویدادها")
+      
     }
 
     setPosts(sortedEvents.slice(15 * (index - 1), 15 * index));
     setTotalPages(Math.ceil(sortedEvents.length / 15));
     setLoading(false);
-  }, [sortType, currentPage]);
+  }, [eventType, currentPage]);
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
@@ -72,9 +83,9 @@ const EventsList: React.FC<EventsListProps> = ({ sortType }) => {
 
   return (
     <Card className="events-list">
-      <div className="container-fluid mb-1" lang="fa">
+      <div className="container custom-container mb-1" lang="fa">
         <div className="text-right mb-2 mt-4">
-          <h2 className="section-title" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
+          <h2 className="section-title pb-5" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
             {title}
           </h2>
         </div>
@@ -85,12 +96,12 @@ const EventsList: React.FC<EventsListProps> = ({ sortType }) => {
             </div>
           )}
           {posts.map((event) => (
-            <div key={event.id} className="col-xl-2 col-lg-3 col-md-5 col-sm-12">
+            <div key={event.id} className="col-xl-2 col-lg-3 col-md-5 col-sm-5">
               <EventItem event={event} />
             </div>
           ))}
-          <Stack spacing={2}>
-            <Pagination count={totalPages} color="primary" onChange={handleChangePage} />
+          <Stack spacing={2} className="pt-5">
+            <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
           </Stack>
         </div>
       </div>
@@ -98,4 +109,4 @@ const EventsList: React.FC<EventsListProps> = ({ sortType }) => {
   );
 };
 
-export default EventsList;
+export default observer(EventsList);

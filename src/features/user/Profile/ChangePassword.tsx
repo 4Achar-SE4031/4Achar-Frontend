@@ -3,6 +3,7 @@ import { useFormik } from "formik";
 import { changePasswordValidation } from "./UserInfoValidation";
 import axios from "axios";
 import agent from "../../../app/api/agent";
+import { toast } from "react-toastify";
 const ChangePassword = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showPassword2, setShowPassword2] = useState(false);
@@ -32,11 +33,23 @@ const ChangePassword = () => {
   } = useFormik({
     initialValues: InitialValues,
     validationSchema: changePasswordValidation,
-    onSubmit: (values) => {
-      agent.Account.updatePassword({
-      oldPassword: values.password,
-      newPassword: values.newPassword,
-    })
+    onSubmit: async (values) => {
+      try {
+
+
+        const data = {
+          oldPassword: values.password,
+          newPassword: values.newPassword,
+        }
+        await agent.Account.updatePassword(data)
+        toast.success('پروفایل با موفقیت به‌روز شد');
+      }
+      catch (error) {
+
+        toast.error('خطا در به‌روزرسانی پروفایل');
+      }
+
+
     },
   });
   return (
@@ -49,7 +62,7 @@ const ChangePassword = () => {
                 <div className="center-wrap">
                   <div className="section">
                     <div className="change-password__title">
-                    <h2 className="mb-4 pb-3"> تغییر رمز عبور</h2>
+                      <h2 className="mb-4 pb-3"> تغییر رمز عبور</h2>
                     </div>
                     <div className="change-password__content">
                       <div className="change-password__content-current">
@@ -158,11 +171,11 @@ const ChangePassword = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                     </div>
                     <button disabled={isSubmitting} type="submit">
-                        تغییر رمز عبور
-                      </button>
+                      تغییر رمز عبور
+                    </button>
                   </div>
                 </div>
               </div>
