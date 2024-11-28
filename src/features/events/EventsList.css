@@ -6,6 +6,9 @@ body {
   border-top: 4px solid black;
   background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%);
 }
+.events-title {
+  margin-top: 170px !important;
+}
 .items-title {
   color: #ffeba7;
   font-family: "iransansweb";
@@ -18,6 +21,17 @@ body {
 .container-fluid {
   background: radial-gradient(ellipse at bottom, #303131 0%, #333540 100%);
 }
+.events-filter {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f8f9fa;
+  padding: 1rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
 
 button {
   background-color: #1f2029 !important;
@@ -72,9 +86,9 @@ button:hover {
     color: white;
     transition: all 0.3s ease;
   }
-  
+
   .slider-arrow:hover {
-    background: rgba(0,0,0,0.7) !important;
+    background: rgba(0, 0, 0, 0.7) !important;
   }
   .item:hover {
     transition: all 0.2s;
@@ -202,38 +216,15 @@ button:hover {
   .loading h2 {
     color: #ffeba7;
   }
-
-  /* .bi-bookmark-plus-fill {
-    font-size: 3vh;
-    justify-content: center;
-  }
-  .bi-bookmark-plus {
-    font-size: 3vh;
-    color: white;
-    margin-bottom: 3vh;
-  }
-
-  .bi-bookmark-plus:hover {
-    color: #ffeba7;
-    background-color: red;
-  }
-
-  .bi-bookmark-plus,
-  .bi-bookmark-plus-fill,
-  .bi-bookmark-plus::before,
-  .bi-bookmark-plus-fill::before {
-    cursor: pointer;
-    vertical-align: top !important;
-    padding-top: 5px;
-    font-size: 2.5vh;
-  } */
-  
 }
-
 .custom-container {
   max-width: 1322px;
   width: 100%;
 }
+
+.custom-date-input {
+  z-index: 1050; /* Ensure the DatePicker is above other elements */
+} 
 @media (max-width: 1366px) {
   .custom-container {
     max-width: 90%; /* Adjust as needed for responsiveness */
@@ -248,7 +239,7 @@ button:hover {
 
 @media screen and (max-width: 1200px) {
   .items {
-    column-gap: 35px;
+    column-gap: 0px;
   }
 }
 
@@ -276,57 +267,19 @@ button:hover {
     }
   }
 }
-/* @media screen and (max-width: 700px) {
-    .items {
-      height: 680vh;
-    }
-  } */
 
-/*
-  @media screen and (max-width: 1000px) {
-    .items-wrapper {
-      .item {
-        width: 90%;
-      }
-      .item h1 {
-        color: #ffeba7;
-        font-size: 20px;
-        margin: 0 1rem;
-      }
-      .item h4 {
-        color: #ffeba7;
-        font-size: 10px;
-        font-weight: 300;
-        margin: 0 1rem;
-      }
-      .item h5 {
-        color: #ffeba7;
-        font-size: 11px;
-        font-weight: 300;
-        margin: 0 1rem;
-      }
-      .items {
-        display: flex;
-        flex-direction: row;
-        flex: 3 auto;
-      }
-      .event-info__title {
-        margin: 1px;
-        margin-right: 45px;
-        padding: 2px;
-        border-bottom: 1px solid black;
-        background: radial-gradient(
-          ellipse at bottom,
-          #303131 0%,
-          #0e0e1254 100%
-        );
-        border-radius: 10px;
-        width: 80%;
-      }
-      .event-img img {
-        height: 9em;
-        width: auto;
-        object-fit: cover;
-      }
-    }
-  } */
+@media screen and (max-width: 8900px) {
+  .events-filter {
+    overflow-x: auto; /* Allow horizontal scroll */
+    white-space: nowrap; /* Prevent inputs from wrapping */
+  }
+
+  .events-filter .MuiTextField-root,
+  .events-filter .MuiSlider-root,
+  .events-filter .MuiBox-root {
+    min-width: 150px; /* Ensure each input fits properly */
+    margin-right: 8px; /* Add some spacing between items */
+  }
+}
+
+
