@@ -76,14 +76,14 @@ const FiveEvents: React.FC = () => {
           </h2>
         </div>
         <div className="position-relative">
-          <button
+          {/* <button
             className="slider-arrow left"
             onClick={() => setRecentEventIndex(prev =>
               prev === 0 ? mockEvents.length - eventsToShow : prev - 1
             )}
           >
             &#8249;
-          </button>
+          </button> */}
           <div className="items">
             {/* {loading && (
             <div className="loading">
@@ -96,14 +96,14 @@ const FiveEvents: React.FC = () => {
               </div>
             ))}
 
-            <button
+            {/* <button
               className="slider-arrow right"
               onClick={() => setRecentEventIndex(prev =>
                 prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
               )}
             >
               &#8250;
-            </button>
+            </button> */}
           </div>
 
         </div>
@@ -123,14 +123,14 @@ const FiveEvents: React.FC = () => {
         </div>
 
         <div className="position-relative">
-          <button
+          {/* <button
             className="slider-arrow left"
             onClick={() => setPopularEventIndex(prev =>
               prev === 0 ? mockEvents.length - eventsToShow : prev - 1
             )}
           >
             &#8249;
-          </button>
+          </button> */}
           <div className="items">
             {/* {loading && (
             <div className="loading"> 
@@ -143,14 +143,14 @@ const FiveEvents: React.FC = () => {
               </div>
             ))}
           </div>
-          <button
+          {/* <button
             className="slider-arrow right"
             onClick={() => setPopularEventIndex(prev =>
               prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
             )}
           >
             &#8250;
-          </button>
+          </button> */}
         </div>
       </div>
     </Card>
