@@ -1,5 +1,5 @@
   import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
-  import "./register.css";
+  import "./Register.css";
 
   import { ToastContainer, toast } from "react-toastify";
   import { useNavigate } from "react-router-dom";
