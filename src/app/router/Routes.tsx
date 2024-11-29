@@ -13,6 +13,7 @@ import PageNotFound from '../../features/user/concertDetailsPage/PageNotFound/Pa
 import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
+import Navbar from "../../features/Navbar/navbar";
 
 export const routes: RouteObject[] = [
     {
@@ -23,8 +24,8 @@ export const routes: RouteObject[] = [
         </AuthProvider>
       ),
       children: [
-      //  {path:"/" , element: <Landing />},
-      //  {path:"/home",  element: <Home />},
+       {path:"/navbar" , element: <Navbar />},
+       {path:"/home",  element: <Home />},
        {path:"/login",  element: <Login />},
        {path:"/concertDetail",  element: <EventDetails />},
        {path:"/register",  element: <Register />},

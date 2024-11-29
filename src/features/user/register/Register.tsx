@@ -114,7 +114,10 @@
           }})
           .then(() => {
             setShowViolation(false);
-            navigator('/verify', { state: { username: enteredRegisterUserName, password: enteredRegisterPassword, email:enteredRegisterEmail } })
+            toast.success("ایمیل حاوی کد تایید برای شما ارسال شد");
+            setTimeout(() => {            
+              navigator('/verify', { state: { username: enteredRegisterUserName, password: enteredRegisterPassword, email:enteredRegisterEmail } })
+            }, 4000);
           //   autoLogin();
           })
           .catch((error) => {
