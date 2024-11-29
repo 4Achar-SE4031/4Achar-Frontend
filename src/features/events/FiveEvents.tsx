@@ -23,7 +23,6 @@ const FiveEvents: React.FC = () => {
   const [recentEventIndex, setRecentEventIndex] = useState(0);
   const [popularEventIndex, setPopularEventIndex] = useState(0);
   const eventsToShow = 5;
-  const { eventType, showType, setEventType } = eventStore;
   const navigate = useNavigate();
 
   const recentEvents = [...mockEvents]
@@ -58,7 +57,6 @@ const FiveEvents: React.FC = () => {
   };
 
   const handleShowTypeButton = (value: string) => {
-    setEventType(value)
     console.log(value)
     navigate(`/events/${value}`)
   }
