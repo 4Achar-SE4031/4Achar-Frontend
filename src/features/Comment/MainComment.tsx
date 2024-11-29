@@ -134,7 +134,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
   };
 
   return (
-    <div className="container-fluid mb-5 pb-5">
+    <div className="container-fluid mb-5 pb-5" lang="fa">
       <div className="row">
         <div className="col-6 mx-auto">
           <div className="comment-section-title text-center">
