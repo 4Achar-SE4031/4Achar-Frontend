@@ -174,7 +174,9 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
             currentUser={userData.user?.username || ""}
           />
         ))}
-        {userData.user ? (
+        {
+        // userData.user 
+        true ? (
           <NewComment addNewComment={addNewComment} currentUser={userData} />
         ) : (
           <div className="row">
