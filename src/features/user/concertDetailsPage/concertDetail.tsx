@@ -15,6 +15,7 @@ import animationData from "./Animation - 1715854965467.json";
 import Lottie from "react-lottie";
 import MapComponent from "./MapComponent/MapComponent";
 import { useAuth } from "../Authentication/authProvider";
+import MainComment from "../../Comment/MainComment";
 
 interface EventDateTime {
   startWeekDay: string;
@@ -1003,6 +1004,7 @@ const EventDetails: React.FC = () => {
             </div>
         </div>
     </div>
+    <MainComment id={3}/>
 </div> 
 
 {/* <OrganizerInfoModal show = {show} handleClose={handleClose} email={eventDetails.organizerEmail} phone={eventDetails.organizerPhone}/> */}
