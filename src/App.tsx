@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import './App.css'
+import '@testing-library/jest-dom';
 import AuthProvider from './features/user/Authentication/authProvider';
 import { ToastContainer } from 'react-toastify';
 
