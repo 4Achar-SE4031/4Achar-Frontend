@@ -22,6 +22,7 @@ import MusicNotes from './MusicNotes.tsx';
 
 
 import MainComment from "../../Comment/MainComment";
+import Footer from "../../../app/layout/Footer.tsx";
 
 interface EventDateTime {
   startWeekDay: string;
@@ -462,6 +463,7 @@ const EventDetails: React.FC = () => {
         </div>
     </div>
     <MainComment id={3}/>
+    <Footer />
 </div> 
 
 {/* <OrganizerInfoModal show = {show} handleClose={handleClose} email={eventDetails.organizerEmail} phone={eventDetails.organizerPhone}/> */}

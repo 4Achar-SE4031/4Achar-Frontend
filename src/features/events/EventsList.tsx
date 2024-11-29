@@ -15,6 +15,7 @@ import mockEvents from "../../app/common/Mock Data/MOCK_DATA.json";
 import { useStore } from "../../app/store/Store";
 import Pagination from "../../app/common/Pagination";
 import EventsFilter from "./EventsFilter";
+import Footer from "../../app/layout/Footer";
 
 
 const EventsList: React.FC = () => {
@@ -135,6 +136,7 @@ const EventsList: React.FC = () => {
           </Stack>
         </div>
       </div>
+      <Footer />
     </Card>
   );
 };
