@@ -10,7 +10,7 @@ import Card from "../../app/common/Card/Card";
 import agent from "../../app/api/agent";
 import animationData from "../../app/common/lottie/Animation - 1715854965467.json";
 import "./EventsList.css";
-import mockEvents from "../../app/common/Mock Data/MOCK_DATA.json";
+import mock from "../../app/common/Mock Data/MOCK_DATA.json";
 import { useStore } from "../../app/store/Store";
 import { useNavigate } from "react-router-dom";
 
@@ -23,6 +23,8 @@ const FiveEvents: React.FC = () => {
   const [recentEventIndex, setRecentEventIndex] = useState(0);
   const [popularEventIndex, setPopularEventIndex] = useState(0);
   const eventsToShow = 5;
+  const mockEvents = mock.slice(0, 10)
+  
   const navigate = useNavigate();
 
   const recentEvents = [...mockEvents]
@@ -61,8 +63,23 @@ const FiveEvents: React.FC = () => {
     navigate(`/events/${value}`)
   }
 
+  const renderIndicators = (currentIndex: number, eventCount: number, setIndex: React.Dispatch<React.SetStateAction<number>>) => (
+    <div className="slider-indicators">
+      {Array.from({ length: Math.ceil(eventCount - 5) }, (_, index) => (
+        <div>
+        <button  onClick={() => console.log(index, currentIndex)} />
+        <span
+          key={index}
+          className={`dot ${currentIndex === index + eventsToShow ? "active" : ""}`}
+          onClick={() => setIndex(index + eventsToShow)}
+        />
+        </div>
+      ))}
+    </div>
+  );
+
   return (
-    <Card className="events-list">
+    <Card className="events-list pb-5">
       <div className="container-fluid" lang="fa">
         <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
           <button
@@ -75,38 +92,41 @@ const FiveEvents: React.FC = () => {
             رویدادهای جدید
           </h2>
         </div>
-        <div className="position-relative">
-          {/* <button
-            className="slider-arrow left"
+        <div className="position-relative row justify-content-center align-content-center">
+          <button
+            className="slider-arrow left col"
             onClick={() => setRecentEventIndex(prev =>
-              prev === 0 ? mockEvents.length - eventsToShow : prev - 1
+              prev === 0 ? mockEvents.length - eventsToShow  : prev - 1
             )}
           >
             &#8249;
-          </button> */}
-          <div className="items">
+          </button>
+          <div className="items col-lg-11 col-sm-9">
             {/* {loading && (
             <div className="loading">
               <Lottie options={defaultOptions} />
             </div>
           )} */}
+
             {recentEvents.map(event => (
-              <div key={event.id} className="col-lg-2 col-md-3 col-sm-5 mb-3">
+              <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                 <EventItem event={event} />
               </div>
             ))}
 
-            {/* <button
-              className="slider-arrow right"
-              onClick={() => setRecentEventIndex(prev =>
-                prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
-              )}
-            >
-              &#8250;
-            </button> */}
+
           </div>
+          <button
+            className="slider-arrow right col"
+            onClick={() => setRecentEventIndex(prev =>
+              prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
+            )}
+          >
+            &#8250;
+          </button>
 
         </div>
+          {renderIndicators(recentEventIndex, mockEvents.length, setRecentEventIndex)}
 
 
         <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
@@ -122,36 +142,37 @@ const FiveEvents: React.FC = () => {
           </h2>
         </div>
 
-        <div className="position-relative">
-          {/* <button
-            className="slider-arrow left"
+        <div className="position-relative row justify-content-center align-content-center">
+          <button
+            className="slider-arrow left col"
             onClick={() => setPopularEventIndex(prev =>
               prev === 0 ? mockEvents.length - eventsToShow : prev - 1
             )}
           >
             &#8249;
-          </button> */}
-          <div className="items">
+          </button>
+          <div className="items col-lg-11 col-sm-9">
             {/* {loading && (
             <div className="loading"> 
               <Lottie options={defaultOptions} />
             </div>
           )} */}
             {popularEvents.map(event => (
-              <div key={event.id} className="col-md-2 col-sm-6 mb-3">
+              <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                 <EventItem event={event} />
               </div>
             ))}
           </div>
-          {/* <button
-            className="slider-arrow right"
+          <button
+            className="slider-arrow right col"
             onClick={() => setPopularEventIndex(prev =>
               prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
             )}
           >
             &#8250;
-          </button> */}
+          </button>
         </div>
+        {renderIndicators(popularEventIndex, mockEvents.length, setPopularEventIndex)}
       </div>
     </Card>
   );

@@ -44,6 +44,9 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
           </div>
         </div>
       </div>
+      <div className="event-info__title">
+            <h1 id="event-title">{event.title}</h1>
+      </div>
     </Link>
   );
 };
