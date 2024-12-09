@@ -33,8 +33,15 @@ const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState(window.innerWidth > 1040 ? blogo : slogo);
   useEffect(() => {
+    console.log("------------------")
+    console.log("user data: "+ userData)
+    console.log("token: "+ auth.token)
+  },[]);
+  
+  useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData") || "null");
     setUserData(storedUserData);
+    
     if (auth.token) {
       if (!isLoggedIn) {
         const fetchUserData = async () => {
@@ -90,6 +97,7 @@ const Navbar: React.FC = () => {
   }, [auth, isLoggedIn, isOpen]);
 
   const handleShowDrawer = () => {
+    
     setShowDrawer(!showDrawer);
     if (!showBorder) {
       setTimeout(() => setShowBorder(!showBorder), 300);
@@ -169,27 +177,36 @@ const Navbar: React.FC = () => {
                         
                         <div className="row" >
                             {userData && <p className="pt-2 px-2 ellipsis"> {userData.userName}</p>}
-                            {userData!.profilePicture && <img src={userData!.profilePicture} style={{height:"40px",width:"40px",borderRadius: "50%"  }} alt="profile"/>}
-                            {!userData!.profilePicture && <img src={profile} style={{height:"40px",width:"40px",borderRadius: "50%"  }} alt="profile"/>}
+                            {/* {userData!.profilePicture && <img src={userData!.profilePicture} style={{height:"40px",width:"40px",borderRadius: "50%"  }} alt="profile"/>}
+                            {!userData!.profilePicture && <img src={profile} style={{height:"40px",width:"40px",borderRadius: "50%"  }} alt="profile"/>} */}
                             
-                            
+                            {userData?.profilePicture ? (
+                                <img
+                                  src={userData.profilePicture}
+                                  style={{ height: "40px", width: "40px", borderRadius: "50%" }}
+                                  alt="profile"
+                                />
+                              ) : (
+                                <img
+                                  src={profile}
+                                  style={{ height: "40px", width: "40px", borderRadius: "50%" }}
+                                  alt="profile"
+                                />
+                            )}
                         </div>
                           
                         
                         {isOpen && (
-                          <div className="col dropdown-content">
+                          <div className="col dropdown-contentt">
+                            {/* <div className="row"> ردیف 1</div>
+                            <div className="row"> ردیف 2</div> */}
                                 <div className="row pr-2 pt-2  dropdown-item1" onClick={() =>navigate('/created-events')}>
                                         <i className="pl-1 ml-0  uil uil-user"></i>
                                         <p className="pt-0 mb-0">حساب کاربری</p>
                                 </div>
-                                {/* <div className="row pr-2 pb-0 mb-0   dropdown-item3">
-                                        <i class="pl-1 ml-0 pr-1 mt-0 pb-0 bi bi-wallet2"></i>
-                                        <p className="pt-1 mb-0 mt-1"><Wallet/> </p>
-                                    
-                                </div> */}
                                 <div className="row pr-2 pb-2  dropdown-item2" >
-                                       <i className=" pl-2 pr-1 mt-1 bi bi-box-arrow-right"></i>
-                                         <p className="pt-2 mb-0 mt-1" onClick={() => {
+                                        <i className=" pl-2 pr-1 mt-1 bi bi-box-arrow-right"></i>
+                                          <p className="pt-2 mb-0 mt-1" onClick={() => {
                                 toast.error("از حساب کاربری خارج شدید")
                                 setTimeout(() => {
                                     auth.logOut()
@@ -199,10 +216,10 @@ const Navbar: React.FC = () => {
 
                                 </div>
                         </div>
-                        )}
-                      </div>
                         
-                    }
+                        )}
+                        </div>
+                }
 
             {showDrawer && !auth.token && (
               <>

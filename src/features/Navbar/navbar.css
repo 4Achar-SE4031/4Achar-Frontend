@@ -5,8 +5,9 @@
   cursor: pointer;
 }
 
-.dropdown-content {
+.dropdown-contentt {
   display: flex;
+  flex-direction: column;
   position: absolute;
   direction: rtl;
   top: 100%; 
@@ -34,19 +35,11 @@
 .dropdown-item2{
   border-radius:0px 0px 4px 4px ;
   color:#ffeba7;
-  background-color: #ef6610;
+  background-color: #2B2E38;
   cursor: pointer;
 }
 
 
-
-.ellipsis {
-  direction: rtl;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 100px;
-}
 
 
 .auth-link {
@@ -67,23 +60,35 @@
 .navbar {
   height: 60px;
   width: 100%;
-  /* position: relative; */
+  position: relative;
   background: radial-gradient(ellipse at bottom, #1b2735 0%, #12141d 100%);
   /* position: fixed;
   top: 0;
   overflow: hidden; */
   font-family: "iransansweb";
   color: #ffeba7;
-  padding-left: 0%;
-  padding-right: 0%;
+  /* padding-left: 0%;
+  padding-right: 0%; */
     /* overflow: hidden;
     position: fixed;
     width: 100%;
     z-index: 1100; */
-
-  .container {
+  .sdfdsf{
 
   }
+  /* .row {
+    display: flex ;
+    flex-wrap: wrap; 
+    margin-right: -0.75rem; 
+    margin-left: -0.75rem; 
+  }
+  .col {
+    flex: 1 0 0%; 
+    max-width: 100%; 
+    padding-right: 0.75rem; 
+    padding-left: 0.75rem; 
+  } */
+  
   .search-bar {
     display: flex;
     direction: rtl;

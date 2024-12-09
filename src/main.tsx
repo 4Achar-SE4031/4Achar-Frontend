@@ -6,6 +6,7 @@ import { router } from './app/router/Routes'
 // import "./assets/font/iransansweb.ttf"
 
 // import "./fonts/iransansweb.ttf"
+// import 'bootstrap/dist/css/bootstrap.min.css';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
