@@ -24,14 +24,14 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
 
         <div className="event-info">
           <div className="event-info__title">
-            <h1 id="event-title">{event.title} نمایش امشب</h1>
+            <h1 id="event-title">{event.title}</h1>
           </div>
           <div className="event-info__details">
-            <h4 id="event-details">{event.details} آخرین دوره اجراها در ایران</h4>
+            <h4 id="event-details">{event.details}</h4>
             <i className="input-icon uil uil-document-layout-right"></i>
           </div>
           <div className="event-info__address"> 
-            <h4 id="event-address">{`${event.province} ${event.city}`}کاخ هنر </h4>
+            <h4 id="event-address">{`${event.province} ${event.city}`} </h4>
             <i className="input-icon uil uil-location-point"></i>
           </div>
           <div className="event-info__date">
@@ -39,10 +39,13 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
             <i className="input-icon uil uil-calendar-alt"></i>
           </div>
           <div className="event-info__hour">
-            <h5 id="event-hour">{toPersianDigits(event.start_hour)} {toPersianDigits("19:00")}</h5>
+            <h5 id="event-hour">{toPersianDigits(event.start_hour)}</h5>
             <i className="input-icon uil uil-clock"></i>
           </div>
         </div>
+      </div>
+      <div className="event-info__title">
+            <h1 id="event-title">{event.title}</h1>
       </div>
     </Link>
   );
