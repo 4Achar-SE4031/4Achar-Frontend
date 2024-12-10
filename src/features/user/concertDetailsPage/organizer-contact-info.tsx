@@ -30,7 +30,7 @@ const OrganizerInfoModal: React.FC<OrganizerInfoModalProps> = ({ show, handleClo
   const addEmoji = (e: any) => {
     let sym = e.unified.split("-");
     let codesArray: string[] = [];
-    sym.forEach((el) => codesArray.push("0x" + el));
+    sym.forEach((el:any) => codesArray.push("0x" + el));
     let emoji = String.fromCodePoint(...codesArray as any);
     setInput(input + emoji);
   };
@@ -40,6 +40,12 @@ const OrganizerInfoModal: React.FC<OrganizerInfoModalProps> = ({ show, handleClo
   };
 
   const sendMessageHandler = async () => {
+    if (id === undefined) {
+        // Handle the case where id is undefined
+        console.error("Recipient ID is undefined");
+        return;
+      }
+      
     let sendingMessage = {
       content: input,
       recipient: id.toString(),
@@ -61,7 +67,7 @@ const OrganizerInfoModal: React.FC<OrganizerInfoModalProps> = ({ show, handleClo
         draggable: true,
         progress: undefined,
         autoClose: 3000,
-        toastStyle: { backgroundColor: "#2b2c38", fontFamily: "iransansweb", color: "#ffeba7", marginTop: "60px" }
+        style: { backgroundColor: "#2b2c38", fontFamily: "iransansweb", color: "#ffeba7", marginTop: "60px" }
       });
       setIsInputDisabled(true);
       const inputted_text = input;

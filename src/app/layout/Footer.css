@@ -1,0 +1,76 @@
+.footer {
+    background-color: #1c1c1c;
+    color: #ffeba7;
+    padding: 30px 20px;
+    direction: rtl; /* Set direction to right-to-left */
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 200px;
+  }
+  
+  .footer-title {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+  
+  .footer-subtitle {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+  }
+  
+  .footer-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .footer-list li {
+    margin-bottom: 5px;
+    transition: transform 0.3s, color 0.3s; /* Add transition for smooth hover effect */
+  }
+  
+  .footer-list li:hover {
+    transform: scale(1.1); /* Grow a bit larger on hover */
+    color: #ffeba7; /* Change the color */
+    cursor: pointer;
+    
+  }
+  
+  .footer-bottom {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-top: 1px solid #444;
+    padding-top: 10px;
+  }
+  
+  .footer-social {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .footer-social span {
+    margin-left: 5px;
+  }
+  
+  .footer-social svg {
+    cursor: pointer;
+    color: #ffeba7;
+    transition: transform 0.3s, color 0.3s; /* Add transition for hover effect */
+  }
+  
+  .footer-social svg:hover {
+    transform: scale(1.1); /* Grow a bit larger on hover */
+    color: #ffeba7; /* Keep the color consistent */
+  }
+  

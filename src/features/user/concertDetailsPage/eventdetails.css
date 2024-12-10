@@ -1,12 +1,6 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900");
-
-.loading {
-  display: flex;
-  justify-content: center; 
-  align-items: center;
-}
 .event-details {
-  font-family: "iransansweb";
+  /* font-family: "iransansweb"; */
   font-weight: 300;
   line-height: 1.3;
   color: #ffeba7;
@@ -18,7 +12,6 @@
   overflow-y: auto;
   
   .asda{
-
   }
   .ellipsis {
     direction: ltr;
@@ -26,31 +19,8 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width:170px;
-    width:'auto';
-  }
-
-
-  .event-details-card{
-    direction: rtl;
-    width:770px;
-    max-width: 90%;
-    margin-top: 10px;
-    border-radius: 6px;
-    background-color: #2b2e38;
-    height:"fit-content";
-  }
-  .event-details-mcard{
-    direction: rtl;
-    width:350px;
-    max-width: 90%;
-    margin-top: 0px;
-    border-radius: 6px;
-    background-color: #2b2e38;
-    height:400px;
   }
   
-  
-
 a:hover {
   text-decoration: none;
 }
@@ -80,10 +50,6 @@ h4 {
 .full-height {
   min-height: 100vh;
 }
-
-
-
-
 .custom-file-upload {
   display: inline-block;
   padding:0px 25px;
@@ -106,9 +72,6 @@ h4 {
   padding-right: 5px;
   margin: 0px !important;
 }
-
-
-
 .card-3d-wrap-ce {
   direction: rtl;
   position: relative;
@@ -117,7 +80,8 @@ h4 {
   -webkit-transform-style: preserve-3d;
   transform-style: preserve-3d;
   perspective: 800px;
-  margin-top: 0px;
+  margin-top: 30px;
+  height: 150%;
 }
 .card-3d-wrap-description {
   direction: rtl;
@@ -130,9 +94,6 @@ h4 {
   margin-top: 10px;
   
 }
-
-
-
 .center-wrap {
   position: absolute;
   width: 100%;
@@ -141,12 +102,10 @@ h4 {
   transform: translate3d(0, -50%, 35px) perspective(100px);
   display: block;
 }
-
 .card-front,
 .card-back {
-  /* width: 100%; */
+  width: 100%;
   height: 100%;
-  width: fit-content;
   background-color: #2b2e38;
   background-image: url("https://www.toptal.com/designers/subtlepatterns/patterns/dark_embroidery.png");
   position: absolute;
@@ -159,12 +118,7 @@ h4 {
   font-size: 14px;
   margin-left: 5px;
 }
-.ed-message {
-  margin:10px 0 0;
-  color: #b3b3b3;
-  font-size: 14px;
-}
-#message{
+.section .message {
   margin:10px 0 0;
   color: #b3b3b3;
   font-size: 14px;
@@ -176,14 +130,12 @@ h4 {
 .section .message a:hover {
   color: #3064c6;
 }
-
 .form-group {
   position: relative;
   display: block; 
   margin: 0;
   padding: 0;
 }
-
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
   -webkit-appearance: none;
@@ -217,7 +169,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 200ms linear;
   box-shadow: 0 4px 8px 0 rgba(21, 21, 21, 0.2);
 }
-
 .form-style-ce-area {
   resize: none;
   text-align: right;
@@ -237,8 +188,6 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   transition: all 200ms linear;
   box-shadow: 0 4px 8px 0 rgba(21, 21, 21, 0.2);
 }
-
-
 .province-city{ 
   margin-top: 5px;
   width: 95%;
@@ -254,12 +203,6 @@ select {
   font-size: 14px;
   border-radius: 5px;
 }
-
-
-
-
-
-
 .switchButton {
   --s: 25px; /* adjust this to control the size*/
   
@@ -299,20 +242,12 @@ select {
   --_p: 100%;
   --_i: 1;
 }
-
-
-
-
 .form-style:focus,
 .form-style:active {
   border: none;
   outline: none;
   box-shadow: 0 4px 8px 0 rgba(21, 21, 21, 0.2);
 }
-
-
-
-
 .btn {
   border-radius: 4px;
   height: 34px;
@@ -328,25 +263,22 @@ select {
   background-color: #ffeba7;
   color: #000000;
 }
-
 .btn:hover {
   background-color: #000000;
   color: #ffeba7;
   box-shadow: 0 8px 24px 0 rgba(16, 39, 112, 0.2);
 }
-
 .separator-text {
   padding-top: 6px;
   color: #b3b3b3;
   font-size: 15px;
 }
-
 .google-login-button {
   border-radius: 30px;
   color: #ffeba7;
   background-color: #252020;
   font-size: 20px;
-  font-family: "iransansweb";
+  /* font-family: "iransansweb"; */
   height: 44px;
   width: 125px;
 }
@@ -354,60 +286,99 @@ select {
   background-color: #000000;
   color: #4285f4;
 }
-
 @media (max-width: 1000px){
   .switchButton{
     --s: 20px !important; 
     
   }
   p{
-    font-size: 14px !important;
+    font-size: 12px !important;
   }
 }
-
-
-
-
+@media screen and (max-width: 450px) {
+  .link {
+    color: #ffeba7;
+    padding-right: 245px;
+    font-size: 10px;
+  }
+  .section .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 10px;
+  }
+  .section .message a {
+    color: #30c1c6;
+    font-size: 10px;
+  }
+}
 @media screen and (max-width: 420px) {
   .link {
     color: #ffeba7;
     padding-right: 190px;
     font-size: 10px;
   }
-  .ellipsis {
-    direction: ltr;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width:140px;
-    width:'auto';
-  }
-  .ed-message{
-    margin:10px 0 0;
-    color: #b3b3b3;
-    font-size: 13px !important;
-  }
+}
+  
 }
 
-
-.bi-bookmark-plus, .bi-bookmark-plus-fill, .bi-bookmark-plus::before, .bi-bookmark-plus-fill::before{
-    cursor: pointer;
-    vertical-align: top !important;
-    font-size: 2vh;
-}
-
-.message{
-    justify-content: center;
+/* Ensure the body and html have full height */
+html, body {
+    height: 100%;
     margin: 0;
-    font-size: 1.5vh;
-}
-
-}
-/* @media screen and (max-width: 600px) {
-  .event-details{
-    height: 75vh !important;
+    overflow: hidden; /* Prevent the page from scrolling */
   }
-} */
 
+  
+  /* Container for all music notes */
+  .music-notes-container {
+    /* position: fixed; */
+    top: 0;
+    left: 0;
+    /* width: 100vw; Use viewport width */
+    /* height: 100vh; Use viewport height */
+    pointer-events: none; /* Ensure notes don't block interactions */
+    z-index: -1; /* Make sure notes stay behind content */
+  }
+  
+  /* Individual music note */
+  .music-note {
+    position: absolute;
+    animation: float 10s linear infinite; /* Slower movement */
+    color: rgba(255, 255, 255, 0.8); /* Light color for music notes */
+    opacity: 0; /* Make sure notes start invisible */
+    transition: opacity 0.5s ease-in-out; /* Smooth transition for opacity */
+  }
+  
+  /* Keyframes for floating animation */
+  @keyframes float {
+    0% {
+      transform: translateY(100vh) translateX(0); /* Start at the bottom */
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(${Math.random() * 200 - 100}vw); /* Move to a random X value */
+      opacity: 0; /* Fade out at the top */
+    }
+  }
+  
+  /* Styling for the event content */
+  .event-details-container {
+    position: relative;
+    min-height: 100vh; /* Ensure the container takes up at least the full height of the viewport */
+    background-color: #282c34; /* Dark background */
+    color: white;
+    padding: 20px;
+    overflow: hidden; /* Prevent content from overflowing */
+  }
+  
+  .event-content {
+    position: relative;
+    z-index: 1; /* Ensure event content appears above music notes */
+    padding: 20px;
+    text-align: center;
+  }
+  
 
-
+  .py-1.mr-0.ml-2.px-0.mb-2.pb-5 {
+    padding-bottom: 0 !important;
+  }
