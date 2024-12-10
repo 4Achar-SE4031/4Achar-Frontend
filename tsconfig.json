@@ -5,6 +5,11 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "noUnusedLocals": false,
+    "module": "ESNext",
+    "target": "ES5",  // or "ES6" depending on your needs
+    "outDir": "./build",
+    "types": ["node", "react", "react-dom"]
   }
 }
