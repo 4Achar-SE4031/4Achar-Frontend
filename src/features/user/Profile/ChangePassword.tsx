@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useFormik } from "formik";
 import { changePasswordValidation } from "./UserInfoValidation";
-import axios from "axios";
 import agent from "../../../app/api/agent";
 import { toast } from "react-toastify";
 const ChangePassword = () => {
@@ -42,11 +41,11 @@ const ChangePassword = () => {
           newPassword: values.newPassword,
         }
         await agent.Account.updatePassword(data)
-        toast.success('پروفایل با موفقیت به‌روز شد');
+        toast.success('رمز عبور با موفقیت تغییر یافت');
       }
       catch (error) {
 
-        toast.error('خطا در به‌روزرسانی پروفایل');
+        toast.error('خطا در تغییر رمز عبور');
       }
 
 
@@ -62,21 +61,22 @@ const ChangePassword = () => {
                 <div className="center-wrap">
                   <div className="section">
                     <div className="change-password__title">
-                      <h2 className="mb-4 pb-3"> تغییر رمز عبور</h2>
+                      <h2 className="mb-4 pb-3">فرم تغییر رمز عبور</h2>
                     </div>
                     <div className="change-password__content">
                       <div className="change-password__content-current">
                         <div className="col-lg-6 col-sm-10 text-right">
-                          <label>رمز عبور فعلی </label>
+                          <label htmlFor="password">رمز عبور فعلی</label>
                           <div className={`form-group mt-1`}>
                             <input
                               id="password"
-                              className={errors.password ? "input-error" : ""}
+                              className={errors.password ? "input-error password" : "password"}
                               dir="ltr"
                               type={showPassword ? "text" : "password"}
                               value={values.password}
                               onChange={handleChange}
                               onBlur={handleBlur}
+                              name="password"
                             />
                             <i
                               className={
@@ -101,18 +101,19 @@ const ChangePassword = () => {
                       </div>
                       <div className="change-password__content-new">
                         <div className="col-lg-6 col-sm-10 text-right">
-                          <label>رمز عبور جدید </label>
+                          <label htmlFor="newPassword">رمز عبور جدید</label>
                           <div className={`form-group mt-1`}>
                             <input
                               id="newPassword"
                               className={
-                                errors.newPassword ? "input-error" : ""
+                                errors.newPassword ? "input-error newPassword" : "newPassword"
                               }
                               dir="ltr"
                               type={showPassword2 ? "text" : "password"}
                               value={values.newPassword}
                               onChange={handleChange}
                               onBlur={handleBlur}
+                              name="newPassword"
                             />
                             <i
                               className={
@@ -137,18 +138,19 @@ const ChangePassword = () => {
                       </div>
                       <div className="change-password__content-confirm">
                         <div className="col-lg-6 col-sm-10 text-right">
-                          <label>تکرار رمز عبور جدید </label>
+                          <label htmlFor="confirmPassword">تکرار رمز عبور جدید</label>
                           <div className={`form-group mt-1`}>
                             <input
                               id="confirmPassword"
                               className={
-                                errors.confirmPassword ? "input-error" : ""
+                                errors.confirmPassword ? "input-error confirmPassword" : "confirmPassword"
                               }
                               dir="ltr"
                               type={showPassword3 ? "text" : "password"}
                               value={values.confirmPassword}
                               onChange={handleChange}
                               onBlur={handleBlur}
+                              name="confirmPassword"
                             />
                             <i
                               className={
