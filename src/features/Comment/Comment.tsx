@@ -62,7 +62,7 @@ const Comment: React.FC<CommentProps> = ({
 
   return (
     <>
-      <div className="comment comment-content mr-3">
+      <div className="comment comment-content">
         <div className="scoreColumn">
           {current ? (
             <>

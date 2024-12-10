@@ -7,8 +7,63 @@ body {
     border-top: 4px solid black;
     background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%);
   }
+  .slider-arrow {
+    position: absolute; /* Position relative to the parent container */
+    top: 50%; /* Move the button to the vertical center */
+    transform: translateY(-50%); /* Adjust for the button's own height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 35px; /* Keep consistent height */
+    width: 35px; /* Add width for consistent shape */
+    background-color: #1f2029; /* Optional: button background */
+    color: #ffeba7; /* Optional: button text color */
+    border: 1px solid #ffeba7; /* Optional: border for style */
+    border-radius: 50%; /* Optional: make the buttons round */
+    cursor: pointer; /* Show a pointer cursor for better UX */
+  }
+  
+  .slider-arrow.left {
+    left: 10px; /* Position slightly inside on the left */
+  }
+  
+  .slider-arrow.right {
+    right: 10px; /* Position slightly inside on the right */
+  }
+  
+  .slider-arrow:hover {
+    background-color: #ffeba7;
+    color: #1f2029;
+  }
+  .slider-indicators {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+  }
+  
+  .dot {
+    height: 10px;
+    width: 10px;
+    margin: 0 5px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: inline-block;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .dot.active {
+    background-color: #007bff;
+  }
+    
   .events-title {
     margin-top: 170px !important;
+  }
+  #event-title{
+    color: #ffeba7;
+    font-size: 16px;
+
   }
   .items-title {
     color: #ffeba7;
@@ -30,6 +85,9 @@ body {
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 10;
+  }
+  .slider-arrow{
+    max-height: 35px;
   }
 
   button {
@@ -54,7 +112,7 @@ body {
     overflow: auto;
     position: relative;
     /* border-radius: 10px; */
-    column-gap: 30px;
+    /* column-gap: px; */
     margin-bottom: 20px;
     position: relative;
     overflow: hidden;
@@ -81,14 +139,7 @@ body {
       border-radius: 10px;
       /* border: 1px solid #ffeba7; */
     }
-    .slider-arrow {
-      color: white;
-      transition: all 0.3s ease;
-    }
 
-    .slider-arrow:hover {
-      background: rgba(0, 0, 0, 0.7) !important;
-    }
     .item:hover {
       transition: all 0.2s;
       transform: scale(1.01);
@@ -225,10 +276,13 @@ body {
     z-index: 1050;
   }
 }
-@media (max-width: 1366px) {
+@media (max-width: 2066px) {
   .events-list {
     .custom-container {
       max-width: 90%;
+    }
+    .items{
+      column-gap: 20px !important;
     }
   }
 }
