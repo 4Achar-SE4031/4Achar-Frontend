@@ -5,27 +5,27 @@ import { useParams } from 'react-router-dom';
 import copy from 'clipboard-copy';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import PageNotFound from "./PageNotFound/PageNotFound";
+import PageNotFound from "./PageNotFound/PageNotFound.tsx";
 
 import Navbar from "../../Navbar/navbar.tsx";
 import './c_details.css'
-import OrganizerInfoModal from "./organizer-contact-info";
+import OrganizerInfoModal from "./organizer-contact-info.tsx";
 
-import MainComment from "../../Comment/MainComment";
+import MainComment from "../../Comment/MainComment.tsx";
 
 import moment from 'moment-jalaali';
 import animationData from "./Animation - 1715854965467.json";
 import Lottie from "react-lottie";
 // import { Alert } from 'react-alert'
 // import { toast } from "react-toastify";
-import MapComponent from "./MapComponent/MapComponent";
+import MapComponent from "./MapComponent/MapComponent.tsx";
 
-import { useAuth } from "../Authentication/authProvider";
+import { useAuth } from "../Authentication/authProvider.tsx";
 import HoverRating from "./Rating.tsx"
 import MusicNotes from './MusicNotes.tsx';
 import Footer from "../../../app/layout/Footer.tsx";
 
-const ConcertDetails = () => {
+const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
     const [canPurchase, setCanPurchase] = useState(true);
     const handleClose = () => setShow(false);
@@ -38,7 +38,7 @@ const ConcertDetails = () => {
         animationData: animationData,
       };
     const navigator=useNavigate();
-    let { id } = useParams();
+    let { id } = useParams<{ id: string }>();
     const monthDict ={0:"فروردین", 1:"اردیبهشت",2:"خرداد",3:"تیر",4:"مرداد",5:"شهریور",6:"مهر",7:"آبان",8:"آذر",9:"دی",10:"بهمن",11:"اسفند"};
     const dayDict ={"Monday":"دوشنبه","Tuesday":"سه شنبه","Wednesday":"چهارشنبه","Thursday":"پنج شنبه","Friday":"جمعه","Saturday":"شنبه","Sunday":"یک شنبه"};
     const [eventDateTime,setEventDateTime] = useState(
@@ -91,12 +91,24 @@ const ConcertDetails = () => {
 
     })
    
-    
+    const auth = useAuth();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [isBookmarked, setBookmark] = useState(false);
-    let userData = JSON.parse(localStorage.getItem("userData"));
-    const auth = useAuth();
+    let userData = localStorage.getItem("userData");
+    if (userData) {
+        try {
+            userData = JSON.parse(userData);
+        } catch (e) {
+            console.error("Error parsing userData:", e);
+            // Handle the error or set a default value if needed
+            userData = null; // or some default empty object
+        }
+        } else {
+        userData = null; // Handle the case where there's no data in localStorage
+    }
+
+    
 
     const bookmarkToggler = async () =>{
             if(auth.token!==""){
@@ -133,6 +145,7 @@ const ConcertDetails = () => {
            
         
     }
+    const [screenSize, setScreenSize] = useState<string>('');
 
     useEffect(() => {
         setTimeout(() => {
@@ -192,7 +205,6 @@ const ConcertDetails = () => {
             setScreenSize('large');
         }
     }, []);
-    const [screenSize,setScreenSize] = useState()
     useEffect(() => {
         const handleResize = () => {
             let width = window.innerWidth;
@@ -268,7 +280,7 @@ const ConcertDetails = () => {
     };
 
     const copyLinkToClipboard = () => {
-        copy(eventDetails.onlineevent.url)
+        copy(window.location.href)
         .then(() => {
         })
         .catch(err => {
@@ -276,11 +288,13 @@ const ConcertDetails = () => {
         });
     };
 
-    const handleMapData = (data) =>{
-        
+    const handleMapData = (data: { lat: any; lng: any }) => {
+        console.log("Latitude:", data.lat);
+        console.log("Longitude:", data.lng);
+        // Implement additional logic with 'data' here
     }
 
-    const searchTagHandler = (tag) =>{
+    const searchTagHandler = (tag: string) =>{
     }
     const eventTags = eventDetails.tags.map(tag => <div className="container" onClick={() =>searchTagHandler(tag)} style={{cursor:"pointer",borderRadius:"5px",margin:"5px",paddingTop:"3px",paddingBottom:"2px",paddingLeft:"4px",paddingRight:"4px",background:"#808080",width:"fit-content",fontSize:"12px",height:"20px"}}>{tag}#</div>);
     if (loading) {
@@ -312,22 +326,22 @@ const ConcertDetails = () => {
                 {screenSize==='large' && <>
                         <div className="row justify-content-center" style={{marginTop:"30px"}}>
                             
-                            <div className="event-details-mcard py-3 mr-0  px-3 mb-2" styel={{width:"350px",maxWidth:"350px"}}>
+                            <div className="event-details-mcard py-3 mr-0  px-3 mb-2" style={{width:"350px",maxWidth:"350px"}}>
                                     <p className="pb-3 ed-message text-right">{eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
                                     <h4 className=" pb-3 text-right"> {eventDetails.title} </h4>
                                     <div className="row px-3 mb-2"> 
-                                        <i class="bi bi-tag-fill icons-style"></i>
+                                        <i className="bi bi-tag-fill icons-style"></i>
                                         <p className="ed-message">{eventDetails.ticket_price.toLocaleString()} تومان</p>
                                         
                                     </div>
                                     
                                     <div className="row px-3 mb-2">
-                                        <i class="bi bi-geo-alt-fill icons-style"></i>
+                                        <i className="bi bi-geo-alt-fill icons-style"></i>
                                         <p className="ed-message">{eventDetails.province}-{eventDetails.city}</p>
                                     </div>
 
                                     <div className="row px-3 pb-3 mb-2">
-                                        <p class="bi bi-grid icons-style"></p>
+                                        <p className="bi bi-grid icons-style"></p>
                                         <p className="ed-message">{eventDetails.category}</p>
                                     </div>
                                     <div className="row px-3 pt-1" >
@@ -371,12 +385,12 @@ const ConcertDetails = () => {
                     <div className="row justify-content-center">
                     <div className="event-details-card py-3 mr-0  px-3 mb-2" style={{width:"350px",height:"fit-content"}}>
                                 <div className="row px-3">
-                                    <i class="bi bi-clock  icons-style"></i>
+                                    <i className="bi bi-clock  icons-style"></i>
                                     <p className="pb-1 ed-message">شروع: {eventDateTime.startWeekDay} {eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
 
                                 </div>
                                 <div className="row px-3">
-                                    <i class="bi bi-clock  icons-style"></i>
+                                    <i className="bi bi-clock  icons-style"></i>
                                     <p className="pb-3 ed-message">پایان: {eventDateTime.endWeekDay} {eventDateTime.endDay} {eventDateTime.endMonth} {eventDateTime.endYear} ساعت {eventDateTime.endTime} </p>
 
                                 </div>
@@ -428,7 +442,7 @@ const ConcertDetails = () => {
                                     {canPurchase && 
                                         <button
                                             className="btn  mt-1 mx-1"
-                                            onClick={(e) => navigator('/register-event/'+id.toString())}
+                                            onClick={(e) => navigator('/register-event/'+Number(id).toString())}
                                             >
                                             خرید بلیت  
                                         </button>
@@ -467,7 +481,7 @@ const ConcertDetails = () => {
                                     {canPurchase && 
                                         <button
                                             className="btn  mt-1 mx-1"
-                                            onClick={(e) => navigator('/register-event/'+id.toString())}
+                                            onClick={(e) => navigator('/register-concert/'+Number(id).toString())}
                                             >
                                            خرید بلیت  
                                         </button>
@@ -480,12 +494,12 @@ const ConcertDetails = () => {
                         <div className="row justify-content-right" style={{width:"780px",zIndex: 10,position: "relative"}}>
                             <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content",width:"380px"}}>
                             <div className="row px-3">
-                                    <i class="bi bi-clock  icons-style"></i>
+                                    <i className="bi bi-clock  icons-style"></i>
                                     <p className="pb-1 ed-message">شروع: {eventDateTime.startWeekDay} {eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
 
                                 </div>
                                 <div className="row px-3">
-                                    <i class="bi bi-clock  icons-style"></i>
+                                    <i className="bi bi-clock  icons-style"></i>
                                     <p className="pb-3 ed-message">پایان: {eventDateTime.endWeekDay} {eventDateTime.endDay} {eventDateTime.endMonth} {eventDateTime.endYear} ساعت {eventDateTime.endTime} </p>
 
                                 </div>
@@ -523,15 +537,15 @@ const ConcertDetails = () => {
                             <p className="pb-3 ed-message text-right">{eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
                                     <h4 className=" pb-3 text-right"> {eventDetails.title} </h4>
                                     <div className="row px-3">
-                                        <i class="bi bi-tag-fill icons-style"></i>
+                                        <i className="bi bi-tag-fill icons-style"></i>
                                         <p className="ed-message">{eventDetails.ticket_price.toLocaleString()} تومان</p>
                                     </div>
                                     <div className="row px-3">
-                                        <i class="bi bi-geo-alt-fill icons-style"></i>
+                                        <i className="bi bi-geo-alt-fill icons-style"></i>
                                         <p className="ed-message">{eventDetails.province}-{eventDetails.city}</p>
                                     </div>
                                     <div className="row px-3 pb-3">
-                                        <p class="bi bi-grid icons-style"></p>
+                                        <p className="bi bi-grid icons-style"></p>
                                         <p className="ed-message">{eventDetails.category}</p>
                                     </div>
                                     <div className="row px-3 pt-4" >
@@ -579,16 +593,16 @@ const ConcertDetails = () => {
                             <p className="pb-3 ed-message text-right">{eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
                                     <h4 className=" pb-3 text-right"> {eventDetails.title} </h4>
                                     <div className="row px-3">
-                                        <i class="bi bi-tag-fill icons-style"></i>
+                                        <i className="bi bi-tag-fill icons-style"></i>
                                         <p className="ed-message">{eventDetails.ticket_price.toLocaleString()} تومان</p>
                                     </div>
                                     
                                     <div className="row px-3">
-                                        <i class="bi bi-geo-alt-fill icons-style"></i>
+                                        <i className="bi bi-geo-alt-fill icons-style"></i>
                                         <p className="ed-message">{eventDetails.province}-{eventDetails.city}</p>
                                     </div>
                                     <div className="row px-3 pb-3">
-                                        <p class="bi bi-grid icons-style"></p>
+                                        <p className="bi bi-grid icons-style"></p>
                                         <p className="ed-message">{eventDetails.category}</p>
                                     </div>
                                     <div className="row px-3 pt-4" >
@@ -621,12 +635,12 @@ const ConcertDetails = () => {
 
                                 <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content",zIndex: 10,position: "relative"}}>
                             <div className="row px-3">
-                                    <i class="bi bi-clock  icons-style"></i>
+                                    <i className="bi bi-clock  icons-style"></i>
                                     <p className="pb-1 ed-message">شروع: {eventDateTime.startWeekDay} {eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
 
                                 </div>
                                 <div className="row px-3">
-                                    <i class="bi bi-clock  icons-style"></i>
+                                    <i className="bi bi-clock  icons-style"></i>
                                     <p className="pb-3 ed-message">پایان: {eventDateTime.endWeekDay} {eventDateTime.endDay} {eventDateTime.endMonth} {eventDateTime.endYear} ساعت {eventDateTime.endTime} </p>
 
                                 </div>
@@ -674,7 +688,7 @@ const ConcertDetails = () => {
                     </center>
 
                 }
-                <MainComment id={id}/>
+                <MainComment id={Number(id)}/>
                 <Footer />
             </div> 
             

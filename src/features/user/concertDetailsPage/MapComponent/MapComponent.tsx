@@ -56,9 +56,9 @@ function LocationMarker({ params }: LocationMarkerProps) {
 
 // MapComponent component props type definition
 interface MapComponentProps {
-  sendDataToParent: (data: { lat: number; lng: number }) => void;
-  lati: number;
-  long: number;
+  sendDataToParent: (data: { lat: any; lng: any }) => void;
+  lati: any;
+  long: any;
   onlyShow: boolean;
   name: string;
 }
