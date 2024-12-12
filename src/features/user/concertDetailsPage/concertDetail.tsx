@@ -135,7 +135,10 @@ const EventDetails: React.FC = () => {
   const [eventDetails, setEventDetails] = useState({
     startDay: "پنج شنبه",
     startDate: [1403, "آبان", 30],
+    starts: '30 آبان 1403',
+    ends: "5 آذر 1403",
     startTime: [21, 30],
+    day: '30 آذر',
     endDay: "جمعه",
     endDate: [1403, "آذر", 7],
     endTime: [21, 30],
@@ -147,6 +150,7 @@ const EventDetails: React.FC = () => {
     organizerName: "فرهاد فخر الدینی",
     organizerPhone: "09123456789",
     organizerEmail: "organizer@gmail.com",
+    url: 'http://localhost:3000/concertDetail',
     description: `
       رعایت شئونات اسلامی در تالار وحدت الزامی می باشد.
   
@@ -281,7 +285,7 @@ const EventDetails: React.FC = () => {
   };
 
   const copyLinkToClipboard = () => {
-    copy(eventDetails.onlineevent.url)
+    copy(eventDetails.url)
       .then(() => {})
       .catch((err) => {
         console.error('خطا در کپی کردن لینک برگزاری:', err);

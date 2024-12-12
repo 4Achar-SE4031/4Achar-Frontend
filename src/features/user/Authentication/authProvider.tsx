@@ -25,7 +25,7 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const loginAction = async (data: LoginData): Promise<string | false> => {
     try {
-      const response = await axios.post('http://localhost:5000/Account/jwt/create', data);
+      const response = await axios.post('https://api-concertify.darkube.app/Account/jwt/create', data);
       if (response.data) {
         setToken(response.data.token);
         console.log(response.data.token)

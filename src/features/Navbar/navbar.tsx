@@ -200,7 +200,7 @@ const Navbar: React.FC = () => {
                           <div className="col dropdown-contentt">
                             {/* <div className="row"> ردیف 1</div>
                             <div className="row"> ردیف 2</div> */}
-                                <div className="row pr-2 pt-2  dropdown-item1" onClick={() =>navigate('/created-events')}>
+                                <div className="row pr-2 pt-2  dropdown-item1" onClick={() =>navigate('/user-info')}>
                                         <i className="pl-1 ml-0  uil uil-user"></i>
                                         <p className="pt-0 mb-0">حساب کاربری</p>
                                 </div>
@@ -235,7 +235,7 @@ const Navbar: React.FC = () => {
             {showDrawer && auth.token && (
               <>
                 <li className="auth-link-li">
-                  <NavLink to="/created-events">حساب کاربری</NavLink>
+                  <NavLink to="/user-info">حساب کاربری</NavLink>
                 </li>
                 {/* <li className="auth-link-li" style={{ marginRight: "15px" }}>
                   <Wallet balance={userData?.balance || 0} />

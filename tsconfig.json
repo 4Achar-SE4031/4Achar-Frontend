@@ -8,5 +8,13 @@
     "allowJs": true,
     "checkJs": false,
     "jsx": "react-jsx",
+    "noUnusedLocals": false,
+    "module": "ESNext",  
+    "outDir": "./build",
+    "types": ["node", "react", "react-dom"],
+
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "target": "es6",
   }
 }

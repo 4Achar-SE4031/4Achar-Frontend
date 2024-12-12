@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "leaflet/dist/leaflet.css";
 import {
   MapContainer,
@@ -14,6 +14,9 @@ import redPin from "../../../../assets/Images/red pin.png";
 import bluePin from "../../../../assets/Images/blue pin.png";
 import "./MapComponent.css";
 
+// Define a type for LatLngTuple (two-element array)
+type LatLngTuple = [number, number];
+
 const blackIcon = new Icon({
   iconUrl: "https://cdn-icons-png.flaticon.com/512/447/447031.png",
   iconSize: [38, 38],
@@ -27,8 +30,13 @@ const blueIcon = new Icon({
   iconSize: [38, 38],
 });
 
-function LocationMarker(params) {
-  const [position, setPosition] = useState(null);
+// LocationMarker component
+interface LocationMarkerProps {
+  params: any;
+}
+
+function LocationMarker({ params }: LocationMarkerProps) {
+  const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMapEvents({
     click() {
       map.locate();
@@ -45,27 +53,52 @@ function LocationMarker(params) {
     </Marker>
   );
 }
-const MapComponent = ({ sendDataToParent, lati, long, onlyShow, name }) => {
+
+// MapComponent component props type definition
+interface MapComponentProps {
+  sendDataToParent: (data: { lat: number; lng: number }) => void;
+  lati: number;
+  long: number;
+  onlyShow: boolean;
+  name: string;
+}
+
+const MapComponent: React.FC<MapComponentProps> = ({
+  sendDataToParent,
+  lati,
+  long,
+  onlyShow,
+  name,
+}) => {
   const [classes, setClasses] = useState(name);
-  const [marker, setMarker] = useState([
+  const [marker, setMarker] = useState<{ geocode: LatLngTuple; popUp: string }[]>([
     {
       geocode: [lati, long],
       popUp: "محل برگزاری رویداد",
     },
   ]);
 
+  // Correctly type center as LatLngTuple (two-element array)
   const mapOptions = {
-    center: [lati, long],
+    center: [lati, long] as LatLngTuple, // Ensures it's typed correctly as [number, number]
     zoom: 9,
   };
-  const MapEventsHandler = ({ handleMapClick }) => {
+
+  // MapEventsHandler props definition
+  interface MapEventsHandlerProps {
+    handleMapClick: (e: L.LeafletMouseEvent) => void;
+  }
+
+  const MapEventsHandler: React.FC<MapEventsHandlerProps> = ({ handleMapClick }) => {
     useMapEvents({
       click: (e) => handleMapClick(e),
     });
     return null;
   };
-  const handleMapClick = (e) => {
+
+  const handleMapClick = (e: L.LeafletMouseEvent) => {
     if (onlyShow === true) {
+      // No action
     } else {
       const { lat, lng } = e.latlng;
       setMarker([
@@ -83,9 +116,9 @@ const MapComponent = ({ sendDataToParent, lati, long, onlyShow, name }) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapEventsHandler handleMapClick={handleMapClick} />
-        <LocationMarker />
-        {marker.map((marker) => (
-          <Marker position={marker.geocode} icon={blueIcon}>
+        <LocationMarker params={{}} /> {/* Adjust params here if needed */}
+        {marker.map((marker, index) => (
+          <Marker key={index} position={marker.geocode} icon={blueIcon}>
             <Popup>{marker.popUp}</Popup>
           </Marker>
         ))}
@@ -93,4 +126,5 @@ const MapComponent = ({ sendDataToParent, lati, long, onlyShow, name }) => {
     </div>
   );
 };
+
 export default MapComponent;

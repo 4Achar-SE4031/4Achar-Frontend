@@ -300,8 +300,6 @@ const ConcertDetails = () => {
     }
     
 
-    // if (!eventDetails) return <div>No data available</div>;
-
     return (
         <>
             <Navbar/>
@@ -364,7 +362,7 @@ const ConcertDetails = () => {
                             <img 
                                         src={(eventDetails.photo!=="" && eventDetails.photo!== null)?eventDetails.photo : require("../../assets/events.jpg")}
                                         alt="Your Image"
-                                        style={{ width: "770px", height: "400px",zIndex: 10,}}
+                                        style={{ width: "770px", height: "400px",zIndex: 10,position: "relative"}}
                                     />
                                 
                             </div>
@@ -423,7 +421,7 @@ const ConcertDetails = () => {
                             </div>
 
                         <div>
-                            <div className="event-details-card py-3 mr-0 ml-2 px-3 mb-2" style={{width:"765px",maxWidth:"100%",zIndex: 10,}}>
+                            <div className="event-details-card py-3 mr-0 ml-2 px-3 mb-2" style={{width:"765px",maxWidth:"100%",zIndex: 10,position: "relative"}}>
                                     <h4 className="pb-3" style={{textAlign: "center"}}>توضیحات</h4>
                                     <p className="ed-message" style={{whiteSpace:"pre-line", textAlign: "right"}}>{eventDetails.description}</p>
                                     <center>
@@ -458,11 +456,11 @@ const ConcertDetails = () => {
                             <img className="" 
                                     src={(eventDetails.photo!=="" && eventDetails.photo!== null)?eventDetails.photo : require("../../assets/events.jpg")}
                                     alt="Your Image"
-                                    style={{ maxWidth:'90%',width: "770px", height: "fit-content" ,marginTop:"30px",marginLeft:"10px"}}
+                                    style={{ maxWidth:'90%',width: "770px", height: "fit-content" ,marginTop:"30px",marginLeft:"10px",zIndex: 10,position: "relative"}}
                                 />
                             </div>
                             <div>
-                        <div className="event-details-card py-3 mr-0 ml-2 px-3 mb-2">
+                        <div className="event-details-card py-3 mr-0 ml-2 px-3 mb-2" style={{zIndex: 10,position: "relative"}}>
                             <h4 className="pb-3">توضیحات</h4>
                             <p className="ed-message" style={{whiteSpace:"pre-line", textAlign: "right"}}>{eventDetails.description}</p>
                             <center>
@@ -479,7 +477,7 @@ const ConcertDetails = () => {
                         </div>
 
                         {screenSize==='medium' &&
-                        <div className="row justify-content-right" style={{width:"780px"}}>
+                        <div className="row justify-content-right" style={{width:"780px",zIndex: 10,position: "relative"}}>
                             <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content",width:"380px"}}>
                             <div className="row px-3">
                                     <i class="bi bi-clock  icons-style"></i>
@@ -577,7 +575,7 @@ const ConcertDetails = () => {
 
                         {(screenSize==='small' || screenSize==='extra small') && 
                             <>
-                                <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content",marginLeft:"10px"}}>
+                                <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content",marginLeft:"10px",zIndex: 10,position: "relative"}}>
                             <p className="pb-3 ed-message text-right">{eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
                                     <h4 className=" pb-3 text-right"> {eventDetails.title} </h4>
                                     <div className="row px-3">
@@ -621,7 +619,7 @@ const ConcertDetails = () => {
 
 
 
-                                <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content"}}>
+                                <div className="event-details-card  py-3 mr-0 ml-2 px-3 mb-2" style={{ height:"fit-content",zIndex: 10,position: "relative"}}>
                             <div className="row px-3">
                                     <i class="bi bi-clock  icons-style"></i>
                                     <p className="pb-1 ed-message">شروع: {eventDateTime.startWeekDay} {eventDateTime.startDay} {eventDateTime.startMonth} {eventDateTime.startYear} ساعت {eventDateTime.startTime} </p>
