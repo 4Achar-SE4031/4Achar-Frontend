@@ -404,7 +404,7 @@ const ConcertDetails: React.FC = () => {
                                         
                                         </div>
                                     </div>
-                                        <MapComponent  sendDataToParent={handleMapData} lati={eventDetails.location_lat} long={eventDetails.location_lon} onlyShow={true} name="EventDetails"/>
+                                    <MapComponent  sendDataToParent={handleMapData} lati={eventDetails.location_lat} long={eventDetails.location_lon} onlyShow={true} name="EventDetails"/>
                                     
 
                                 </>
@@ -503,7 +503,7 @@ const ConcertDetails: React.FC = () => {
                                     <p className="pb-3 ed-message">پایان: {eventDateTime.endWeekDay} {eventDateTime.endDay} {eventDateTime.endMonth} {eventDateTime.endYear} ساعت {eventDateTime.endTime} </p>
 
                                 </div>
-                                { auth.token!=="" &&<>
+                                <>
                                 <div className="row px-3 pt-1" >
                                     <div className="col">
                                         <p className="pt-2 px-0 mb-0 text-right">آدرس برگزاری</p>
@@ -517,7 +517,6 @@ const ConcertDetails: React.FC = () => {
                                     
                             </>
                             
-                            } 
                                 <div className="row px-3 pt-1" >
                                     <div className="col">
                                         <p className="pt-2 px-0 mb-0 text-right"> اشتراک گذاری رویداد</p>
