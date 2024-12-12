@@ -24,9 +24,9 @@ export default function HoverRating() {
             display: 'flex', 
             alignItems: 'center', 
             direction:"ltr",
-            marginTop:"20px",
+            marginTop:"5px",
             fontSize:"15px",
-            marginLeft: "40px"}}>
+            marginLeft: "35px"}}>
       <Rating
         name="hover-feedback"
         value={value}

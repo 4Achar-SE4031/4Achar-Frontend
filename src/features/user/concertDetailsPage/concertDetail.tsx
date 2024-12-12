@@ -130,7 +130,7 @@ const EventDetails: React.FC = () => {
     endYear: "",
     endDay: "",
   });
-
+    
 
   const [eventDetails, setEventDetails] = useState({
     startDay: "پنج شنبه",

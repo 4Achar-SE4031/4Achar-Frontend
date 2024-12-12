@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
       if (!isLoggedIn) {
         const fetchUserData = async () => {
           try {
-            const response = await axios.get<UserData>("http://localhost:5000/account/me/", {
+            const response = await axios.get<UserData>("https://api-concertify.darkube.app/account/me/", {
               headers: {
                 "Content-Type": "application/json",
                 Authorization: `JWT ${auth.token}`,
@@ -204,9 +204,9 @@ const Navbar: React.FC = () => {
                                         <i className="pl-1 ml-0  uil uil-user"></i>
                                         <p className="pt-0 mb-0">حساب کاربری</p>
                                 </div>
-                                <div className="row pr-2 pb-2  dropdown-item2" >
+                                <div className="row pr-2 dropdown-item2" >
                                         <i className=" pl-2 pr-1 mt-1 bi bi-box-arrow-right"></i>
-                                          <p className="pt-2 mb-0 mt-1" onClick={() => {
+                                          <p className="mt-1" onClick={() => {
                                 toast.error("از حساب کاربری خارج شدید")
                                 setTimeout(() => {
                                     auth.logOut()
