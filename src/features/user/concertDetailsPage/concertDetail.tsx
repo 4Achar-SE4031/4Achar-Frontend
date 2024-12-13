@@ -23,6 +23,7 @@ import MusicNotes from './MusicNotes.tsx';
 
 import MainComment from "../../Comment/MainComment";
 import Footer from "../../../app/layout/Footer.tsx";
+import Navbar from "../../Navbar/navbar.tsx";
 
 interface EventDateTime {
   startWeekDay: string;
@@ -129,7 +130,7 @@ const EventDetails: React.FC = () => {
     endYear: "",
     endDay: "",
   });
-
+    
 
   const [eventDetails, setEventDetails] = useState({
     startDay: "پنج شنبه",
@@ -333,7 +334,7 @@ const EventDetails: React.FC = () => {
   return (
 
 <>
-{/* <Navbar/> */}
+<Navbar/>
 <ToastContainer className="toastify-container"position="top-right" toastStyle={{backgroundColor: "#2b2c38", fontFamily: "iransansweb", color: "#ffeba7",marginTop:"60px"}} pauseOnHover={false} autoClose={3000} />
 <div className="music-notes-container">
                     <MusicNotes count={30}/>

@@ -12,7 +12,7 @@ interface EventItemProps {
 
 const EventItem: React.FC<EventItemProps> = ({ event }) => {
   return (
-    <Link to={`/concertdetail`}>
+    <Link to={"/concertdetail"}>
       <div className="item mb-3">
         <div className="event-img">
           <img
@@ -26,8 +26,12 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
           <div className="event-info__title">
             <h1 id="event-title">{event.title}</h1>
           </div>
-          <div className="event-info__details">
+          {/* <div className="event-info__details">
             <h4 id="event-details">{event.details}</h4>
+            <i className="input-icon uil uil-document-layout-right"></i>
+          </div> */}
+              <div className="event-info__details">
+            <h4 id="event-details">{event.category}</h4>
             <i className="input-icon uil uil-document-layout-right"></i>
           </div>
           <div className="event-info__address"> 
@@ -35,17 +39,17 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
             <i className="input-icon uil uil-location-point"></i>
           </div>
           <div className="event-info__date">
-            <h4 id="event-date">{toPersianDigits(event.start_date)}</h4>
+            <h4 id="event-date">{toPersianDigits(event.startDate)}</h4>
             <i className="input-icon uil uil-calendar-alt"></i>
           </div>
           <div className="event-info__hour">
-            <h5 id="event-hour">{toPersianDigits(event.start_hour)}</h5>
+            <h5 id="event-hour">{toPersianDigits(event.startHour)}</h5>
             <i className="input-icon uil uil-clock"></i>
           </div>
         </div>
       </div>
       <div className="event-info__title">
-            <h1 id="event-title">{event.title}</h1>
+            <h1 id="event-title">{!event.title.includes(")") ? event.title : event.title.substring(0, event.title.indexOf("("))}</h1>
       </div>
     </Link>
   );
