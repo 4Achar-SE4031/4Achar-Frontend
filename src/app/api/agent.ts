@@ -45,7 +45,7 @@ const Account = {
 };
 
 const Events = {
-    list: (): Promise<Event[]> => requests.get<Event[]>('/events'),
+    list: (queryParams: any): Promise<Event[]> => requests.get<Event[]>('/Concert'),
 };
 
 const agent = {
@@ -54,3 +54,25 @@ const agent = {
 };
 
 export default agent;
+
+
+// Name	Description
+// Title   string
+
+// StartRange  string
+
+// EndRange    string
+
+// Province    string
+
+// City    string
+
+// Category    string
+
+// TicketPriceRangeStart   string
+
+// TicketPriceRangeEnd string
+
+// Skip    integer($int32)
+
+// Take    integer($int32)

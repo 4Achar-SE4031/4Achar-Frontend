@@ -39,29 +39,58 @@ const EventsList: React.FC = () => {
     setFilters(newFilters);
   };
 
+  // useEffect(() => {
+  //   let filteredEvents = [...mockEvents];
+
+  //   // Apply filters
+  //   if (filters.city) {
+  //     filteredEvents = filteredEvents.filter((event) => event.city === filters.city);
+  //   }
+  //   if (filters.category) {
+  //     filteredEvents = filteredEvents.filter((event) => event.category === filters.category);
+  //   }
+  //   filteredEvents = filteredEvents.filter(
+  //     (event) =>
+  //       event.ticket_price >= filters.priceRange[0] &&
+  //       event.ticket_price <= filters.priceRange[1]
+  //   );
+  //   if (filters.sortType === "cheap") {
+  //     filteredEvents = filteredEvents.sort((a, b) => a.ticket_price - b.ticket_price);
+  //   } else if (filters.sortType === "expensive") {
+  //     filteredEvents = filteredEvents.sort((a, b) => b.ticket_price - a.ticket_price);
+  //   }
+
+  //   setPosts(filteredEvents.slice(0, 15)); // Update posts based on filters
+  // }, [filters]);
   useEffect(() => {
-    let filteredEvents = [...mockEvents];
-
-    // Apply filters
-    if (filters.city) {
-      filteredEvents = filteredEvents.filter((event) => event.city === filters.city);
-    }
-    if (filters.category) {
-      filteredEvents = filteredEvents.filter((event) => event.category === filters.category);
-    }
-    filteredEvents = filteredEvents.filter(
-      (event) =>
-        event.ticket_price >= filters.priceRange[0] &&
-        event.ticket_price <= filters.priceRange[1]
-    );
-    if (filters.sortType === "cheap") {
-      filteredEvents = filteredEvents.sort((a, b) => a.ticket_price - b.ticket_price);
-    } else if (filters.sortType === "expensive") {
-      filteredEvents = filteredEvents.sort((a, b) => b.ticket_price - a.ticket_price);
-    }
-
-    setPosts(filteredEvents.slice(0, 15)); // Update posts based on filters
-  }, [filters]);
+    const fetchFilteredEvents = async () => {
+      setLoading(true);
+  
+      try {
+        const queryParams = new URLSearchParams({
+          city: filters.city || "",
+          category: filters.category || "",
+          minPrice: filters.priceRange[0]?.toString() || "0",
+          maxPrice: filters.priceRange[1]?.toString() || "500",
+          sortType: filters.sortType || "",
+          startDate: filters.dateRange[0] || "",
+          endDate: filters.dateRange[1] || "",
+        }).toString();
+  
+        const response = await agent.Events.list(`/Concert?${queryParams}`);
+        setPosts(response.slice(15 * (index - 1), 15 * index));
+        setTotalPages(Math.ceil(response.length / 15));
+        console.log(response)
+      } catch (error) {
+        console.error("Error fetching filtered events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+  
+    fetchFilteredEvents();
+  }, [filters, currentPage]);
+  
   const defaultOptions = {
     loop: true,
     autoplay: true,
@@ -84,24 +113,24 @@ const EventsList: React.FC = () => {
 
   //   fetchEvents();
   // }, [currentPage]);
-  useEffect(() => {
-    setLoading(true);
-    let sortedEvents = [...mockEvents];
-    if (!eventType){
-      setEventType(location.pathname.split("/")[2])
-    }
-    if (eventType === "recent") {
-      sortedEvents = sortedEvents.sort((a, b) => Date.parse(b.start_date) - Date.parse(a.start_date));
-      setTitle("جدیدترین رویدادها")
-    } else if (eventType === "popular") {
-      sortedEvents = sortedEvents.sort((a, b) => b.rating - a.rating);
-      setTitle("محبوب ترین رویدادها")
-    }
+  // useEffect(() => {
+  //   setLoading(true);
+  //   let sortedEvents = [...mockEvents];
+  //   if (!eventType){
+  //     setEventType(location.pathname.split("/")[2])
+  //   }
+  //   if (eventType === "recent") {
+  //     sortedEvents = sortedEvents.sort((a, b) => Date.parse(b.start_date) - Date.parse(a.start_date));
+  //     setTitle("جدیدترین رویدادها")
+  //   } else if (eventType === "popular") {
+  //     sortedEvents = sortedEvents.sort((a, b) => b.rating - a.rating);
+  //     setTitle("محبوب ترین رویدادها")
+  //   }
 
-    setPosts(sortedEvents.slice(15 * (index - 1), 15 * index));
-    setTotalPages(Math.ceil(sortedEvents.length / 15));
-    setLoading(false);
-  }, [eventType, currentPage]);
+  //   setPosts(sortedEvents.slice(15 * (index - 1), 15 * index));
+  //   setTotalPages(Math.ceil(sortedEvents.length / 15));
+  //   setLoading(false);
+  // }, [eventType, currentPage]);
 
   const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
