@@ -2,8 +2,8 @@ export interface Event {
     id: number;
     title: string;
     details: string;
-    start_date: string;
-    start_hour: string;
+    startDate: string;
+    startHour: string;
     photo: string | null;
     province?: string | null;
     city?: string;

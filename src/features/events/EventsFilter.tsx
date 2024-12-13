@@ -162,6 +162,9 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
               borderColor: "#1976d2",
               direction: "rtl",
               width: "100%",
+              height: "55px",
+              borderRadius: "5px",
+              textAlign: "center",
             }}
           />
           <DatePicker
@@ -182,6 +185,9 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
               borderColor: "#1976d2",
               direction: "rtl",
               width: "100%",
+              height: "55px",
+              borderRadius: "5px",
+              textAlign: "center",
             }}
           />
         </Box>
