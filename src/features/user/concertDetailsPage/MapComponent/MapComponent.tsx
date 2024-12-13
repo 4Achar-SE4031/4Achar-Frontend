@@ -12,6 +12,7 @@ import {
 import { Icon } from "leaflet";
 import redPin from "../../../../assets/Images/red pin.png";
 import bluePin from "../../../../assets/Images/blue pin.png";
+import yellowPin from "../../../../assets/Images/yellow pin.png";
 import "./MapComponent.css";
 
 // Define a type for LatLngTuple (two-element array)
@@ -29,6 +30,11 @@ const blueIcon = new Icon({
   iconUrl: bluePin,
   iconSize: [38, 38],
 });
+const yellowIcon = new Icon({
+    iconUrl: yellowPin,
+    iconSize: [38, 38],
+  });
+
 
 // LocationMarker component
 interface LocationMarkerProps {
@@ -74,7 +80,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
   const [marker, setMarker] = useState<{ geocode: LatLngTuple; popUp: string }[]>([
     {
       geocode: [lati, long],
-      popUp: "محل برگزاری رویداد",
+      popUp: "تهران، خیابان حافظ، تالار وحدت",
     },
   ]);
 
@@ -109,16 +115,16 @@ const MapComponent: React.FC<MapComponentProps> = ({
   };
 
   return (
-    <div className={`map-component ${classes} col-md-12 col-sm-12 col-12`}>
+    <div className={`map-component ${classes}`}>
       <MapContainer className="map-component__map" {...mapOptions}>
         <TileLayer
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          attribution=''
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <MapEventsHandler handleMapClick={handleMapClick} />
         <LocationMarker params={{}} /> {/* Adjust params here if needed */}
         {marker.map((marker, index) => (
-          <Marker key={index} position={marker.geocode} icon={blueIcon}>
+          <Marker key={index} position={marker.geocode} icon={yellowIcon}>
             <Popup>{marker.popUp}</Popup>
           </Marker>
         ))}
