@@ -13,8 +13,17 @@
   }
   
   .footer-section {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     min-width: 200px;
+    justify-content: center;
+    align-items: center;
+    img {
+      height: 30px;
+      /* margin-right: 10px; */
+      max-width: 300px;
+    }
   }
   
   .footer-title {
@@ -51,12 +60,15 @@
     align-items: center;
     border-top: 1px solid #444;
     padding-top: 10px;
+    margin: 30px;
   }
   
   .footer-social {
     display: flex;
     align-items: center;
     gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
   }
   
   .footer-social span {

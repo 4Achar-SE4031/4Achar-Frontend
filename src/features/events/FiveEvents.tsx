@@ -61,7 +61,8 @@ const FiveEvents: React.FC = () => {
   );
 
   return (
-    <Card className="events-list pb-5" id="RecentEvents" lang="fa" >
+    <div className="RecentEvents">
+    <Card className="events-list pb-5" lang="fa" >
       <div className="container-fluid" lang="fa">
         <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
           <button
@@ -157,6 +158,7 @@ const FiveEvents: React.FC = () => {
         {/* {renderIndicators(popularEventIndex, mockEvents.length, setPopularEventIndex)} */}
       </div>
     </Card>
+    </div>
   );
 };
 

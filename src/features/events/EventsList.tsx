@@ -16,6 +16,7 @@ import { useStore } from "../../app/store/Store";
 import Pagination from "../../app/common/Pagination";
 import EventsFilter from "./EventsFilter";
 import Footer from "../../app/layout/Footer";
+import Navbar from "../Navbar/navbar";
 
 
 const EventsList: React.FC = () => {
@@ -63,7 +64,16 @@ const EventsList: React.FC = () => {
   //   setPosts(filteredEvents.slice(0, 15)); // Update posts based on filters
   // }, [filters]);
   useEffect(() => {
+    setEventType(location.pathname.split("/")[2])
+    if (eventType === "recent") {
+      setTitle("جدیدترین رویدادها")
+    } else if (eventType === "popular") {
+      setTitle("محبوب ترین رویدادها")
+    }
+  })
+  useEffect(() => {
     const fetchFilteredEvents = async () => {
+
       setLoading(true);
   
       try {
@@ -140,11 +150,12 @@ const EventsList: React.FC = () => {
   };
 
   return (
+    <><Navbar />
     <Card className="events-list">
       {/* Events Filter Component */}
       <div className="container custom-container mb-1" lang="fa">
       <EventsFilter onFilterChange={handleFilterChange} />
-        <div className="text-right events-title mb-2 mt-5">
+        <div className="text-right events-title">
           <h2 className="section-title pb-5" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
             {title}
           </h2>
@@ -167,6 +178,7 @@ const EventsList: React.FC = () => {
       </div>
       <Footer />
     </Card>
+    </>
   );
 };
 

@@ -2,7 +2,14 @@ body {
   /* overflow: auto !important; */
   background: radial-gradient(ellipse at bottom, #303131 0%, #333540 100%);
 }
+.RecentEvents .events-list{
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: auto;
+}
 .events-list {
+  overflow: scroll;
+  height: 100vh;
   .items-wrapper {
     border-top: 4px solid black;
     background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%);
@@ -57,9 +64,9 @@ body {
     background-color: #007bff;
   }
     
-  .events-title {
+  /* .events-title {
     margin-top: 170px !important;
-  }
+  } */
   #event-title{
     color: #ffeba7;
     font-size: 16px;
@@ -78,7 +85,7 @@ body {
     background: radial-gradient(ellipse at bottom, #303131 0%, #333540 100%);
   }
   .events-filter {
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
     width: 100%;
