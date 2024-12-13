@@ -5,11 +5,16 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
     "jsx": "react-jsx",
     "noUnusedLocals": false,
-    "module": "ESNext",
-    "target": "ES5",  // or "ES6" depending on your needs
+    "module": "ESNext",  
     "outDir": "./build",
-    "types": ["node", "react", "react-dom"]
+    "types": ["node", "react", "react-dom"],
+    "noImplicitAny": false,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "target": "es6",
   }
 }

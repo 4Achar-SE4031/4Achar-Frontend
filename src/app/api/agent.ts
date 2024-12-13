@@ -20,7 +20,7 @@ axios.interceptors.request.use((config) => {
     return config;
 });
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "https://api-concertify.darkube.app";
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 

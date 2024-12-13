@@ -7,11 +7,11 @@ const FooterComponent: React.FC = () => {
   return (
     <footer className="footer" lang="fa">
       <div className="footer-container">
-        <div className="footer-section">
+        <div className="footer-section text-right">
           <h3 className="footer-title">کنسرتیفای</h3>
 
         </div>
-        <div className="footer-section">
+        <div className="footer-section text-right">
           <h4 className="footer-subtitle">دسته‌بندی‌های محبوب</h4>
           <ul className="footer-list">
             <li>کنسرت‌های موسیقی</li>
@@ -21,7 +21,7 @@ const FooterComponent: React.FC = () => {
             <li>کارگاه‌های آموزشی</li>
           </ul>
         </div>
-        <div className="footer-section">
+        <div className="footer-section text-right">
           <h4 className="footer-subtitle">لینک‌های مهم</h4>
           <ul className="footer-list">
             <li>درباره ما</li>
