@@ -28,7 +28,7 @@ const ForgetPassword: React.FC = () => {
         if (recoveryEmailValidation === true) {
             
             setIsRunning(true);
-            axios.post('http://localhost:5000/Account/send_reset_password_email', { email: enteredRecoveryEmail })
+            axios.post('https://api-concertify.darkube.app/Account/send_reset_password_email', { email: enteredRecoveryEmail })
                 .then(response => {
                 setShowViolation(false);
                 console.log(response)

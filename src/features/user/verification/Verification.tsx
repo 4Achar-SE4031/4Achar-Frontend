@@ -51,7 +51,7 @@ const Verification: React.FC = () => {
         console.log({confirmationToken:otp.join(""),email:email})
         console.log(location)
         axios
-        .post("http://localhost:5000/Account/confirm_email", {confirmationToken:otp.join(""),email:email},{headers:{
+        .post("https://api-concertify.darkube.app/Account/confirm_email", {confirmationToken:otp.join(""),email:email},{headers:{
             "Content-Type": "application/json",
             accept: "application/json",
         }})

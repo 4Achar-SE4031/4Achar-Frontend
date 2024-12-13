@@ -13,20 +13,22 @@ import PageNotFound from '../../features/user/concertDetailsPage/PageNotFound/Pa
 import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
+import ConcertDetails from "../../features/user/concertDetailsPage/concert_details.jsx";
 
 export const routes: RouteObject[] = [
     {
-      path: "/",
+      path:'/',
        element: (
         <AuthProvider>
           <App />
         </AuthProvider>
       ),
       children: [
-      //  {path:"/" , element: <Landing />},
-      //  {path:"/home",  element: <Home />},
+       { index: true, element: <Home /> },
+       {path:"/home",  element: <Home />},
+       {path:"/concertDetail",  element: <ConcertDetails />},
        {path:"/login",  element: <Login />},
-       {path:"/concertDetail",  element: <EventDetails />},
+       {path:"/d",  element: <EventDetails />},
        {path:"/register",  element: <Register />},
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
@@ -37,8 +39,6 @@ export const routes: RouteObject[] = [
        {path:"/events/popular", element: <EventsList />},
        {path:"/events", element: <FiveEvents />},
        {path:"/account/reset_password", element: <ResetPassword />},
-       {path: "/home", element: <Home />},
-      //  {path:"not-found",  element: <PageNotFound />},
        { path: "*", element: <Navigate replace to="not-found" /> },
       ],
     },

@@ -2,6 +2,7 @@ import React from 'react';
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 import './Footer.css';
 import { Link } from 'react-router-dom';
+import logo from "../../../public/concertify-logo.png"
 
 const FooterComponent: React.FC = () => {
   return (
@@ -9,6 +10,7 @@ const FooterComponent: React.FC = () => {
       <div className="footer-container">
         <div className="footer-section">
           <h3 className="footer-title">کنسرتیفای</h3>
+          <img src={logo} alt='Concertify Logo'/>
 
         </div>
         <div className="footer-section">
@@ -35,14 +37,14 @@ const FooterComponent: React.FC = () => {
         <div className="footer-section">
 
         </div>
-        {/* <div className="footer-social"> */}
-        {/* </div> */}
       </div>
-          <span>ما را دنبال کنید:</span>
+        <div className="footer-social">
+          <span>ما را در شبکه‌های اجتماعی دنبال کنید:</span>
           <FaFacebookF />
           <FaTwitter />
           <FaInstagram />
           <FaLinkedinIn />
+        </div>
       <div className="footer-bottom">
         <p>© ۲۰۲۴ کنسرتیفای. کلیه حقوق محفوظ است.</p>
       </div>

@@ -108,13 +108,16 @@
         nameValidation
       ) {
         axios
-          .post("http://localhost:5000/Account/signup", userData,{headers:{
+          .post("https://api-concertify.darkube.app/Account/signup", userData,{headers:{
               "Content-Type": "application/json",
               accept: "application/json",
           }})
           .then(() => {
             setShowViolation(false);
-            navigator('/verify', { state: { username: enteredRegisterUserName, password: enteredRegisterPassword, email:enteredRegisterEmail } })
+            toast.success("ایمیل حاوی کد تایید برای شما ارسال شد");
+            setTimeout(() => {            
+              navigator('/verify', { state: { username: enteredRegisterUserName, password: enteredRegisterPassword, email:enteredRegisterEmail } })
+            }, 4000);
           //   autoLogin();
           })
           .catch((error) => {

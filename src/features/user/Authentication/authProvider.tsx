@@ -25,10 +25,11 @@ const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const loginAction = async (data: LoginData): Promise<string | false> => {
     try {
-      const response = await axios.post('http://localhost:5000/Account/jwt/create', data);
+      const response = await axios.post('https://api-concertify.darkube.app/Account/jwt/create', data);
       if (response.data) {
-        setToken(response.data.access);
-        localStorage.setItem("token", response.data.access);
+        setToken(response.data.token);
+        console.log(response.data.token)
+        localStorage.setItem("token", response.data.token);
         return "Data received successfully";
       } else if (response.data.message === 'username does not exist') {
         return "username does not exist";

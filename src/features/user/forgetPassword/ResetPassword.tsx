@@ -89,7 +89,7 @@ const ResetPassword: React.FC = () => {
       
     ) {
       axios
-        .post("http://localhost:5000/Account/reset_password", userData,{headers:{
+        .post("https://api-concertify.darkube.app/Account/reset_password", userData,{headers:{
             "Content-Type": "application/json",
             accept: "application/json",
         }})

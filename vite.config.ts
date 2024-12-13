@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
@@ -8,6 +8,11 @@ export default defineConfig({
     port: 3000
   },
   plugins: [react()],
+  test: { 
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: './setup.ts',
+  },
   build: {
     // This will handle large font files or other assets
     assetsInlineLimit: 0, // Ensure all assets are copied instead of inlined
@@ -20,4 +25,5 @@ export default defineConfig({
       },
     },
   },
+  base: "/",
 })
