@@ -54,12 +54,13 @@
   }
   
   .footer-bottom {
-    margin-top: 20px;
+    margin-top: 20px; /* این مقدار می‌تواند بسته به نیاز شما کاهش یا افزایش یابد */
     display: flex;
-    justify-content: center;
-    align-items: center;
+    justify-content: center; /* برای مرکز کردن افقی */
+    align-items: center; /* برای مرکز کردن عمودی */
     border-top: 1px solid #444;
     padding-top: 10px;
+    margin-bottom: 30px;
     margin: 30px;
   }
   
