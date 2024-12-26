@@ -11,10 +11,10 @@
     "noUnusedLocals": false,
     "module": "ESNext",  
     "outDir": "./build",
-    "types": ["node", "react", "react-dom"],
+    "types": ["node", "react", "react-dom","vitest/globals"],
     "noImplicitAny": false,
     "lib": ["dom", "dom.iterable", "esnext"],
     "moduleResolution": "node",
-    "target": "es6",
+    "target": "es6"
   }
 }
