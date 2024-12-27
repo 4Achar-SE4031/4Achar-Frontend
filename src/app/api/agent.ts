@@ -1,7 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangePassword, UpdateUser, User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
 import { Event } from "../models/event";
-import { useAuth } from "../../features/user/login/authProvider";
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
         setTimeout(resolve, delay);

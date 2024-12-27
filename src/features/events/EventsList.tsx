@@ -17,7 +17,11 @@ import Pagination from "../../app/common/Pagination";
 import EventsFilter from "./EventsFilter";
 import Footer from "../../app/layout/Footer";
 import Navbar from "../Navbar/navbar";
-
+const defaultOptions = {
+  loop: true,
+  autoplay: true,
+  animationData,
+};
 
 const EventsList: React.FC = () => {
   const [posts, setPosts] = useState<Event[]>([]);
@@ -88,6 +92,7 @@ const EventsList: React.FC = () => {
         }).toString();
   
         const response = await agent.Events.list(`/Concert?${queryParams}`);
+        console.log(response)
         setPosts(response.slice(15 * (index - 1), 15 * index));
         setTotalPages(Math.ceil(response.length / 15));
         console.log(response)
@@ -101,11 +106,7 @@ const EventsList: React.FC = () => {
     fetchFilteredEvents();
   }, [filters, currentPage]);
   
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData,
-  };
+
 
   // useEffect(() => {
   //   const fetchEvents = async () => {
@@ -163,10 +164,10 @@ const EventsList: React.FC = () => {
         <div className="items pb-5">
           {loading && (
             <div className="loading">
-              <Lottie options={defaultOptions} />
+              {/* <Lottie options={defaultOptions} /> */}
             </div>
           )}
-          {posts.map((event) => (
+          {!loading && posts.map((event) => (
             <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-5">
               <EventItem event={event} />
             </div>
