@@ -13,7 +13,7 @@ import PageNotFound from '../../features/user/concertDetailsPage/PageNotFound/Pa
 import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
-import ConcertDetails from "../../features/user/concertDetailsPage/concert_details.jsx";
+import ConcertDetails from "../../features/user/concertDetailsPage/concert_details";
 
 export const routes: RouteObject[] = [
     {

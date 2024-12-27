@@ -16,6 +16,7 @@ import agent from '../../../app/api/agent';
 import ChangePassword from './ChangePassword';
 import { userInfoValidation } from './UserInfoValidation';
 import Footer from '../../../app/layout/Footer';
+import Navbar from '../../Navbar/navbar';
 
 const UserInfo: React.FC = () => {
   const [userData, setUserData] = useState<User | null>(null);
@@ -102,7 +103,7 @@ const UserInfo: React.FC = () => {
 
   return (
     <center>
-      {/* <Navbar /> */}
+      <Navbar />
       {/* <ProfileSidebar /> */}
       <div className="user-info" lang="fa">
         <form className="userinfo" onSubmit={formik.handleSubmit}>
