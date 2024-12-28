@@ -17,7 +17,7 @@ interface EventsFilterProps {
 
 const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
-    priceRange: [0, 500],
+    priceRange: [0, 2000000],
     city: "",
     category: "",
     sortType: "",
@@ -69,7 +69,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
             onChange={(e, value) => handleInputChange("priceRange", value)}
             valueLabelDisplay="auto"
             min={0}
-            max={500}
+            max={2000000}
             sx={{ color: "#1976d2" }}
           />
         </Box>

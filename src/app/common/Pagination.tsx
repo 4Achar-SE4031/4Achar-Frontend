@@ -20,6 +20,11 @@ const Pagination: React.FC<{
       onChange={onChange}
       renderItem={(item) => (
         <PaginationItem
+        data-testid={
+          item.type === 'page'
+            ? `pagination-button-${item.page}`
+            : `pagination-button-${item.type}`
+        }
           {...item}
           // Convert page numbers to Persian if the item type is 'page'
           page={item.page !== null ? toPersianDigits(item.page) : undefined}

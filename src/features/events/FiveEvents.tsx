@@ -17,7 +17,7 @@ const FiveEvents: React.FC = () => {
   const navigate = useNavigate();
 
   const recentEvents = [...mockEvents]
-    .sort((a, b) => Date.parse(b.start_date) - Date.parse(a.start_date))
+    .sort((a, b) => Date.parse(b.startDate) - Date.parse(a.startDate))
     .slice(recentEventIndex, recentEventIndex + eventsToShow);
 
   const popularEvents = [...mockEvents]
