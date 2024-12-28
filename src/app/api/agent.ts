@@ -44,7 +44,7 @@ const Account = {
 };
 
 const Events = {
-    list: (queryParams: any): Promise<Event[]> => requests.get<Event[]>('/Concert'),
+    list: (queryParams?: any): Promise<Event[]> => requests.get<Event[]>(`/Concert${queryParams ? "?" + queryParams: ""}`),
 };
 
 const agent = {
