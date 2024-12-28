@@ -14,7 +14,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './setup.ts',
     coverage: {
-      provider: 'istanbul', // or 'c8' if you prefer
+      provider: 'v8', // or 'c8' if you prefer
       reporter: ['text', 'json', 'html'], // coverage report formats
       include: ['src/**/*.{ts,tsx}'], // files to include for coverage
       exclude: ['**/*.d.ts', 'node_modules/', 'src/**/*.test.{ts,tsx}'], // files to exclude
