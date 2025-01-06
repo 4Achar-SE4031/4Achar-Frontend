@@ -30,7 +30,7 @@ const HeroSection: React.FC = () => {
   return (
     <HeroContainer lang="fa">
       <HeroBg>
-        <VideoBg autoPlay loop muted>
+        <VideoBg autoPlay loop muted data-testid="hero-video">
           <source src={Video} type="video/mp4" />
         </VideoBg>
       </HeroBg>

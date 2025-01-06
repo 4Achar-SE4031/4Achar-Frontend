@@ -1,36 +1,96 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { vi } from 'vitest';
-import EventsList from './EventsList'; // Adjust the import path as needed
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
-import { TestProvider } from './testProvider';
-import agent from '../../app/api/agent';
+// EventsList.test.tsx
 
-// Mock the API
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import '@testing-library/jest-dom'; // Provides jest-dom matchers
+import { vi } from 'vitest';
+import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+
+import EventsList from './EventsList';
+import { TestProvider } from './testProvider';
+import agent from '../../app/api/agent'; // Adjust path as needed
+
+
+beforeAll(() => {
+  window.scrollTo = vi.fn();
+});
+
+
+
+vi.mock('lottie-web');
+
 vi.mock('../../app/api/agent', () => {
+  const listMock = vi.fn((queryParams) => {
+    if (queryParams && queryParams.includes('Skip=15')) {
+      // Simulate second page data (Events 16-30)
+      return Promise.resolve(
+        Array.from({ length: 15 }, (_, i) => ({
+          id: i + 16,
+          title: `Event ${i + 16}`,
+          details: '',
+          startDate: '',
+          startHour: '',
+          photo: '',
+          category: '',
+          rating: 0,
+        }))
+      );
+    }
+    // Simulate first call with 30 events to have totalPages = 2
+    return Promise.resolve(
+      Array.from({ length: 30 }, (_, i) => ({
+        id: i + 1,
+        title: `Event ${i + 1}`,
+        details: '',
+        startDate: '',
+        startHour: '',
+        photo: '',
+        category: '',
+        rating: 0,
+      }))
+    );
+  });
+
   return {
     default: {
       Events: {
-        list: vi.fn(),
+        list: listMock,
       },
     },
   };
 });
-
-// Mock lottie-web to prevent errors
-vi.mock('lottie-web', () => ({
-  loadAnimation: vi.fn(() => ({
-    play: vi.fn(),
-    stop: vi.fn(),
-    destroy: vi.fn(),
-  })),
+vi.mock('../../app/common/Pagination', () => ({
+  default: ({ count, page, onChange }: { count: number; page: number; onChange: (event: any, value: number) => void }) => {
+    const pages = Array.from({ length: count }, (_, i) => i + 1); // Create an array of page numbers
+    return (
+      <div>
+        {pages.map((p) => (
+          <button
+            key={p}
+            onClick={() => onChange(null, p)} // Call onChange with the page number
+            data-testid={`pagination-button-${p}`} // Add test ID for easier querying
+          >
+            {p}
+          </button>
+        ))}
+      </div>
+    );
+  },
 }));
+
+
 
 describe('EventsList Component', () => {
   beforeEach(() => {
-    vi.clearAllMocks(); // Reset mocks before each test
+    // Reset all mock calls before each test
+    vi.clearAllMocks();
   });
 
-  it('should display the correct title based on eventType', async () => {
+  it('should display the correct title when visiting /events/recent', async () => {
+    // Set up a resolved mock for agent.Events.list
+    // (agent.Events.list as vi.Mock).mockResolvedValue([]);
+    const { Events } = vi.mocked(agent)
+    vi.mocked(Events.list).mockRejectedValueOnce(new Error('API error'));
+
     render(
       <MemoryRouter initialEntries={['/events/recent']}>
         <TestProvider>
@@ -39,132 +99,85 @@ describe('EventsList Component', () => {
       </MemoryRouter>
     );
 
+    // Because EventsList sets title in a useEffect based on route,
+    // if you want it to detect “recent”, you can manually mock
+    // the location or pass initial route. 
+    // Or if your component uses location directly, you might
+    // need MemoryRouter with initialEntries.
+
+    // Wait for any asynchronous side effects
     await waitFor(() => {
+      // If you expect the heading 'جدیدترین رویدادها' to appear
       expect(screen.getByText('جدیدترین رویدادها')).toBeInTheDocument();
     });
   });
 
-  // it('should fetch and display events when filters are applied', async () => {
-  //   const mockEvents = [
-  //     {
-  //       id: 1,
-  //       title: 'Event 1',
-  //       details: 'A great concert',
-  //       startDate: '2024-12-14',
-  //       startHour: '19:00',
-  //       photo: null,
-  //       province: 'Tehran',
-  //       city: 'Tehran',
-  //       category: 'Concert',
-  //       ticket_price: 500,
-  //       rating: 4.5,
-  //     },
-  //     {
-  //       id: 2,
-  //       title: 'Event 2',
-  //       details: 'A great play',
-  //       startDate: '2024-12-15',
-  //       startHour: '20:00',
-  //       photo: 'image.jpg',
-  //       province: 'Tehran',
-  //       city: 'Mashhad',
-  //       category: 'Theater',
-  //       ticket_price: 300,
-  //       rating: 4.0,
-  //     },
-  //   ];
-  //   vi.mocked(agent.Events.list).mockResolvedValue(mockEvents);
+  it('should display events fetched from the API', async () => {
 
-  //   render(
-  //     <BrowserRouter>
-  //       <TestProvider>
-  //         <EventsList />
-  //       </TestProvider>
-  //     </BrowserRouter>
-  //   );
+    render(
+      <MemoryRouter initialEntries={['/events/recent']}>
+        <TestProvider>
+          <EventsList />
+        </TestProvider>
+      </MemoryRouter>
+    );
 
-  //   await waitFor(() => {
-  //     expect(agent.Events.list).toHaveBeenCalled();
-  //     expect(screen.getByText('Event 1')).toBeInTheDocument();
-  //     expect(screen.getByText('Event 2')).toBeInTheDocument();
-  //   });
-  // });
+    // Wait for the component to finish loading events
+    await waitFor(() => {
+      const oneMatches = screen.queryAllByText('Event 1');
+      const twoMatches = screen.queryAllByText('Event 2');
+      expect(oneMatches.length).toBeGreaterThan(0);
+      expect(twoMatches.length).toBeGreaterThan(0);
+    });
+  });
 
-  // it('should show loading animation while fetching events', async () => {
-  //   vi.mocked(agent.Events.list).mockImplementation(
-  //     () =>
-  //       new Promise((resolve) => {
-  //         setTimeout(() => resolve([]), 100); // Simulate delay
-  //       })
-  //   );
+  it('should handle pagination click', async () => {
 
-  //   render(
-  //     <BrowserRouter>
-  //       <TestProvider>
-  //         <EventsList />
-  //       </TestProvider>
-  //     </BrowserRouter>
-  //   );
 
-  //   expect(screen.queryByTestId('loading')).toBeInTheDocument();
+    render(
+      <MemoryRouter initialEntries={['/events/recent']}>
+        <TestProvider>
+          <EventsList />
+        </TestProvider>
+      </MemoryRouter>
+    );
 
-  //   await waitFor(() => {
-  //     expect(agent.Events.list).toHaveBeenCalled();
-  //   });
-  // });
+    // Page 1 items
+    await waitFor(() => {
+      const oneMatches = screen.queryAllByText('Event 1');
+      const twoMatches = screen.queryAllByText('Event 15');
+      expect(oneMatches.length).toBeGreaterThan(0);
+      expect(twoMatches.length).toBeGreaterThan(0);
+    });
 
-  // it('should change the page when pagination is clicked', async () => {
-  //   const mockEventsPage1 = [
-  //     {
-  //       id: 1,
-  //       title: 'Event 1',
-  //       details: 'A great concert',
-  //       startDate: '2024-12-14',
-  //       startHour: '19:00',
-  //       photo: null,
-  //       province: 'Tehran',
-  //       city: 'Tehran',
-  //       category: 'Concert',
-  //       ticket_price: 500,
-  //       rating: 4.5,
-  //     },
-  //   ];
-  //   const mockEventsPage2 = [
-  //     {
-  //       id: 2,
-  //       title: 'Event 2',
-  //       details: 'A great play',
-  //       startDate: '2024-12-15',
-  //       startHour: '20:00',
-  //       photo: 'image.jpg',
-  //       province: 'Tehran',
-  //       city: 'Mashhad',
-  //       category: 'Theater',
-  //       ticket_price: 300,
-  //       rating: 4.0,
-  //     },
-  //   ];
+    const page2Button = screen.getByTestId("pagination-button-2");
+    fireEvent.click(page2Button);
 
-  //   vi.mocked(agent.Events.list)
-  //     .mockResolvedValueOnce(mockEventsPage1) // First page
-  //     .mockResolvedValueOnce(mockEventsPage2); // Second page
 
-  //   render(
-  //     <BrowserRouter>
-  //       <TestProvider>
-  //         <EventsList />
-  //       </TestProvider>
-  //     </BrowserRouter>
-  //   );
+    await waitFor(() => {
+      const oneMatches = screen.queryAllByText('Event 16');
+      const twoMatches = screen.queryAllByText('Event 29');
+      expect(oneMatches.length).toBeGreaterThan(0);
+      expect(twoMatches.length).toBeGreaterThan(0);
+    });
+    expect(screen.queryByText('Event 1')).not.toBeInTheDocument();
+  });
+  it('should display fallback message when no events are fetched', async () => {
+    const { Events } = vi.mocked(agent);
+    (Events.list as jest.Mock).mockResolvedValue([]);
+  
+    render(
+      <MemoryRouter initialEntries={['/events/recent']}>
+        <TestProvider>
+          <EventsList />
+        </TestProvider>
+      </MemoryRouter>
+    );
+  
+    // Wait for the fallback message
+    await waitFor(() => {
+      expect(screen.getByText('رویدادی یافت نشد.')).toBeInTheDocument();
+    });
+  });
 
-  //   await waitFor(() => {
-  //     expect(screen.getByText('Event 1')).toBeInTheDocument();
-  //   });
-
-  //   fireEvent.click(screen.getByText('2')); // Simulate pagination click
-
-  //   await waitFor(() => {
-  //     expect(screen.getByText('Event 2')).toBeInTheDocument();
-  //   });
-  // });
 });

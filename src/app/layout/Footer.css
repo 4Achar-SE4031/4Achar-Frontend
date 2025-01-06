@@ -3,7 +3,7 @@
     color: #ffeba7;
     padding: 30px 20px;
     direction: rtl; /* Set direction to right-to-left */
-  }
+  
   
   .footer-container {
     display: flex;
@@ -68,7 +68,7 @@
   }
   
   .footer-social {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 10px;
     justify-content: center;
@@ -89,4 +89,4 @@
     transform: scale(1.1); /* Grow a bit larger on hover */
     color: #ffeba7; /* Keep the color consistent */
   }
-  
+}
