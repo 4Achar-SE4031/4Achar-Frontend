@@ -467,7 +467,7 @@ const Register: React.FC = () => {
                           className="btn mt-4"
                           onClick={(e) => registerHandler(e)}
                         >
-                          عضویت در ایونتیفای
+                          عضویت در کنسرتیفای
                         </button>
                         <p className="message">
                           قبلا عضو شده‌اید؟ <a href="/login">ورود کاربران</a>

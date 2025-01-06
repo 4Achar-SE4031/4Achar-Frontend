@@ -66,7 +66,7 @@ describe("Register Component", () => {
     render(<Register />);
 
     const signUpButton = screen.getByRole("button", {
-      name: /عضویت در ایونتیفای/i,
+      name: /عضویت در کنسرتیفای/i,
     });
 
     // Click the sign-up button with no valid data
@@ -107,7 +107,7 @@ describe("Register Component", () => {
 //     });
 
 //     const signUpButton = screen.getByRole("button", {
-//       name: /عضویت در ایونتیفای/i,
+//       name: /عضویت در کنسرتیفای/i,
 //     });
 //     fireEvent.click(signUpButton);
 
@@ -143,7 +143,7 @@ describe("Register Component", () => {
     });
 
     fireEvent.click(
-      screen.getByRole("button", { name: /عضویت در ایونتیفای/i })
+      screen.getByRole("button", { name: /عضویت در کنسرتیفای/i })
     );
 
     // Wait for axios call and success flow
@@ -200,7 +200,7 @@ describe("Register Component", () => {
     });
 
     fireEvent.click(
-      screen.getByRole("button", { name: /عضویت در ایونتیفای/i })
+      screen.getByRole("button", { name: /عضویت در کنسرتیفای/i })
     );
 
     await waitFor(() => {
@@ -218,7 +218,7 @@ describe("Register Component", () => {
 
     // Click again
     fireEvent.click(
-      screen.getByRole("button", { name: /عضویت در ایونتیفای/i })
+      screen.getByRole("button", { name: /عضویت در کنسرتیفای/i })
     );
 
     await waitFor(() => {
@@ -251,7 +251,7 @@ describe("Register Component", () => {
     });
 
     fireEvent.click(
-      screen.getByRole("button", { name: /عضویت در ایونتیفای/i })
+      screen.getByRole("button", { name: /عضویت در کنسرتیفای/i })
     );
 
     await waitFor(() => {
