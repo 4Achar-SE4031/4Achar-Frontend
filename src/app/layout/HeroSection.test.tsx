@@ -1,16 +1,24 @@
+// HeroSection.test.tsx
+
 import { render, screen, fireEvent, waitFor } from '@testing-library/react'; 
+import '@testing-library/jest-dom'; // Import Jest DOM matchers
 import HeroSection from './HeroSection';
-import { vi } from 'vitest';
+import { Mock, vi } from 'vitest';
 import { BrowserRouter } from 'react-router-dom';
 
 // Mocking localStorage
-Object.defineProperty(window, 'localStorage', {
-  value: {
-    getItem: vi.fn().mockReturnValue(null), // No token
-    setItem: vi.fn(),
-    removeItem: vi.fn(),
-  },
-  writable: true,
+beforeEach(() => {
+  // Reset all mocks before each test
+  vi.resetAllMocks();
+
+  Object.defineProperty(window, 'localStorage', {
+    value: {
+      getItem: vi.fn(),
+      setItem: vi.fn(),
+      removeItem: vi.fn(),
+    },
+    writable: true,
+  });
 });
 
 describe('HeroSection Component', () => {
@@ -26,30 +34,34 @@ describe('HeroSection Component', () => {
   });
 
   it('should display the login button when there is no user token', () => {
+    // Mock getItem to return null
+    (window.localStorage.getItem as Mock).mockReturnValue(null);
+
     render(
       <BrowserRouter>
         <HeroSection />
       </BrowserRouter>
     );
+
     const loginButton = screen.getByText(/!بزن بریم/);
     expect(loginButton).toBeInTheDocument();
     expect(loginButton.closest('a')).toHaveAttribute('href', '/login');
   });
 
   it('should display the events button when there is a user token', async () => {
-    // Set a user token in localStorage before rendering
-    localStorage.setItem('token', 'test-token');
-    
+    // Mock getItem to return a token
+    (window.localStorage.getItem as Mock).mockReturnValue('test-token');
+
     render(
       <BrowserRouter>
         <HeroSection />
       </BrowserRouter>
     );
 
-    // Wait for the events button to appear with the correct URL
+    // Wait for the component to re-render after useEffect
     const eventsButton = await screen.findByText(/!بزن بریم/);
     expect(eventsButton).toBeInTheDocument();
-    expect(eventsButton.closest('a')).toHaveAttribute('href', '/login');
+    expect(eventsButton.closest('a')).toHaveAttribute('href', '/events/recent');
   });
 
   it('should render video with correct source', () => {
@@ -58,13 +70,16 @@ describe('HeroSection Component', () => {
         <HeroSection />
       </BrowserRouter>
     );
+
+    const videoElement = screen.getByTestId('hero-video');
+  
+    expect(videoElement).toBeInTheDocument();
+    expect(videoElement).toHaveAttribute('autoPlay');
+    expect(videoElement).toHaveAttribute('loop');
     
-    // Get the video element
-    const videoElement = screen.findAllByRole('video');
-    
-    // Find the source element within the video
-    
-    // Check if the source has the correct src attribute
-    expect(videoElement)
+    const sourceElement = videoElement.querySelector('source');
+    expect(sourceElement).toBeInTheDocument();
+    expect(sourceElement).toHaveAttribute('src', expect.stringContaining('video2.mp4'));
+    expect(sourceElement).toHaveAttribute('type', 'video/mp4');
   });
 });

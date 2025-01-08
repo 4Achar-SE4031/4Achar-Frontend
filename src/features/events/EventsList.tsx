@@ -31,7 +31,7 @@ const EventsList: React.FC = () => {
   const [index, setIndex] = useState<number>(1);
   const [title, setTitle] = useState<string>();
   const [filters, setFilters] = useState<any>({
-    priceRange: [0, 500],
+    priceRange: [0, 0],
     city: "",
     category: "",
     sortType: "",
@@ -67,6 +67,13 @@ const EventsList: React.FC = () => {
 
   //   setPosts(filteredEvents.slice(0, 15)); // Update posts based on filters
   // }, [filters]);
+
+  const filterQueryParams = (params: Object) => {
+    console.log(params)
+    return Object.fromEntries(
+      Object.entries(params).filter(([_, value]) => value !== "" && value !== undefined && value !== null && value !== "0")
+    );
+  }
   useEffect(() => {
     setEventType(location.pathname.split("/")[2])
     if (eventType === "recent") {
@@ -74,27 +81,45 @@ const EventsList: React.FC = () => {
     } else if (eventType === "popular") {
       setTitle("محبوب ترین رویدادها")
     }
-  })
+  }, [eventType])
   useEffect(() => {
     const fetchFilteredEvents = async () => {
 
       setLoading(true);
-  
+
       try {
-        const queryParams = new URLSearchParams({
-          city: filters.city || "",
-          category: filters.category || "",
-          minPrice: filters.priceRange[0]?.toString() || "0",
-          maxPrice: filters.priceRange[1]?.toString() || "500",
-          sortType: filters.sortType || "",
-          startDate: filters.dateRange[0] || "",
-          endDate: filters.dateRange[1] || "",
-        }).toString();
-  
-        const response = await agent.Events.list(`/Concert?${queryParams}`);
+        let queryParams = new URLSearchParams(
+          filterQueryParams({
+            City: filters.city || "",
+            Category: filters.category || "",
+            TicketPriceRangeStart: filters.priceRange[0]?.toString() || "",
+            TicketPriceRangeEnd: filters.priceRange[1]?.toString() || "",
+            sortType: filters.sortType || "",
+            StartRange: filters.dateRange[0] || "",
+            EndRange: filters.dateRange[1] || "",
+          })
+        ).toString();
+        console.log(queryParams)
+        let response = await agent.Events.list(`${queryParams}`);
         console.log(response)
-        setPosts(response.slice(15 * (index - 1), 15 * index));
         setTotalPages(Math.ceil(response.length / 15));
+        const skip = 15 * (index - 1)
+        queryParams = new URLSearchParams(
+          filterQueryParams({
+            City: filters.city || "",
+            Category: filters.category || "",
+            TicketPriceRangeStart: filters.priceRange[0]?.toString() || "",
+            TicketPriceRangeEnd: filters.priceRange[1]?.toString() || "",
+            sortType: filters.sortType || "",
+            StartRange: filters.dateRange[0] || "",
+            EndRange: filters.dateRange[1] || "",
+            Skip: skip.toString(),
+            Take: "15",
+          })
+        ).toString();
+        response = await agent.Events.list(`${queryParams}`);
+        setPosts(response);
+
         console.log(response)
       } catch (error) {
         console.error("Error fetching filtered events:", error);
@@ -102,10 +127,10 @@ const EventsList: React.FC = () => {
         setLoading(false);
       }
     };
-  
+
     fetchFilteredEvents();
   }, [filters, currentPage]);
-  
+
 
 
   // useEffect(() => {
@@ -152,33 +177,36 @@ const EventsList: React.FC = () => {
 
   return (
     <><Navbar />
-    <Card className="events-list">
-      {/* Events Filter Component */}
-      <div className="container custom-container mb-1" lang="fa">
-      <EventsFilter onFilterChange={handleFilterChange} />
-        <div className="text-right events-title">
-          <h2 className="section-title pb-5" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
-            {title}
-          </h2>
+      <Card className="events-list">
+        {/* Events Filter Component */}
+        <div className="container custom-container mb-1" lang="fa">
+          <EventsFilter onFilterChange={handleFilterChange} />
+          <div className="text-right events-title">
+            <h2 className="section-title pb-5" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
+              {title}
+            </h2>
+          </div>
+          <div className="items pb-5">
+            {loading && (
+              <div className="loading">
+                <Lottie options={defaultOptions} />
+              </div>
+            )}
+            {!loading && posts?.length > 0 ? posts.map((event) => (
+              <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-5">
+                <EventItem event={event} />
+              </div>
+            )): (
+              !loading && <p>رویدادی یافت نشد.</p>
+            )}
+            {!loading &&
+              <Stack spacing={2} className="pt-5">
+                <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
+              </Stack>}
+          </div>
         </div>
-        <div className="items pb-5">
-          {loading && (
-            <div className="loading">
-              {/* <Lottie options={defaultOptions} /> */}
-            </div>
-          )}
-          {!loading && posts.map((event) => (
-            <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-5">
-              <EventItem event={event} />
-            </div>
-          ))}
-          <Stack spacing={2} className="pt-5">
-            <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
-          </Stack>
-        </div>
-      </div>
-      <Footer />
-    </Card>
+        <Footer />
+      </Card>
     </>
   );
 };

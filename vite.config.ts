@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config'
 import react from '@vitejs/plugin-react'
 
+
 // https://vite.dev/config/
 export default defineConfig({
   server: {
@@ -12,6 +13,22 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './setup.ts',
+    coverage: {
+      provider: 'v8', // or 'c8' if you prefer
+      reporter: ['text', 'json', 'html'], // coverage report formats
+      include: ['src/**/*.{ts,tsx}'], // files to include for coverage
+      exclude: ['**/*.d.ts', 'node_modules/', 'src/**/*.test.{ts,tsx}'], // files to exclude
+      all: true, // include all files, not just covered ones
+      // Optionally, you can set thresholds to enforce minimum coverage
+      // thresholds: {
+      //   global: {
+      //     branches: 80,
+      //     functions: 80,
+      //     lines: 80,
+      //     statements: 80,
+      //   },
+      // },
+    },
   },
   build: {
     // This will handle large font files or other assets
