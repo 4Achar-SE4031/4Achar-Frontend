@@ -87,38 +87,38 @@ describe("Register Component", () => {
   });
 
   // 5. Fill valid fields test //
-//   it("does not show validation errors if fields are valid", async () => {
-//     render(<Register />);
+  //   it("does not show validation errors if fields are valid", async () => {
+  //     render(<Register />);
 
-//     fireEvent.change(screen.getByPlaceholderText("نام کاربری"), {
-//       target: { value: "john.doe" },
-//     });
-//     fireEvent.change(screen.getByPlaceholderText("نام و نام خانوادگی"), {
-//       target: { value: "John Doe" },
-//     });
-//     fireEvent.change(screen.getByPlaceholderText("ایمیل"), {
-//       target: { value: "john@example.com" },
-//     });
-//     fireEvent.change(screen.getByPlaceholderText("رمز عبور"), {
-//       target: { value: "Aa!12345" },
-//     });
-//     fireEvent.change(screen.getByPlaceholderText("تایید رمز عبور"), {
-//       target: { value: "Aa!12345" },
-//     });
+  //     fireEvent.change(screen.getByPlaceholderText("نام کاربری"), {
+  //       target: { value: "john.doe" },
+  //     });
+  //     fireEvent.change(screen.getByPlaceholderText("نام و نام خانوادگی"), {
+  //       target: { value: "John Doe" },
+  //     });
+  //     fireEvent.change(screen.getByPlaceholderText("ایمیل"), {
+  //       target: { value: "john@example.com" },
+  //     });
+  //     fireEvent.change(screen.getByPlaceholderText("رمز عبور"), {
+  //       target: { value: "Aa!12345" },
+  //     });
+  //     fireEvent.change(screen.getByPlaceholderText("تایید رمز عبور"), {
+  //       target: { value: "Aa!12345" },
+  //     });
 
-//     const signUpButton = screen.getByRole("button", {
-//       name: /عضویت در کنسرتیفای/i,
-//     });
-//     fireEvent.click(signUpButton);
+  //     const signUpButton = screen.getByRole("button", {
+  //       name: /عضویت در کنسرتیفای/i,
+  //     });
+  //     fireEvent.click(signUpButton);
 
-//     // Since everything is valid, the component might initiate the API call
-//     // and not show the validation error messages
-//     await waitFor(() => {
-//       expect(
-//         screen.queryByText(/فرمت ایمیل نادرست است/i)
-//       ).not.toBeInTheDocument();
-//     });
-//   });
+  //     // Since everything is valid, the component might initiate the API call
+  //     // and not show the validation error messages
+  //     await waitFor(() => {
+  //       expect(
+  //         screen.queryByText(/فرمت ایمیل نادرست است/i)
+  //       ).not.toBeInTheDocument();
+  //     });
+  //   });
 
   // 6. Successful registration test
   it("calls axios.post with correct data if fields are valid and navigates on success", async () => {
