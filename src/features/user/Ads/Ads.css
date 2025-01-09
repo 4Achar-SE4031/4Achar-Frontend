@@ -1,0 +1,55 @@
+.ad-card {
+    position: relative;
+    overflow: hidden;
+    width: 100%; /* Changed from 25vh to use full container width */
+    height: 400px;
+    max-width: 640px;
+    margin: 0 auto;
+    border-radius: 1rem; /* Changed from 1vh to rem for consistency */
+  }
+
+.ad-image {
+    width: 100%; /* Changed from 25vh to fill container */
+    height: 100%; /* Changed from 45vh to fill container */
+    object-fit: contain; /* Ensures image covers area while maintaining aspect ratio */
+    object-position: center; /* Centers the image */
+    transform: scale(1);
+    transition: transform 0.3s ease-in-out;
+    background-repeat: no-repeat;
+    background-size: contain;
+  }
+
+.ad-card:hover .ad-image {
+  transform: scale(1.05); /* Larger scale on hover */
+}
+
+[dir="rtl"] .link-container {
+    flex-direction: row-reverse;
+}
+
+[dir="rtl"] .ad-card:hover .chevron-icon {
+    transform: translateX(-10px);
+}
+
+.chevron-icon{
+    transition: transform 0.3s ease-in-out;
+}
+
+
+/* Optional: Add responsive adjustments */
+@media (max-width: 640px) {
+  .ad-card {
+    max-width: 100%;
+  }
+}
+
+#descriptionContainer{
+    font-size:1.2rem;
+    direction: rtl;
+    text-align: center; 
+    /* margin-right: 1vh; */
+}
+.ad-card a svg {
+    width: 2rem; /* Makes the arrow icon bigger - 24px */
+    height: 2rem; /* Makes the arrow icon bigger - 24px */
+}

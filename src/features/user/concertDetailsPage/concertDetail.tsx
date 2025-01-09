@@ -21,6 +21,7 @@ import MusicNotes from "./MusicNotes.tsx";
 import MainComment from "../../Comment/MainComment";
 import Footer from "../../../app/layout/Footer.tsx";
 import Navbar from "../../Navbar/navbar.tsx";
+import AdvertisementCard from "../Ads/Ads.tsx"
 
 interface EventDateTime {
   startWeekDay: string;
@@ -369,6 +370,15 @@ const EventDetails: React.FC = () => {
       <div className="event-details">
         <div className="section pb-0">
           <div className="row justify-content-center">
+            
+          <AdvertisementCard
+            title="Special Offer"
+            description="Get 50% off on all premium features this week!"
+            linkUrl="/special-offer"
+            linkText="Claim Offer"
+            imageUrl="./sample_picture.jpg"
+            />
+                        
             <div
               className="card-3d-wrap-ce"
               style={{ height: "400px", width: "350px" }}
