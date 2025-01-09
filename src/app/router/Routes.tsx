@@ -14,6 +14,7 @@ import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
 import ConcertDetails from "../../features/user/concertDetailsPage/concert_details";
+import SearchBar from "../../features/Search/searchbar";
 
 export const routes: RouteObject[] = [
     {
@@ -26,6 +27,7 @@ export const routes: RouteObject[] = [
       children: [
        { index: true, element: <Home /> },
        {path:"/home",  element: <Home />},
+       {path:"/sea",  element: <SearchBar />},
        {path:"/concertDetail",  element: <ConcertDetails />},
        {path:"/login",  element: <Login />},
        {path:"/d",  element: <EventDetails />},
