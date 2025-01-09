@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import "./searchBar.css";
+import "./search.css";
+import Navbar from "../Navbar/navbar";
 
 const SearchBar: React.FC = () => {
   const suggestions = [
@@ -56,31 +57,37 @@ const SearchBar: React.FC = () => {
   };
 
   return (
-    <div className="container">
-      <div className="searchInput">
-        <input
-          type="text"
-          placeholder="Enter a keyword..."
-          value={userInput}
-          onChange={handleChange}
-        />
-        <div className="resultBox">
-          {showSuggestions &&
-            filteredSuggestions.map((suggestion, index) => (
-              <div
-                key={index}
-                className="resultItem"
-                onClick={() => handleClickSuggestion(suggestion)}
-              >
-                {suggestion}
+    <>
+      <Navbar />
+      <div className="container">
+        <div className="searchInput">
+          <input
+            type="text"
+            placeholder="Enter a keyword..."
+            value={userInput}
+            onChange={handleChange}
+          />
+          <div className="suggestions-container">
+            {showSuggestions && (
+              <div className="suggestions-list">
+                {filteredSuggestions.map((suggestion, index) => (
+                  <div
+                    key={index}
+                    className="suggestion-item"
+                    onClick={() => handleClickSuggestion(suggestion)}
+                  >
+                    {suggestion}
+                  </div>
+                ))}
               </div>
-            ))}
-        </div>
-        <div className="icon">
-          <i className="fas fa-search"></i>
+            )}
+          </div>
+          <div className="icon">
+            <i className="fas fa-search"></i>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
