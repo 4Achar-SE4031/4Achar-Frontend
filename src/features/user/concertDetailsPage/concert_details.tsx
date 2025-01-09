@@ -580,7 +580,7 @@ const ConcertDetails: React.FC = () => {
                                     style={{
                                         width: "765px",
                                         maxWidth: "100%",
-                                        height:"480px",
+                                        height: "480px",
                                         zIndex: 10,
                                         position: "relative",
                                     }}
@@ -634,9 +634,7 @@ const ConcertDetails: React.FC = () => {
                             </div>
 
                             {/* Right Section */}
-                            <div 
-                                className="col-md-2 left-section"
-                                >
+                            <div className="col-md-2 left-section">
                                 <AdvertisementCard
                                     title=""
                                     description=""
@@ -644,7 +642,7 @@ const ConcertDetails: React.FC = () => {
                                     linkText="با اسنپ خیالت از سفر راحته!"
                                     imageUrl={ads_sample_image2}
                                     height="480px"
-                                    />
+                                />
                             </div>
                         </div>
                     </>

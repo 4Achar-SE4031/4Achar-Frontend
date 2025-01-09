@@ -6,6 +6,7 @@
     max-width: 640px;
     margin: 0 auto;
     border-radius: 1rem; /* Changed from 1vh to rem for consistency */
+    background-color: rgb(24, 26, 27) !important
   }
 
 .ad-image {
@@ -47,9 +48,11 @@
     font-size:1.2rem;
     direction: rtl;
     text-align: center; 
+    color: rgb(255, 229, 142);
     /* margin-right: 1vh; */
 }
 .ad-card a svg {
     width: 2rem; /* Makes the arrow icon bigger - 24px */
     height: 2rem; /* Makes the arrow icon bigger - 24px */
 }
+
