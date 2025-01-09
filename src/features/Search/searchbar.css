@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+.searchpage{
+  
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: #f4f5f7;
+  padding: 0 20px;
+  direction: ltr; /* Left-to-right direction */
+}
+
+.container {
+  max-width: 450px;
+  margin: 150px auto;
+}
+
+.container .searchInput {
+  background: #fff;
+  width: 100%;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: 0px 1px 5px 3px rgba(0, 0, 0, 0.12);
+}
+
+.searchInput input {
+  height: 55px;
+  width: 100%;
+  outline: none;
+  border: none;
+  border-radius: 5px;
+  padding: 0 60px 0 20px;
+  font-size: 18px;
+  box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.searchInput.active input {
+  border-radius: 5px 5px 0 0;
+}
+
+.searchInput .resultBox {
+  padding: 0;
+  opacity: 0;
+  pointer-events: none;
+  max-height: 280px;
+  overflow-y: auto;
+  background-color: #fff;  /* اضافه کردن رنگ پس‌زمینه برای جعبه پیشنهادات */
+  border: 1px solid #ddd;  /* اضافه کردن حاشیه برای باکس پیشنهادات */
+  border-radius: 5px;  /* گرد کردن گوشه‌های باکس */
+  margin-top: 8px;
+  position: absolute; /* برای اینکه روی فیلد جستجو قرار بگیرد */
+  width: 100%; /* عرض باکس پیشنهادات مطابق با فیلد جستجو */
+  z-index: 9999; /* بالا بردن لایه نمایش */
+}
+
+.searchInput.active .resultBox {
+  padding: 10px 8px;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.resultBox .resultItem {
+  list-style: none;
+  padding: 8px 12px;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 3px;
+  color: #333; /* رنگ متن برای خوانایی بیشتر */
+}
+
+.resultBox .resultItem:hover {
+  background: #efefef;
+}
+
+.searchInput .icon {
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  height: 55px;
+  width: 55px;
+  text-align: center;
+  line-height: 55px;
+  font-size: 20px;
+  color: #644bff;
+  cursor: pointer;
+}
+
+
+}
