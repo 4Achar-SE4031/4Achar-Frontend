@@ -3,6 +3,8 @@
     color: #ffeba7;
     padding: 30px 20px;
     direction: rtl; /* Set direction to right-to-left */
+    z-index: 5 !important;
+    position: relative;
   
   
   .footer-container {
