@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+.searchpage {
+  position: relative;
+}
+
+.suggestions-container {
+  position: absolute;
+  top: 100%; /* قرار دادن لیست پیشنهادات دقیقا زیر جعبه جستجو */
+  left: 0;
+  width: 100%;
+  background-color: #fff; /* پس‌زمینه سفید برای لیست پیشنهادات */
+  border-radius: 0 0 8px 8px; /* گوشه‌های گرد برای لیست */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* سایه برای زیبایی */
+  z-index: 10; /* اطمینان از اینکه لیست روی سایر عناصر باشد */
+}
+
+.suggestions-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 200px; /* محدود کردن ارتفاع لیست */
+  overflow-y: auto; /* اسکرول شدن لیست در صورت بزرگ بودن */
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  text-align: right;
+  direction: rtl;
+  border-bottom: 1px solid #eee;
+}
+
+.suggestion-item:hover {
+  background-color: #f9d966;
+  color: #fff;
+}

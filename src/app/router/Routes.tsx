@@ -14,7 +14,7 @@ import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
 import ConcertDetails from "../../features/user/concertDetailsPage/concert_details";
-import SearchBar from "../../features/Search/searchbar";
+import SearchBar from "../../features/Search/search";
 
 export const routes: RouteObject[] = [
     {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./navbar.css";
 import { useNavigate } from "react-router-dom";
@@ -32,6 +32,7 @@ const Navbar: React.FC = () => {
   const [showBorder, setShowBorder] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState(window.innerWidth > 1040 ? blogo : slogo);
+  const suggestionsRef = useRef<HTMLDivElement | null>(null);
 
   const mockSuggestions = [
     "کنسرت کلاسیک تهران",
@@ -41,7 +42,14 @@ const Navbar: React.FC = () => {
     "کنسرت جاستین بیبر",
     "کنسرت کنسرتی"
   ];
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([
+    "کنسرت کلاسیک تهران",
+    "کنسرت پاپ اصفهان",
+    "نمایشگاه موسیقی",
+    "کنسرت گروه راک",
+    "کنسرت جاستین بیبر",
+    "کنسرت کنسرتی"]);
+
   const fetchSuggestions = async (query: string) => {
     console.log("fetching suggestions")
     if (query.length >= 1) {  // جستجو تنها زمانی شروع شود که حداقل 3 حرف تایپ شده باشد
@@ -146,9 +154,31 @@ const Navbar: React.FC = () => {
     fetchSuggestions(query);
   };
   
-  const searchHandler = () => {
-    // Add your search logic here
+  const searchHandler = (query: string) => {
+    console.log("searching: "+ query);
   };
+
+     // تابعی برای بستن پیشنهادات
+  const closeSuggestions = () => {
+    setSuggestions([]);
+  };
+
+  // اثر برای اضافه کردن event listener برای کلیک‌های خارج از بخش پیشنهادات
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        closeSuggestions();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // پاک کردن event listener هنگام unmount شدن کامپوننت
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
 
   return (
     <nav className="navbar">
@@ -163,31 +193,49 @@ const Navbar: React.FC = () => {
             />
           </NavLink>
         </div>
-
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="جستجو..."
-            className="search-input"
-            value={searchBoxText}
-            // onChange={(e) => setSearchBoxText(e.target.value)}
-            onChange={handleSearchInputChange}
-          />
-          <button className="search-button" onClick={searchHandler}>
-            <p className="bi bi-search search-icon"></p>
-          </button>
-          <div className="suggestions-container">
-            {suggestions.length > 0 && (
-              <ul className="suggestions-list">
-                {suggestions.map((suggestion, index) => (
-                  <li key={index} className="suggestion-item">
-                    {suggestion}
-                  </li>
-                ))}
-              </ul>
-            )}
+        <div className="centered-column">
+          <div className="col" style={{paddingLeft:"0px", paddingRight:"0px"}}>
+            <div className="search-bar">
+              <input
+                type="text"
+                placeholder="جستجو..."
+                className="search-input"
+                value={searchBoxText}
+                onChange={handleSearchInputChange}
+              />
+              <button className="search-button" onClick={() => {
+                          searchHandler(searchBoxText);
+                        }}>
+                <p className="bi bi-search search-icon"></p>
+              </button>
+            </div>
+            <div style={{paddingLeft:"15px", paddingRight:"15px"}}>
+              <div className="suggestions-container" ref={suggestionsRef}>
+                {suggestions.length > 0 && (
+                  <ul className="suggestions-list">
+                    {suggestions.map((suggestion, index) => (
+                      <li
+                        key={index}
+                        className="suggestion-item"
+                        style={{fontFamily: "iransansweb"}}
+                        onClick={() => {
+                          setSearchBoxText(suggestion);
+                          searchHandler(suggestion);
+                          setSuggestions([]); 
+                        }}
+                      >
+                        {suggestion}
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
           </div>
         </div>
+
+        
+        
 
         <div className="menu-icon" onClick={handleShowDrawer}>
           <i className="bi bi-list" style={{ fontSize: "28px", paddingBottom: "15px" }}></i>

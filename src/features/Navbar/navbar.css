@@ -3,30 +3,56 @@
 
 .suggestions-container {
   position: absolute;
-  background-color: white;
-  border: 1px solid #ccc;
-  width: 100%;
-  max-height: 200px;
-  overflow-y: auto;
-  z-index: 1000;
-  top: 100%;  /* این خط به پیشنهادات کمک می‌کند که درست زیر فیلد جستجو قرار بگیرند */
-  left: 0;  /* اطمینان حاصل می‌کند که پیشنهادات از سمت چپ درست قرار می‌گیرند */
+  top: 100%; 
+  left: 0;
+  width: 100%; 
+  background-color: #fef9e5 !important;
+  border-radius: 0 0 20px 20px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  color: #12141d !important;
+  height: auto !important; /* اجازه نمایش تمام محتوا */
+  max-height: unset; /* حذف محدودیت ارتفاع */
+  overflow: visible !important; /* جلوگیری از برش محتوا */
 }
 
 .suggestions-list {
-  list-style-type: none;
-  padding: 0;
+  list-style: none;
   margin: 0;
+  padding: 0;
+  height: auto; 
+  max-height: unset; /* حذف محدودیت ارتفاع */
+  overflow: visible !important; /* جلوگیری از برش محتوا */
 }
 
 .suggestion-item {
   padding: 10px;
   cursor: pointer;
+  font-family: "Poppins", sans-serif;
+  font-size: 14px;
+  text-align: right;
+  direction: rtl;
+  border-bottom: 1px solid #eee;
+  height: 45px;
+  font-family: 'iransansweb';
+  background-color: #fef9e5; /* رنگ پس‌زمینه برای تمام آیتم‌ها */
 }
 
 .suggestion-item:hover {
-  background-color: #f0f0f0;
+  background-color: #f9d966; /* رنگ پس‌زمینه هنگام هاور */
+  color: #12141d !important;
 }
+
+.suggestion-item:last-child {
+  border-radius: 0 0 20px 20px !important; /* اعمال گوشه‌های گرد برای آخرین آیتم در حالت عادی */
+}
+
+.suggestion-item:last-child:hover {
+  border-radius: 0 0 20px 20px !important; /* اعمال گوشه‌های گرد برای آخرین آیتم هنگام هاور */
+}
+
+
+
 
 
 
