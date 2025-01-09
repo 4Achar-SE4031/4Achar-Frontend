@@ -32,11 +32,45 @@ const Navbar: React.FC = () => {
   const [showBorder, setShowBorder] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState(window.innerWidth > 1040 ? blogo : slogo);
+
+  const mockSuggestions = [
+    "کنسرت کلاسیک تهران",
+    "کنسرت پاپ اصفهان",
+    "نمایشگاه موسیقی",
+    "کنسرت گروه راک",
+    "کنسرت جاستین بیبر",
+    "کنسرت کنسرتی"
+  ];
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const fetchSuggestions = async (query: string) => {
+    console.log("fetching suggestions")
+    if (query.length >= 1) {  // جستجو تنها زمانی شروع شود که حداقل 3 حرف تایپ شده باشد
+      try {
+        // const response = await axios.get(`your-api-endpoint?query=${query}`);
+        // setSuggestions(response.data);
+        const filteredSuggestions = mockSuggestions.filter((suggestion) =>
+          suggestion.toLowerCase().includes(query.toLowerCase())
+        );
+
+        setSuggestions(filteredSuggestions);
+        console.log("Filtered Suggestions:", suggestions);  // چاپ فیلتر شده‌ها
+
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+      }
+    } else {
+      setSuggestions([]);
+    }
+  };
+  
   useEffect(() => {
     console.log("------------------")
     console.log("user data: "+ userData)
     console.log("token: "+ auth.token)
   },[]);
+  useEffect(() => {
+    console.log("Updated Suggestions:", suggestions);
+  }, [suggestions]);
   
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData") || "null");
@@ -106,6 +140,12 @@ const Navbar: React.FC = () => {
     }
   };
 
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const query = e.target.value;
+    setSearchBoxText(query);
+    fetchSuggestions(query);
+  };
+  
   const searchHandler = () => {
     // Add your search logic here
   };
@@ -130,11 +170,23 @@ const Navbar: React.FC = () => {
             placeholder="جستجو..."
             className="search-input"
             value={searchBoxText}
-            onChange={(e) => setSearchBoxText(e.target.value)}
+            // onChange={(e) => setSearchBoxText(e.target.value)}
+            onChange={handleSearchInputChange}
           />
           <button className="search-button" onClick={searchHandler}>
             <p className="bi bi-search search-icon"></p>
           </button>
+          <div className="suggestions-container">
+            {suggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {suggestions.map((suggestion, index) => (
+                  <li key={index} className="suggestion-item">
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
         </div>
 
         <div className="menu-icon" onClick={handleShowDrawer}>
@@ -149,7 +201,7 @@ const Navbar: React.FC = () => {
               </li>
             )} */}
             <li>
-              <NavLink to="/home">خانه</NavLink>
+              <NavLink to="/home" >خانه</NavLink>
             </li>
             <li>
               <NavLink to="/create-event">ویترین</NavLink>
@@ -157,17 +209,16 @@ const Navbar: React.FC = () => {
             <li>
               <NavLink to="/create-event"> خرید ها</NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink to="/create-event">ایجاد کنسرت </NavLink>
-            </li>
+            </li> */}
             
             {!showDrawer && !auth.token && showBorder && (
               <div className="auth-link">
+                  <NavLink to="/register" style={{marginLeft:"30px",marginBottom:"3px",marginRight:"13px"}}>عضویت</NavLink>
+                
                 <li className="auth-link-li">
                   <NavLink to="/login">ورود</NavLink>
-                </li>
-                <li className="auth-link-li">
-                  <NavLink to="/register">عضویت</NavLink>
                 </li>
               </div>
             )}
@@ -223,10 +274,10 @@ const Navbar: React.FC = () => {
 
             {showDrawer && !auth.token && (
               <>
-                <li className="auth-link-li">
+                <li className="auth-link-li-drawer">
                   <NavLink to="/login">ورود</NavLink>
                 </li>
-                <li className="auth-link-li">
+                <li className="auth-link-li-drawer">
                   <NavLink to="/register">عضویت</NavLink>
                 </li>
               </>

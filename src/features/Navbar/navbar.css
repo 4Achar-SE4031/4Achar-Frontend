@@ -1,5 +1,36 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700,800,900");
 
+
+.suggestions-container {
+  position: absolute;
+  background-color: white;
+  border: 1px solid #ccc;
+  width: 100%;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  top: 100%;  /* این خط به پیشنهادات کمک می‌کند که درست زیر فیلد جستجو قرار بگیرند */
+  left: 0;  /* اطمینان حاصل می‌کند که پیشنهادات از سمت چپ درست قرار می‌گیرند */
+}
+
+.suggestions-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+}
+
+.suggestion-item:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
 .dropdown-container {
   position: relative;
   cursor: pointer;
@@ -45,11 +76,38 @@
 
 
 .auth-link {
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.auth-link-li {
+  width: 70px;
+  height: 40px;
+  font-size: 14px;
+  color: #10100f !important; 
+  background-color: #fbe707;
+  margin-top: 0 !important;
+  margin-bottom: 0;
+  margin-right: 0 !important;
+  padding-top: 6px;
+  border-radius: 20px; 
+  text-align: center;
+  font-weight: bold;
+}
+
+.auth-link-li a {
+  color: #10100f !important; 
+}
+
+
+.auth-link-drawer {
   border: 1px solid ; 
   display: flex;
   padding-left: 10px;
 }
-.auth-link-li{
+.auth-link-li-drawer{
   font-size: 14px !important;
   color: #FFF7DD;
   cursor: pointer !important;
@@ -75,9 +133,7 @@
     position: fixed;
     width: 100%;
     z-index: 1100; */
-  .sdfdsf{
-
-  }
+  
   /* .row {
     display: flex ;
     flex-wrap: wrap; 
@@ -166,7 +222,7 @@
   
   .nav-elements ul li:not(:last-child) {
     margin-right: 40px;
-    margin-top: 5px;
+    margin-top: 7px;
   }
   
   .nav-elements ul a {
@@ -264,9 +320,7 @@
 @media (max-width: 1040px) {
   
   .navbar{
-    .sdfs{
-
-    }
+    
     .logo{
       height: 50px;
       width: 60px !important;
@@ -310,9 +364,7 @@
 }
 @media (max-width: 750px) {
   .navbar{
-    .dsfsd{
-
-    }
+    
     .logo{
       display: none;
     }
@@ -321,9 +373,7 @@
 @media (max-width: 715px) {
 
   .navbar{
-    .asdsa{
-      
-    }
+    
     .search-icon{
       padding-bottom: 10px;
       font-size: large !important;
@@ -347,9 +397,7 @@
 @media (max-width: 642px) {
   .navbar {
     z-index: 999;
-    .asdsa{
-      
-    }
+    
     .search-icon{
       padding-bottom: 10px;
       font-size: large !important;
@@ -374,7 +422,7 @@
       display:block;
       cursor: pointer; 
       margin-left: 15%; 
-      margin-bottom: 15px;
+      margin-bottom:  5px;
     }
 
     .nav-elements {
