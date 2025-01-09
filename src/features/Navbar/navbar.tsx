@@ -151,7 +151,7 @@ const Navbar: React.FC = () => {
   };
 
   const handleSearchInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value;
+    const query = e.target.value.trim();
     setSearchBoxText(query);
     if (query === "") {
       setSuggestions([]);
@@ -172,9 +172,9 @@ const Navbar: React.FC = () => {
   
   const searchHandler = (query: string) => {
     console.log("searching: "+ query);
+    navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
   };
 
-     // تابعی برای بستن پیشنهادات
   const closeSuggestions = () => {
     setSuggestions([]);
     setIsSuggestionsOpen(false);
@@ -275,16 +275,18 @@ const Navbar: React.FC = () => {
                       alignItems: "center", // هم‌تراز کردن متن و آیکون
                       padding: "8px", // فضای داخلی برای آیتم‌ها
                     }}
+                    onMouseEnter={()=>{
+                      console.log("Mouse enter")
+                      setSelectedIndex(index);
+                    }}
                     onClick={() => {
                       setSearchBoxText(suggestion);
                       searchHandler(suggestion);
                       closeSuggestions();
                     }}
                   >
-                    {/* متن پیشنهاد */}
                     <span style={{ flex: 1, textAlign: "right" }}>{suggestion}</span>
                   
-                    {/* آیکون سمت چپ */}
                     <span
                       className="bi bi-chevron-left"
                       style={{
@@ -333,7 +335,7 @@ const Navbar: React.FC = () => {
               <div className="auth-link">
                   <NavLink to="/register" style={{marginLeft:"30px",marginBottom:"3px",marginRight:"13px"}}>عضویت</NavLink>
                 
-                <li className="auth-link-li">
+                <li className="auth-link-li" onClick={()=> navigate('/login')} style={{cursor:"pointer"}}>
                   <NavLink to="/login">ورود</NavLink>
                 </li>
               </div>

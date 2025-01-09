@@ -27,7 +27,7 @@ export const routes: RouteObject[] = [
       children: [
        { index: true, element: <Home /> },
        {path:"/home",  element: <Home />},
-       {path:"/sea",  element: <SearchBar />},
+       {path:"/singer",  element: <SearchBar />},
        {path:"/concertDetail",  element: <ConcertDetails />},
        {path:"/login",  element: <Login />},
        {path:"/d",  element: <EventDetails />},
@@ -41,7 +41,7 @@ export const routes: RouteObject[] = [
        {path:"/events/popular", element: <EventsList />},
        {path:"/events", element: <FiveEvents />},
        {path:"/account/reset_password", element: <ResetPassword />},
-       { path: "*", element: <Navigate replace to="not-found" /> },
+       { path: "*", element: <PageNotFound /> },
       ],
     },
   ];
