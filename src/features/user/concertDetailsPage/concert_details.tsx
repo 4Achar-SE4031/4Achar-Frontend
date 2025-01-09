@@ -424,7 +424,7 @@ const ConcertDetails: React.FC = () => {
                                         }
                                         style={{
                                             height: "45px",
-                                            borderRadius: "50%",
+                                            borderRadius: "6px",
                                         }}
                                         alt="profile"
                                     />
@@ -465,6 +465,7 @@ const ConcertDetails: React.FC = () => {
                                         height: "400px",
                                         zIndex: 10,
                                         position: "relative",
+                                        borderRadius: "6px"
                                     }}
                                 />
                             </div>
@@ -671,6 +672,7 @@ const ConcertDetails: React.FC = () => {
                                         marginLeft: "10px",
                                         zIndex: 10,
                                         position: "relative",
+                                        borderRadius: "6px"
                                     }}
                                 />
                             </div>
@@ -857,7 +859,7 @@ const ConcertDetails: React.FC = () => {
                                                 }
                                                 style={{
                                                     height: "45px",
-                                                    borderRadius: "50%",
+                                                    borderRadius: "6px",
                                                 }}
                                                 alt="profile"
                                             />
@@ -952,7 +954,7 @@ const ConcertDetails: React.FC = () => {
                                                 }
                                                 style={{
                                                     height: "45px",
-                                                    borderRadius: "50%",
+                                                    borderRadius: "6px",
                                                 }}
                                                 alt="profile"
                                             />

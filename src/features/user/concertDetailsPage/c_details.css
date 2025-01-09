@@ -455,3 +455,7 @@ select {
 .side-widget p {
     margin-bottom: 10px;
 }
+
+.mt-1{
+    border-radius: 6px;
+}
