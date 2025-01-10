@@ -12,7 +12,7 @@ import slogo from '/logo-small.png';
 import profile from '/profile.png';
 import agent from "../../app/api/agent";
 import { set } from "mobx";
-
+import { useSearch } from "../Search/searchStatus";
 interface UserData {
   email?: string;
   firstName?:string;
@@ -36,6 +36,8 @@ const Navbar: React.FC = () => {
   const suggestionsRef = useRef<HTMLDivElement | null>(null);
   const [isSuggestionsOpen, setIsSuggestionsOpen] = useState<boolean>(false); // وضعیت باز یا بسته بودن پیشنهادات
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
+  const { searchStatus, setSearchStatus } = useSearch();
+
 
   const mockSuggestions = ["داریوش","ابی","گوگوش","معین","هایده","مهستی","لیلا فروهر","شهرام شب‌پره","اندی","سیروان خسروی",
 "احسان خواجه‌امیری","بنیامین بهادری","شادمهر عقیلی","مرتضی پاشایی","محسن یگانه","محسن چاوشی",
@@ -55,7 +57,6 @@ const Navbar: React.FC = () => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const fetchSuggestions = async (query: string) => {
-    console.log("fetching suggestions")
     try {
       // const response = await axios.get(`your-api-endpoint?query=${query}`);
       // setSuggestions(response.data);
@@ -64,7 +65,6 @@ const Navbar: React.FC = () => {
       );
 
       setSuggestions(filteredSuggestions.slice(0,5));
-      console.log("Filtered Suggestions:", suggestions);  // چاپ فیلتر شده‌ها
 
     } catch (error) {
       console.error("Error fetching suggestions:", error);
@@ -73,15 +73,7 @@ const Navbar: React.FC = () => {
     
   };
   
-  useEffect(() => {
-    console.log("------------------")
-    console.log("user data: "+ userData)
-    console.log("token: "+ auth.token)
-  },[]);
-  useEffect(() => {
-    console.log("Updated Suggestions:", suggestions);
-  }, [suggestions]);
-  
+
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData") || "null");
     setUserData(storedUserData);
@@ -151,8 +143,9 @@ const Navbar: React.FC = () => {
   };
 
   const handleSearchInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const query = e.target.value.trim();
+    let query = e.target.value;
     setSearchBoxText(query);
+    query = query.trim()
     if (query === "") {
       setSuggestions([]);
       setIsSuggestionsOpen(false);
@@ -160,18 +153,17 @@ const Navbar: React.FC = () => {
       return;
     }
     await fetchSuggestions(query);
-    console.log("rad shod")
     if(suggestions.length==0){
       setIsSuggestionsOpen(false);
-      console.log("rad shod2222")
     }else{
       setIsSuggestionsOpen(true);
-      console.log("rad shod3333")
     }
   };
   
   const searchHandler = (query: string) => {
     console.log("searching: "+ query);
+    setSearchStatus("Loading");
+    console.log("search status in NAVBAR: "+searchStatus);
     navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
   };
 
@@ -197,7 +189,6 @@ const Navbar: React.FC = () => {
     };
   }, []);
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    console.log("Key pressed: " + selectedIndex);
   
     if (suggestions.length === 0) return;
     

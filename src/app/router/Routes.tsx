@@ -27,7 +27,7 @@ export const routes: RouteObject[] = [
       children: [
        { index: true, element: <Home /> },
        {path:"/home",  element: <Home />},
-       {path:"/singer",  element: <SearchBar />},
+       {path:"/singer/:singer",  element: <SearchBar />},
        {path:"/concertDetail",  element: <ConcertDetails />},
        {path:"/login",  element: <Login />},
        {path:"/d",  element: <EventDetails />},

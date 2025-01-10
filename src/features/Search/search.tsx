@@ -1,94 +1,109 @@
-import React, { useState } from "react";
-import "./search.css";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 import Navbar from "../Navbar/navbar";
+import './search.css'
+import Lottie from "react-lottie";
+import animationData from "../user/concertDetailsPage/Animation - 1715854965467.json";
+import PageNotFound from "../user/concertDetailsPage/PageNotFound/PageNotFound";
+import { useSearch } from "./searchStatus";
 
-const SearchBar: React.FC = () => {
-  const suggestions = [
-    "Channel",
-    "CodingLab",
-    "CodingNepal",
-    "YouTube",
-    "YouTuber",
-    "YouTube Channel",
-    "Blogger",
-    "Bollywood",
-    "Vlogger",
-    "Vehicles",
-    "Facebook",
-    "Freelancer",
-    "Facebook Page",
-    "Designer",
-    "Developer",
-    "Web Designer",
-    "Web Developer",
-    "Login Form in HTML & CSS",
-    "How to learn HTML & CSS",
-    "How to learn JavaScript",
-    "How to become Freelancer",
-    "How to become Web Designer",
-    "How to start Gaming Channel",
-    "How to start YouTube Channel",
-    "What does HTML stands for?",
-    "What does CSS stands for?",
-  ];
+const Search: React.FC = () => {
+  const { singer } = useParams<{ singer: string }>(); 
+  const [data, setData] = useState<any>(null); 
+  const [error, setError] = useState<string | null>(null); 
+  const { searchStatus, setSearchStatus } = useSearch();
 
-  const [userInput, setUserInput] = useState<string>("");
-  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
-  const [showSuggestions, setShowSuggestions] = useState<boolean>(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setUserInput(inputValue);
-    if (inputValue) {
-      const filtered = suggestions.filter(suggestion =>
-        suggestion.toLowerCase().startsWith(inputValue.toLowerCase())
-      );
-      setFilteredSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setFilteredSuggestions([]);
-      setShowSuggestions(false);
-    }
+  const defaultOptions = {
+      loop: true,
+      autoplay: true,
+      clickToPause: true,
+      animationData: animationData,
   };
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!singer) {
+        setError("ID معتبر نیست.");
+        console.log("ID is not valid");
+        return;
+      }
+      let searchTerm = singer.split('/').pop()?.replace(/-/g, " ").normalize("NFC").trim(); 
+      if (!searchTerm) {
+        setError("مقدار جستجو پیدا نشد.");
+        console.log("Search term is not valid");
+        return;
+      }
+      
 
-  const handleClickSuggestion = (suggestion: string) => {
-    setUserInput(suggestion);
-    setShowSuggestions(false);
-  };
+      try {
+        const response = await axios.post(
+          "https://api-concertify.darkube.app/Concert/search",
+          { searchTerm:  searchTerm }, 
+          {
+            headers: {
+              "Content-Type": "application/json",
+              accept: "text/plain",
+            },
+          }
+        );
+        console.log("Loaded data: "+response.data)
+        setTimeout(() => {
+          if (response.data && Object.keys(response.data).length > 0){
+            setData(response.data); 
+            console.log("Data to show "+response.data);
+            setSearchStatus("Loaded");
+            console.log("search status in SEARCH: "+searchStatus);
+          }else{
+            setSearchStatus("gotError");
+            console.log("Nothing to show "+response.data);
+            console.log("search status in SEARCH: "+searchStatus);
+          }
+          
+        }, 1000);
+      } catch (err) {
+        console.error("Error during API call:", err);
+        setError("خطا در دریافت داده‌ها!");
+        setTimeout(() => {
+          setSearchStatus("gotError");
+        }, 1000);
+      }
+    };
+    fetchData();
+  }, [singer]); 
+
+  if(searchStatus == "gotError"){
+    return <PageNotFound />;
+  }
+
+  if(searchStatus == "Loading"){
+    return (
+      <div className="event-details">
+          <Navbar />
+
+          <div
+              className="container col loading"
+              style={{
+                  height: "200px",
+                  width: "200px",
+                  marginTop: "15%",
+              }}
+          >
+              <Lottie options={defaultOptions} />
+          </div>
+      </div>
+  );
+  }
 
   return (
     <>
-      <Navbar />
-      <div className="container">
-        <div className="searchInput">
-          <input
-            type="text"
-            placeholder="Enter a keyword..."
-            value={userInput}
-            onChange={handleChange}
-          />
-          <div className="suggestions-container">
-            {showSuggestions && (
-              <div className="suggestions-list">
-                {filteredSuggestions.map((suggestion, index) => (
-                  <div
-                    key={index}
-                    className="suggestion-item"
-                    onClick={() => handleClickSuggestion(suggestion)}
-                  >
-                    {suggestion}
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-          <div className="icon">
-            <i className="fas fa-search"></i>
-          </div>
-        </div>
+      <Navbar/>
+      <div className ="searchpage">
+        <h1>نتایج جستجو</h1>
+        <pre style={{color:"white"}}>{JSON.stringify(data, null, 2)}</pre>
+        <div style={{height:"50px"}}> </div>
       </div>
     </>
   );
 };
 
-export default SearchBar;
+export default Search;
