@@ -7,13 +7,15 @@ import Lottie from "react-lottie";
 import animationData from "../user/concertDetailsPage/Animation - 1715854965467.json";
 import PageNotFound from "../user/concertDetailsPage/PageNotFound/PageNotFound";
 import { useSearch } from "./searchStatus";
+import { useNavigate } from "react-router-dom";
 
 const Search: React.FC = () => {
   const { singer } = useParams<{ singer: string }>(); 
   const [data, setData] = useState<any>(null); 
   const [error, setError] = useState<string | null>(null); 
   const { searchStatus, setSearchStatus } = useSearch();
-
+  const navigate = useNavigate();
+  
   const defaultOptions = {
       loop: true,
       autoplay: true,
@@ -96,14 +98,53 @@ const Search: React.FC = () => {
 
   return (
     <>
-      <Navbar/>
-      <div className ="searchpage">
-        <h1>نتایج جستجو</h1>
-        <pre style={{color:"white"}}>{JSON.stringify(data, null, 2)}</pre>
-        <div style={{height:"50px"}}> </div>
+      <Navbar />
+      <div className="searchpage">
+        <div className="results">
+          {data.map((item: any) => (
+            <div
+              key={item.id}
+              className="result-card"
+              style={{ backgroundImage: `url(${item.cardImage})` }}
+            >
+              <div className="card-content">
+                <h2>{item.title}</h2>
+                <p>
+                  <i className="bi bi-geo-alt" style={{ marginLeft: '5px', fontSize: "13px"}}></i>
+                  {item.location}
+                </p>
+                <p>
+                  <i className="bi bi-calendar-week" style={{ marginLeft: '5px', fontSize: "13px"}}></i>
+                  {`${new Date(item.startDateTime).toLocaleString("fa-IR", {
+                    weekday: "long",
+                  })} ${new Date(item.startDateTime).toLocaleDateString("fa-IR", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}، ${new Date(item.startDateTime).toLocaleString("fa-IR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}`}
+                </p>
+                
+                <button className="buy-button" onClick={() => {
+                  navigate(`/concertDetail/${item.id}`)
+                  setSearchStatus("loading")
+                  }}>
+                  <i className="bi bi-bag-plus" style={{ marginLeft: '5px', fontSize: "16px" }}></i>
+                  خرید بلیت
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
+
   );
+  
 };
 
 export default Search;
+
+
