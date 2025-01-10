@@ -24,6 +24,7 @@ const Search: React.FC = () => {
   };
   useEffect(() => {
     const fetchData = async () => {
+      console.log("Fetching data...");
       if (!singer) {
         setError("ID معتبر نیست.");
         console.log("ID is not valid");
@@ -94,6 +95,10 @@ const Search: React.FC = () => {
           </div>
       </div>
   );
+  }
+  if (!data){
+    setSearchStatus("Loading");
+    // fetchData();
   }
 
   return (
