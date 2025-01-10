@@ -469,8 +469,9 @@ const Register: React.FC = () => {
                         >
                           عضویت در کنسرتیفای
                         </button>
-                        <p className="message">
-                          قبلا عضو شده‌اید؟ <a href="/login">ورود کاربران</a>
+                        <p className="message"
+                        style={{fontSize:"18px"}}>
+                          قبلا عضو شده‌اید؟ <a href="/login" style={{fontSize:"18px"}}>ورود کاربران</a>
                         </p>
                       </div>
                     </div>

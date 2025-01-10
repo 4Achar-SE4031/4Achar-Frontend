@@ -7,14 +7,15 @@ const ExpandablePrice = ({ prices = [700000, 850000, 1000000] }) => {
         top: 0,
         right: 0,
     });
-    const triggerRef = useRef(null);
-    const popoverRef = useRef(null);
+    // Add HTMLDivElement type (or HTMLButtonElement, depending on what element you're referencing)
+    const triggerRef = useRef<HTMLDivElement>(null);
+    const popoverRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        const handleClickOutside = (event) => {
+        const handleClickOutside = (event: MouseEvent) => { // Properly type the event
             if (
                 triggerRef.current &&
-                !triggerRef.current.contains(event.target)
+                !triggerRef.current.contains(event.target as Node)
             ) {
                 setIsExpanded(false);
             }
