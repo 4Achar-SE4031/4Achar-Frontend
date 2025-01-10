@@ -233,6 +233,12 @@ body {
       margin-left: 120px;
       gap: 0.3rem;
     }
+    .event-info__fields {
+      margin-left: 20px; /* کمی به سمت راست حرکت فیلدها */
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
     .event-info_price {
       font-size: 1rem;
       font-weight: 400;
