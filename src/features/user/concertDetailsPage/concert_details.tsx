@@ -596,6 +596,7 @@ const ConcertDetails: React.FC = () => {
                                         long={eventDetails.location_lon}
                                         onlyShow={true}
                                         name="EventDetails"
+                                        address={eventDetails.address}
                                     />
                                 </>
 
@@ -842,6 +843,7 @@ const ConcertDetails: React.FC = () => {
                                                 long={eventDetails.location_lon}
                                                 onlyShow={true}
                                                 name="EventDetails"
+                                                address={eventDetails.address}
                                             />
                                         </>
 
@@ -1116,6 +1118,7 @@ const ConcertDetails: React.FC = () => {
                                                 long={eventDetails.location_lon}
                                                 onlyShow={true}
                                                 name="EventDetails"
+                                                address={eventDetails.address}
                                             />
                                         </>
 
