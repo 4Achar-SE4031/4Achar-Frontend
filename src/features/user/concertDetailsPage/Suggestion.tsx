@@ -36,7 +36,7 @@ const Suggestion: React.FC = () => {
           Take: "20",
         }).toString();
         const response = await agent.Events.list(`${queryParams}`);
-        setRecentEvents(response.data.slice(0, 10));
+        setRecentEvents(response.concerts.slice(0, 10));
 
         console.log(response)
       } catch (error) {
