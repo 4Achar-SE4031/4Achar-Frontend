@@ -5,6 +5,7 @@ import Navbar from "../Navbar/navbar";
 import './search.css'
 import Lottie from "react-lottie";
 import animationData from "../user/concertDetailsPage/Animation - 1715854965467.json";
+import internalServerErroAnimationData from "./Animation - ServerInternalError.json";
 import PageNotFound from "../user/concertDetailsPage/PageNotFound/PageNotFound";
 import { useSearch } from "./searchStatus";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +13,6 @@ import { useNavigate } from "react-router-dom";
 const Search: React.FC = () => {
   const { singer } = useParams<{ singer: string }>(); 
   const [data, setData] = useState<any>(null); 
-  const [error, setError] = useState<string | null>(null); 
   const { searchStatus, setSearchStatus } = useSearch();
   const navigate = useNavigate();
   
@@ -22,26 +22,30 @@ const Search: React.FC = () => {
       clickToPause: true,
       animationData: animationData,
   };
+  const internalServerErrorDefaultOptions = {
+    loop: true,
+    autoplay: true,
+    clickToPause: true,
+    animationData: internalServerErroAnimationData,
+  }
   useEffect(() => {
     const fetchData = async () => {
       console.log("Fetching data...");
       if (!singer) {
-        setError("ID معتبر نیست.");
         console.log("ID is not valid");
         return;
       }
       let searchTerm = singer.split('/').pop()?.replace(/-/g, " ").normalize("NFC").trim(); 
       if (!searchTerm) {
-        setError("مقدار جستجو پیدا نشد.");
         console.log("Search term is not valid");
         return;
       }
       
 
       try {
-        const response = await axios.post(
-          "https://api-concertify.darkube.app/Concert/search",
-          { searchTerm:  searchTerm }, 
+        
+        const response = await axios.get(
+          `https://api-concertify.darkube.app/Concert/search?searchTerm=${encodeURIComponent(searchTerm)}`, 
           {
             headers: {
               "Content-Type": "application/json",
@@ -49,7 +53,8 @@ const Search: React.FC = () => {
             },
           }
         );
-        console.log("Loaded data: "+response.data)
+        // throw new Error("Server Internal Error");
+
         setTimeout(() => {
           if (response.data && Object.keys(response.data).length > 0){
             setData(response.data); 
@@ -57,15 +62,14 @@ const Search: React.FC = () => {
             setSearchStatus("Loaded");
             console.log("search status in SEARCH: "+searchStatus);
           }else{
-            setSearchStatus("gotError");
+            setSearchStatus("notFound");
             console.log("Nothing to show "+response.data);
             console.log("search status in SEARCH: "+searchStatus);
           }
           
         }, 1000);
       } catch (err) {
-        console.error("Error during API call:", err);
-        setError("خطا در دریافت داده‌ها!");
+        console.log("Error during API call:", err);
         setTimeout(() => {
           setSearchStatus("gotError");
         }, 1000);
@@ -74,10 +78,33 @@ const Search: React.FC = () => {
     fetchData();
   }, [singer]); 
 
+    useEffect(() => {
+      console.log("use effect search status in SEARCH:", searchStatus);
+  }, [searchStatus]);
   if(searchStatus == "gotError"){
+      return (
+        <div className="event-details">
+            <Navbar />
+
+            <div
+                className="container col"
+                style={{
+                  height: "50%",
+                  width: "70%",
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+            >
+                <Lottie options={internalServerErrorDefaultOptions} />
+            </div>
+        </div>
+    );
+  }
+  if(searchStatus == "notFound"){
     return <PageNotFound />;
   }
-
   if(searchStatus == "Loading"){
     return (
       <div className="event-details">
@@ -96,7 +123,8 @@ const Search: React.FC = () => {
       </div>
   );
   }
-  if (!data){
+  if (!data && searchStatus !=="gotError"){
+    console.log("if (!data && searchStatus !==gotError){")
     setSearchStatus("Loading");
     // fetchData();
   }

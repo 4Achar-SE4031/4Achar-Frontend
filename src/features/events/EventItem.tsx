@@ -51,7 +51,7 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
     return { minPrice, maxPrice };
   };
   return (
-    <Link to={"/concertdetail"}>
+    <Link to={`/concertdetail/${event.id}`}>
       <div className="item mb-3">
         <div className="event-img">
           <img
@@ -69,7 +69,7 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
             <h4 id="event-details">{event.details}</h4>
             <i className="input-icon uil uil-document-layout-right"></i>
           </div> */}
-              <div className="event-info__details">
+              <div className="event-info__details ml-5">
             <h4 id="event-details" className="truncate">{event.location}</h4>
             <i className="input-icon uil uil-document-layout-right"></i>
           </div>

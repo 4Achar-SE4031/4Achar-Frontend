@@ -1,6 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangePassword, UpdateUser, User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
 import { Event } from "../models/event";
+import { ConcertsResponse } from "../models/concertResponse";
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
         setTimeout(resolve, delay);
@@ -44,8 +45,10 @@ const Account = {
 };
 
 const Events = {
-    list: (queryParams?: any): Promise<Event[]> => requests.get<Event[]>(`/Concert${queryParams ? "?" + queryParams: ""}`),
-};
+    list: (queryParams?: any): Promise<ConcertsResponse> =>
+        requests.get<ConcertsResponse>(
+          `/Concert${queryParams ? "?" + queryParams : ""}`
+        ),};
 
 const agent = {
     Account,

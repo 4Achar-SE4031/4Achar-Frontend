@@ -5,7 +5,7 @@ import axios from "axios";
 
 const LoginWithGoogle: React.FC = () => {
     const login = useGoogleLogin({
-        onSuccess: async (credentialResponse) => {
+        onSuccess: async (credentialResponse: any) => {
             console.log("Login Success:", credentialResponse);
             try {
                 const res = await axios.post('https://api-concertify.darkube.app/api/auth/google', {

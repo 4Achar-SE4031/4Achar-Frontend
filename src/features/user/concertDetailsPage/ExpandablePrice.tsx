@@ -143,3 +143,4 @@ const ExpandablePrice = ({ prices = [700000, 850000, 1000000] }) => {
 };
 
 export default ExpandablePrice;
+

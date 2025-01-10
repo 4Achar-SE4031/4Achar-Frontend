@@ -134,7 +134,7 @@ const ConcertDetails: React.FC = () => {
                     ticketPrice: data.ticketPrice || [],
                     // ticketPrice:"رایگان",
                     attendance: "I",
-                    province: "" || "",
+                    province: "",
                     city: data.city || "بندرعباس",
                     photo: data.coverImage || "/img.png", // Default value since API doesn't provide this
                     // photo: "/img.png" || "/img2.png", // Default value since API doesn't provide this
