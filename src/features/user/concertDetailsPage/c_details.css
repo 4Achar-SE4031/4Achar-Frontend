@@ -171,6 +171,8 @@ h4 {
   margin:3px 0 0;
   color: #b3b3b3;
   font-size: 15px;
+  text-align: right;
+  direction: rtl;
 }
 #message{
   margin:10px 0 0;
@@ -419,3 +421,43 @@ select {
 
 
 
+.left-section,
+.right-section {
+    /* padding: 15px; */
+    height: 100%;
+}
+
+.side-content {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.side-list {
+    list-style: none;
+    padding: 0;
+    margin: 15px 0;
+}
+
+.side-list li {
+    padding: 8px 0;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.side-list li:last-child {
+    border-bottom: none;
+}
+
+.side-widget {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.side-widget p {
+    margin-bottom: 10px;
+}
+
+.mt-1{
+    border-radius: 6px;
+}

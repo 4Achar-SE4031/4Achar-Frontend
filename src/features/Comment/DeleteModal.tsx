@@ -19,7 +19,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   setInitialFetchDone,
 }) => {
   const auth = useAuth();
-  axios.defaults.headers.common["Authorization"] = `JWT ${auth.token}`;
+  // axios.defaults.headers.common["Authorization"] = `JWT ${auth.token}`;
 
   const deleteComment = async (commentId: number) => {
     const baseUrl = `https://eventify.liara.run/comments/${commentId}/`;

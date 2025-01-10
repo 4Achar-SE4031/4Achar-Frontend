@@ -2,13 +2,12 @@ export interface Event {
     id: number;
     title: string;
     details: string;
-    start_date: string;
-    start_hour: string;
-    photo: string | null;
-    province?: string | null;
+    startDateTime: string;
+    cardImage: string | null;
+    location?: string | null;
     city?: string;
     category: string;
-    ticket_price?: number;
+    ticketPrice?: number[] | null; 
     rating: number;
   }
   

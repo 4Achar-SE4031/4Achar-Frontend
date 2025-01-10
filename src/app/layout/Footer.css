@@ -3,7 +3,9 @@
     color: #ffeba7;
     padding: 30px 20px;
     direction: rtl; /* Set direction to right-to-left */
-  }
+    z-index: 5 !important;
+    position: relative;
+  
   
   .footer-container {
     display: flex;
@@ -13,8 +15,17 @@
   }
   
   .footer-section {
+    display: flex;
+    flex-direction: column;
     flex: 1;
     min-width: 200px;
+    justify-content: center;
+    align-items: center;
+    img {
+      height: 30px;
+      /* margin-right: 10px; */
+      max-width: 300px;
+    }
   }
   
   .footer-title {
@@ -55,9 +66,11 @@
   }
   
   .footer-social {
-    display: flex;
+    display: flex !important;
     align-items: center;
     gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
   }
   
   .footer-social span {
@@ -74,4 +87,4 @@
     transform: scale(1.1); /* Grow a bit larger on hover */
     color: #ffeba7; /* Keep the color consistent */
   }
-  
+}

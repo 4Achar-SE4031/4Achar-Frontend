@@ -11,7 +11,7 @@ const ForgetPassword: React.FC = () => {
   const [showViolations, setShowViolation] = useState<boolean>(false);
   const [enteredRecoveryEmail, setEnteredRecoveryEmail] = useState<string>("");
   const [recoveryEmailValidation, setRecoveryEmailValidation] = useState<boolean>(false);
-  const [recoveryEmailValidationMsg, setRecoveryEmailValidationMsg] = useState<string>("فرمت ایمیل نادرست است");
+  const [recoveryEmailValidationMsg, setRecoveryEmailValidationMsg] = useState<string>("لطفا یک ایمیل معتبر وارد کنید");
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {

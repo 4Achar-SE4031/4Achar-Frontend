@@ -14,6 +14,7 @@ import FiveEvents from "../../features/events/FiveEvents";
 import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
 import ConcertDetails from "../../features/user/concertDetailsPage/concert_details";
+import SearchBar from "../../features/Search/search";
 
 export const routes: RouteObject[] = [
     {
@@ -26,7 +27,10 @@ export const routes: RouteObject[] = [
       children: [
        { index: true, element: <Home /> },
        {path:"/home",  element: <Home />},
-       {path:"/concertDetail",  element: <ConcertDetails />},
+       {path:"/singer/:singer",  element: <SearchBar />},
+    //    {path:"/concertDetail",  element: <ConcertDetails />},
+    //    <Route path="event-details/:id" element={<EventDetails />}
+       {path:"/concertDetail/:id",  element: <ConcertDetails />},
        {path:"/login",  element: <Login />},
        {path:"/d",  element: <EventDetails />},
        {path:"/register",  element: <Register />},
@@ -39,7 +43,7 @@ export const routes: RouteObject[] = [
        {path:"/events/popular", element: <EventsList />},
        {path:"/events", element: <FiveEvents />},
        {path:"/account/reset_password", element: <ResetPassword />},
-       { path: "*", element: <Navigate replace to="not-found" /> },
+       { path: "*", element: <PageNotFound /> },
       ],
     },
   ];

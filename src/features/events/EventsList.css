@@ -2,7 +2,14 @@ body {
   /* overflow: auto !important; */
   background: radial-gradient(ellipse at bottom, #303131 0%, #333540 100%);
 }
+.RecentEvents .events-list{
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: auto;
+}
 .events-list {
+  overflow: scroll;
+  height: 100vh;
   .items-wrapper {
     border-top: 4px solid black;
     background: radial-gradient(ellipse at bottom, #303131 0%, #12141d 100%);
@@ -41,7 +48,11 @@ body {
     align-items: center;
     margin-top: 10px;
   }
-  
+  .nothing{
+    color:#ffeba7;
+    font-size: 20px;
+    direction: rtl;
+  }
   .dot {
     height: 10px;
     width: 10px;
@@ -57,12 +68,12 @@ body {
     background-color: #007bff;
   }
     
-  .events-title {
+  /* .events-title {
     margin-top: 170px !important;
-  }
+  } */
   #event-title{
     color: #ffeba7;
-    font-size: 16px;
+    font-size: 12px;
 
   }
   .items-title {
@@ -78,13 +89,15 @@ body {
     background: radial-gradient(ellipse at bottom, #303131 0%, #333540 100%);
   }
   .events-filter {
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
     width: 100%;
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    background-color: #121a49;
+    color: #ffeba7;
   }
   .slider-arrow{
     max-height: 35px;
@@ -197,16 +210,22 @@ body {
       margin: 0 1rem;
       margin-top: 10px;
     }
+/* styles.css یا فایل CSS مربوطه */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
     .item h4 {
       color: #ffeba7;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 300;
       margin: 5px 1rem;
     }
     .item h5 {
       color: #ffeba7;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 300;
       margin: 5px 1rem;
     }
@@ -216,7 +235,13 @@ body {
       margin-left: 120px;
       gap: 0.3rem;
     }
-    .event-info__hour {
+    .event-info__fields {
+      margin-left: 20px; /* کمی به سمت راست حرکت فیلدها */
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .event-info_price {
       font-size: 1rem;
       font-weight: 400;
       color: #ffeba7;
@@ -253,7 +278,7 @@ body {
       display: flex;
       flex-direction: row-reverse;
     }
-    .event-info__hour {
+    .event-info__price {
       display: flex;
       flex-direction: row-reverse;
     }

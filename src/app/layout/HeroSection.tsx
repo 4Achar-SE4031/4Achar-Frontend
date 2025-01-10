@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Video from "./video2.mp4";
 import { Button, ScrollButton } from "./ButtonElements";
 import {
@@ -17,7 +17,10 @@ import { Link } from "react-router-dom";
 const HeroSection: React.FC = () => {
 
   const [hover, setHover] = useState(false);
-  const user = localStorage.getItem("token");
+  const [user, setUser] = useState<string | undefined | null>();
+  useEffect(() => {
+    setUser(localStorage.getItem("token"))
+  },[localStorage])
 
 
   const onHover = () => {
@@ -27,7 +30,7 @@ const HeroSection: React.FC = () => {
   return (
     <HeroContainer lang="fa">
       <HeroBg>
-        <VideoBg autoPlay loop muted>
+        <VideoBg autoPlay loop muted data-testid="hero-video">
           <source src={Video} type="video/mp4" />
         </VideoBg>
       </HeroBg>
@@ -37,7 +40,7 @@ const HeroSection: React.FC = () => {
           رزرو آسان بهترین کنسرت‌ها و نمایش‌های تئاتر سرتاسر ایران
         </HeroP>
         <HeroBtnWrapper>
-            {!user && (
+            {!user ? (
             <Button
               to="/login"
               onMouseEnter={onHover}
@@ -51,8 +54,8 @@ const HeroSection: React.FC = () => {
             >
               !بزن بریم  {hover ? <ArrowForward /> : <ArrowRight />}
             </Button>
-            )}
-            {user && (
+            ) :
+            user && (
             <Button
               to="/events/recent"
               onMouseEnter={onHover}
