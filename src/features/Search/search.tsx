@@ -39,9 +39,8 @@ const Search: React.FC = () => {
       
 
       try {
-        const response = await axios.post(
-          "https://api-concertify.darkube.app/Concert/search",
-          { searchTerm:  searchTerm }, 
+        const response = await axios.get(
+          `https://api-concertify.darkube.app/Concert/search?searchTerm=${encodeURIComponent(searchTerm)}`, 
           {
             headers: {
               "Content-Type": "application/json",
