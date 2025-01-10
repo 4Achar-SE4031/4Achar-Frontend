@@ -69,43 +69,41 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
             <h4 id="event-details">{event.details}</h4>
             <i className="input-icon uil uil-document-layout-right"></i>
           </div> */}
-          <div className="event-info__fields">
-            <div className="event-info__details">
-              <h4 id="event-details" className="truncate">{event.location}</h4>
-              <i className="input-icon uil uil-document-layout-right"></i>
-            </div>
-            <div className="event-info__address">
-              <h4 id="event-address">{`${event.city}`} </h4>
-              <i className="input-icon uil uil-location-point"></i>
-            </div>
-            <div className="event-info__date">
-              <h4 id="event-date">{toPersianDigits(replaceMonthNames(event.startDateTime))} ساعت {toPersianDigits(getFormattedTime(event.startDateTime))}</h4>
-              <i className="input-icon uil uil-calendar-alt"></i>
-            </div>
-            {/* <div className="event-info__hour">
+              <div className="event-info__details ml-5">
+            <h4 id="event-details" className="truncate">{event.location}</h4>
+            <i className="input-icon uil uil-document-layout-right"></i>
+          </div>
+          <div className="event-info__address"> 
+            <h4 id="event-address">{`${event.city}`} </h4>
+            <i className="input-icon uil uil-location-point"></i>
+          </div>
+          <div className="event-info__date">
+            <h4 id="event-date">{toPersianDigits(replaceMonthNames(event.startDateTime))} ساعت {toPersianDigits(getFormattedTime(event.startDateTime))}</h4>
+            <i className="input-icon uil uil-calendar-alt"></i>
+          </div>
+          {/* <div className="event-info__hour">
             <h5 id="event-hour">{toPersianDigits(getFormattedTime(event.startDateTime))}</h5>
             <i className="input-icon uil uil-clock"></i>
           </div> */}
-            {event.ticketPrice && event.ticketPrice.length > 0 && (
-              <div className="event-info__price">
-                <h4 id="event-price">
-                  {(() => {
-                    const { minPrice, maxPrice } = getMinMaxPrice(event.ticketPrice);
-                    if (minPrice === maxPrice) {
-                      return `${formatPrice(minPrice)} تومان`;
-                    }
-                    return `${formatPrice(minPrice)} - ${formatPrice(maxPrice)} تومان`;
-                  })()}
-                </h4>
-                <i className="input-icon uil uil-pricetag-alt"></i>
-              </div>
-            )}
-
-          </div>
+          {event.ticketPrice && event.ticketPrice.length > 0 && (
+            <div className="event-info__price">
+              <h4 id="event-price">
+                {(() => {
+                  const { minPrice, maxPrice } = getMinMaxPrice(event.ticketPrice);
+                  if (minPrice === maxPrice) {
+                    return `${formatPrice(minPrice)} تومان`;
+                  }
+                  return `${formatPrice(minPrice)} - ${formatPrice(maxPrice)} تومان`;
+                })()}
+              </h4>
+              <i className="input-icon uil uil-pricetag-alt"></i>
+            </div>
+          )}
+          
         </div>
       </div>
       <div className="event-info__title">
-        <h1 id="event-title">{!event.title.includes(")") ? event.title : event.title.substring(0, event.title.indexOf("("))}</h1>
+            <h1 id="event-title">{!event.title.includes(")") ? event.title : event.title.substring(0, event.title.indexOf("("))}</h1>
       </div>
     </Link>
   );
