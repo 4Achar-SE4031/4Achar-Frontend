@@ -31,6 +31,7 @@ import { height } from "@mui/system";
 import Suggestion from "./Suggestion.tsx";
 import YektanetAnalytics from "./YektanetAds.tsx";
 import ExpandablePrice from "./ExpandablePrice.tsx";
+import { parseDateTimeToJalali } from './dateParserToJalali.tsx';
 
 const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
@@ -46,76 +47,19 @@ const ConcertDetails: React.FC = () => {
     };
     const navigator = useNavigate();
     let { id } = useParams<{ id: string }>();
-    const monthDict = {
-        0: "فروردین",
-        1: "اردیبهشت",
-        2: "خرداد",
-        3: "تیر",
-        4: "مرداد",
-        5: "شهریور",
-        6: "مهر",
-        7: "آبان",
-        8: "آذر",
-        9: "دی",
-        10: "بهمن",
-        11: "اسفند",
-    };
-    const dayDict = {
-        Monday: "دوشنبه",
-        Tuesday: "سه شنبه",
-        Wednesday: "چهارشنبه",
-        Thursday: "پنج شنبه",
-        Friday: "جمعه",
-        Saturday: "شنبه",
-        Sunday: "یک شنبه",
-    };
+
     const [eventDateTime, setEventDateTime] = useState({
         startWeekDay: "جمعه",
         startMonth: "آذر",
         startTime: "21:00",
         startYear: "1403",
         startDay: "25",
-        endWeekDay: "جمعه",
-        endMonth: "آذر",
-        endTime: "23:00",
-        endYear: "1403",
-        endDay: "25",
+        // endWeekDay: "جمعه",
+        // endMonth: "آذر",
+        // endTime: "23:00",
+        // endYear: "1403",
+        // endDay: "25",
     });
-    // const [eventDetails, setEventDetails] = useState({
-    //     title: "کنسرت ارکستر سمفونیک قاف (منظومه سیمرغ)",
-    //     ticket_price: "600000",
-    //     attendance: "I",
-    //     province: "تهران",
-    //     city: "تهران",
-    //     photo: "/img.png",
-    //     category: "ارکستر سمفونی",
-    //     organizer_photo: "/profile2.png",
-    //     organizer_name: "4AChar-Band",
-    //     organizer_phone: "09123456789",
-    //     organizer_email: "organizer@gmail.com",
-    //     location_lat: "35.7021",
-    //     location_lon: "51.4051",
-    //     address: "تهران، خیابان حافظ، تالار وحدت",
-    //     description: `
-    //   رعایت شئونات اسلامی در تالار وحدت الزامی می باشد.
-
-    //   کنسرت  قاف (منظومه سیمرغ)
-    //   به رهبری فرهاد فخرالدینی و آرش امینی
-    //   خوانندگان:
-    //   مهدی محمدی
-    //   علی تفرشی
-    //   سولیست ویلن:
-    //   امین غفاری
-
-    //   با همکاری :
-    //   ارکستر سمفونیک تهران
-
-    //   تهیه کننده: حبیب صبور
-    //   با حمایت: شرکت کرمان موتور
-    // `,
-    //     tags: [],
-    // });
-
     interface ApiConcertData {
         id: number;
         title: string;
@@ -153,6 +97,22 @@ const ConcertDetails: React.FC = () => {
         tags: [],
     });
 
+    const parseDateTime = (dateTimeStr: string) => {
+        // Create moment-jalaali instance from UTC string
+        const m = moment(dateTimeStr);
+        
+        // Convert to Tehran timezone (UTC+3:30)
+        m.utcOffset('+03:30');
+    
+        return {
+            startWeekDay: m.format('dddd'), // Returns Persian weekday name
+            startMonth: m.jMonth(), // Returns Persian month (0-11)
+            startTime: m.format('HH:mm'),
+            startYear: m.jYear().toString(), // Returns Persian year
+            startDay: m.jDate().toString(), // Returns Persian day of month
+        };
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -163,9 +123,11 @@ const ConcertDetails: React.FC = () => {
                 );
                 // const response = await axios.get(`https://api-concertify.darkube.app/Concert/1`);
                 const data = response.data;
-                console.log("fetched concertDetails data:");
-                console.log(data);
-
+                if (data.startDateTime) {
+                    const parsedDateTime = parseDateTimeToJalali(data.startDateTime);
+                    setEventDateTime(parsedDateTime);
+                }
+    
                 // Transform API data to match your component's state structure
                 setEventDetails({
                     title: data.title || "",
@@ -177,7 +139,7 @@ const ConcertDetails: React.FC = () => {
                     photo: data.coverImage || "/img.png", // Default value since API doesn't provide this
                     // photo: "/img.png" || "/img2.png", // Default value since API doesn't provide this
                     category: data.category || "",
-                    organizer_photo: "/profile2.png", // Default value
+                    organizer_photo:    "/profile2.png", // Default value
                     organizer_name: "", // Not provided by API
                     organizer_phone: "", // Not provided by API
                     organizer_email: "", // Not provided by API
@@ -190,22 +152,12 @@ const ConcertDetails: React.FC = () => {
                     url: data.url || "https://google.com",
                 });
 
-                // Parse and set the date/time information
-                // Note: You'll need to adjust this based on the actual format of startDate
-                const startDate = data.startDate;
-                // Example parsing (adjust based on actual format)
-                setEventDateTime({
-                    startWeekDay: "جمعه", // You'll need to parse this from startDate
-                    startMonth: "آذر", // Parse from startDate
-                    startTime: "21:00", // Parse from startDate
-                    startYear: "1403", // Parse from startDate
-                    startDay: "25", // Parse from startDate
-                    endWeekDay: "جمعه", // Set based on your requirements
-                    endMonth: "آذر",
-                    endTime: "23:00",
-                    endYear: "1403",
-                    endDay: "25",
-                });
+                // useEffect(() => {
+                // if (data.startDateTime) {
+                //     const parsedDateTime = parseToJalali(data.startDateTime);
+                //     setEventDateTime(parsedDateTime);
+                // }
+                // }, [data.startDateTime]);
 
                 setLoading(false);
             } catch (error) {
@@ -499,19 +451,17 @@ const ConcertDetails: React.FC = () => {
                                     {eventDateTime.startYear} ساعت{" "}
                                     {eventDateTime.startTime}{" "}
                                 </p>
-                                <h4 className=" pb-3 text-right">
+                                <h2 className=" pb-3 text-right">
                                     {" "}
                                     {eventDetails.title}{" "}
-                                </h4>
+                                </h2>
                                 {/* <div className="row px-3 mb-2"> */}
                                 {/* <i className="bi bi-tag-fill icons-style"></i> */}
                                 {/* <p className="ed-message">
                                         {eventDetails.ticket_price.toLocaleString()}{" "}
                                         تومان
                                     </p> */}
-                                <ExpandablePrice
-                                    prices={eventDetails.ticketPrice}
-                                />
+                                    {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
                                 {/* </div> */}
 
                                 <div className="row px-3 mb-2">
@@ -622,14 +572,14 @@ const ConcertDetails: React.FC = () => {
                                     </p>
                                 </div>
                                 <div className="row px-3">
-                                    <i className="bi bi-clock  icons-style"></i>
-                                    <p className="pb-3 ed-message">
+                                    {/* <i className="bi bi-clock  icons-style"></i> */}
+                                    {/* <p className="pb-3 ed-message">
                                         پایان: {eventDateTime.endWeekDay}{" "}
                                         {eventDateTime.endDay}{" "}
                                         {eventDateTime.endMonth}{" "}
                                         {eventDateTime.endYear} ساعت{" "}
                                         {eventDateTime.endTime}{" "}
-                                    </p>
+                                    </p> */}
                                 </div>
                                 <>
                                     <div className="row px-3 pt-1">
@@ -656,6 +606,7 @@ const ConcertDetails: React.FC = () => {
                                         long={eventDetails.location_lon}
                                         onlyShow={true}
                                         name="EventDetails"
+                                        address={eventDetails.address}
                                     />
                                 </>
 
@@ -891,15 +842,15 @@ const ConcertDetails: React.FC = () => {
                                             </p>
                                         </div>
                                         <div className="row px-3">
-                                            <i className="bi bi-clock  icons-style"></i>
-                                            <p className="pb-3 ed-message">
+                                            {/* <i className="bi bi-clock  icons-style"></i> */}
+                                            {/* <p className="pb-3 ed-message">
                                                 پایان:{" "}
                                                 {eventDateTime.endWeekDay}{" "}
                                                 {eventDateTime.endDay}{" "}
                                                 {eventDateTime.endMonth}{" "}
                                                 {eventDateTime.endYear} ساعت{" "}
                                                 {eventDateTime.endTime}{" "}
-                                            </p>
+                                            </p> */}
                                         </div>
                                         <>
                                             <div className="row px-3 pt-1">
@@ -928,6 +879,7 @@ const ConcertDetails: React.FC = () => {
                                                 long={eventDetails.location_lon}
                                                 onlyShow={true}
                                                 name="EventDetails"
+                                                address={eventDetails.address}
                                             />
                                         </>
 
@@ -990,9 +942,7 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                        <ExpandablePrice
-                                            prices={eventDetails.ticketPrice}
-                                        />
+                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
                                         {/* </div> */}
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
@@ -1087,9 +1037,7 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                        <ExpandablePrice
-                                            prices={eventDetails.ticketPrice}
-                                        />
+                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
                                         {/* </div> */}
 
                                         <div className="row px-3">
@@ -1173,15 +1121,15 @@ const ConcertDetails: React.FC = () => {
                                             </p>
                                         </div>
                                         <div className="row px-3">
-                                            <i className="bi bi-clock  icons-style"></i>
-                                            <p className="pb-3 ed-message">
+                                            {/* <i className="bi bi-clock  icons-style"></i> */}
+                                            {/* <p className="pb-3 ed-message">
                                                 پایان:{" "}
                                                 {eventDateTime.endWeekDay}{" "}
                                                 {eventDateTime.endDay}{" "}
                                                 {eventDateTime.endMonth}{" "}
                                                 {eventDateTime.endYear} ساعت{" "}
                                                 {eventDateTime.endTime}{" "}
-                                            </p>
+                                            </p> */}
                                         </div>
 
                                         <>
@@ -1212,6 +1160,7 @@ const ConcertDetails: React.FC = () => {
                                                 long={eventDetails.location_lon}
                                                 onlyShow={true}
                                                 name="EventDetails"
+                                                address={eventDetails.address}
                                             />
                                         </>
 
