@@ -21,7 +21,7 @@
   font-family: 'iransansweb';
   src: local('iransansweb'), url(./fonts/iransansweb.ttf) format('truetype');
 }
-:lang(fa) {
+* {
   font-family: "iransansweb" !important; 
 }
 
