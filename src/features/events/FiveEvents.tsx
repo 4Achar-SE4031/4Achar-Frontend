@@ -39,8 +39,8 @@ const FiveEvents: React.FC = () => {
           Take: "20",
         }).toString();
         const response = await agent.Events.list(`${queryParams}`);
-        setRecentEvents(response.slice(0, 10));
-        setPopularEvents(response.slice(10, 20));
+        setRecentEvents(response.data.slice(0, 10));
+        setPopularEvents(response.data.slice(10, 20));
 
         console.log(response)
       } catch (error) {
@@ -126,7 +126,7 @@ const FiveEvents: React.FC = () => {
         <div className="container-fluid" lang="fa">
           <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
             <button
-              className="btn btn-primary show-all"
+              className="btn btn-primary show-all ml-5"
               onClick={() => handleShowTypeButton("recent")}
             >
               نمایش همه
@@ -137,7 +137,7 @@ const FiveEvents: React.FC = () => {
           </div>
           <div className="position-relative row justify-content-center align-content-center">
             <button
-              className="slider-arrow left col"
+              className="slider-arrow left col ml-5"
               onClick={() =>
                 handleIndexChange(recentEventIndex, setRecentEventIndex, "prev")
               }
@@ -160,7 +160,7 @@ const FiveEvents: React.FC = () => {
 
             </div>
             <button
-              className="slider-arrow right col"
+              className="slider-arrow right col mr-5"
               onClick={() =>
                 handleIndexChange(recentEventIndex, setRecentEventIndex, "next")
               }
@@ -174,7 +174,7 @@ const FiveEvents: React.FC = () => {
 
           <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
             <button
-              className="btn btn-primary show-all"
+              className="btn btn-primary show-all ml-5"
               // onClick={() => window.location.href = '/events/popular'}
               onClick={() => handleShowTypeButton("popular")}
             >
@@ -187,7 +187,7 @@ const FiveEvents: React.FC = () => {
 
           <div className="position-relative row justify-content-center align-content-center">
             <button
-              className="slider-arrow left col"
+              className="slider-arrow left col ml-5"
               onClick={() =>
                 handleIndexChange(popularEventIndex, setPopularEventIndex, "prev")
               }
@@ -207,7 +207,7 @@ const FiveEvents: React.FC = () => {
               ))}
             </div>
             <button
-              className="slider-arrow right col"
+              className="slider-arrow right col mr-5"
               onClick={() =>
                 handleIndexChange(popularEventIndex, setPopularEventIndex, "next")
               }

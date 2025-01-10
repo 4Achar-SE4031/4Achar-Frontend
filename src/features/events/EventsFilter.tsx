@@ -15,9 +15,43 @@ interface EventsFilterProps {
   onFilterChange: (filters: any) => void;
 }
 
+const provinces = [
+  "تهران",
+  "گیلان",
+  "آذربایجان شرقی",
+  "خوزستان",
+  "فارس",
+  "اصفهان",
+  "خراسان رضوی",
+  "قزوین",
+  "سمنان",
+  "قم",
+  "مرکزی",
+  "زنجان",
+  "مازندران",
+  "گلستان",
+  "اردبیل",
+  "آذربایجان غربی",
+  "همدان",
+  "کردستان",
+  "کرمانشاه",
+  "لرستان",
+  "بوشهر",
+  "کرمان",
+  "هرمزگان",
+  "چهارمحال و بختیاری",
+  "یزد",
+  "سیستان و بلوچستان",
+  "ایلام",
+  "کهگلویه و بویراحمد",
+  "خراسان شمالی",
+  "خراسان جنوبی",
+  "البرز",
+];
+
 const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
   const [filters, setFilters] = useState({
-    priceRange: [0, 2000000],
+    priceRange: [0, 10000],
     city: "",
     category: "",
     sortType: "",
@@ -37,7 +71,14 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
     }, 2000);
     setDebounceTimer(timer);
   };
-
+  const formatPriceLabel = (value: number) => {
+    if (value < 1000) {
+      return `${value} هزار تومان`;
+    } else {
+      const millionValue = (value / 1000).toFixed(1);
+      return `${millionValue} میلیون تومان`;
+    }
+  };
   return (
     <Box
       sx={{
@@ -68,18 +109,19 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
             value={filters.priceRange}
             onChange={(e, value) => handleInputChange("priceRange", value)}
             valueLabelDisplay="auto"
+            valueLabelFormat={formatPriceLabel}
             min={0}
-            max={2000000}
+            max={10000}
             sx={{ color: "#1976d2" }}
           />
         </Box>
 
         {/* City */}
         <TextField
-          label="شهر"
+          label="استان"
           variant="outlined"
           value={filters.city}
-          onChange={(e) => handleInputChange("city", e.target.value)}
+          onChange={(e) => handleInputChange("province", e.target.value)}
           select
           sx={{
             flex: "1",
@@ -91,12 +133,15 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
             },
           }}
         >
-          <MenuItem value="">همه شهرها</MenuItem>
-          <MenuItem value="تهران">تهران</MenuItem>
-          <MenuItem value="مشهد">مشهد</MenuItem>
+           <MenuItem value="">همه استان‌ها</MenuItem>
+          {provinces.map((province, index) => (
+            <MenuItem key={index} value={province}>
+              {province}
+            </MenuItem>
+          ))}
         </TextField>
 
-        {/* Category */}
+        {/* Category
         <TextField
           label="دسته‌بندی"
           variant="outlined"
@@ -116,7 +161,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
           <MenuItem value="">همه دسته‌بندی‌ها</MenuItem>
           <MenuItem value="کنسرت">کنسرت</MenuItem>
           <MenuItem value="تئاتر">تئاتر</MenuItem>
-        </TextField>
+        </TextField> */}
 
         {/* Sort Type */}
         <TextField
