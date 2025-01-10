@@ -28,6 +28,7 @@ import AdvertisementCard from "../Ads/Ads.tsx";
 import ads_sample_image1 from "../Ads/sample_picture.jpg";
 import ads_sample_image2 from "../Ads/sample_picture2.jpg";
 import { height } from "@mui/system";
+import Suggestion from "./Suggestion.tsx";
 import YektanetAnalytics from './YektanetAds.tsx';
 import ExpandablePrice from "./ExpandablePrice.tsx"
 
@@ -1233,6 +1234,7 @@ const ConcertDetails: React.FC = () => {
                         imageUrl={ads_sample_image}
                         />
                     </div> */}
+                <Suggestion />
                 <MainComment id={Number(id)} />
                 {/* Left Section */}
                 {/* <div className="col-md-2 left-section">
