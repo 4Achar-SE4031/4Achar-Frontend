@@ -23,7 +23,6 @@ const provinces = [
   "خوزستان",
   "فارس",
   "اصفهان",
-  "خراسان رضوی",
   "قزوین",
   "سمنان",
   "قم",
@@ -97,62 +96,45 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
     setDebounceTimer(timer);
   };
 
-  // اعداد فارسی در react-multi-date-picker
-  const digits = persian_fa.digits; // ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"]
-  // اگر قصد داشتید ورودی کاربر را از "۲۳" به "23" ببرید، از الگوهای زیر هم استفاده کنید
+  const digits = persian_fa.digits; 
   const persianNumbers = [/۰/g, /۱/g, /۲/g, /۳/g, /۴/g, /۵/g, /۶/g, /۷/g, /۸/g, /۹/g];
   const arabicNumbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
 
-  // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
-  //    تبدیل مقدار استیت به DateObject برای نمایش در فیلد DatePicker
-  // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+
   const getDateObject = (shamsiStr: string | null) => {
     if (!shamsiStr) return null;
-    // کتابخانه date-object با فرمت "YYYY/M/D" و calendar={persian} می‌تواند parse کند
-    // اگر در استیت ما بین سال/ماه/روز dash بود، حتماً اینجا replace می‌کنیم تا بشود "/"
+
     const replaced = shamsiStr.replace(/-/g, "/");
     return new DateObject({
       date: replaced,
-      format: "YYYY/M/D", // با توجه به این که calendar را Persian گذاشته‌ایم، این یعنی تاریخ شمسی
       calendar: persian,
       locale: persian_fa,
     });
   };
 
-  // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
-  //    هندل تاریخ شروع (انتخاب از تقویم یا تایپ دستی)
-  // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
   const handleStartDateChange = (
     newDate: DateObject | null,
     { input, isTyping }: { input: { value: string }; isTyping: boolean }
   ) => {
     if (!isTyping) {
-      // کاربر تاریخ را با کلیک روی تقویم انتخاب کرده
       if (newDate) {
-        // رشته‌ی شمسی به شکل "۱۴۰۲/۷/۱۳"
         let dateStr = newDate.format("YYYY/M/D");
-        // اگر خواستید ارقام فارسی را به انگلیسی تبدیل کنید (اختیاری):
         for (let i = 0; i < persianNumbers.length; i++) {
           dateStr = dateStr.replace(persianNumbers[i], arabicNumbers[i]);
         }
         handleInputChange("dateRange", [dateStr, filters.dateRange[1]]);
       } else {
-        // انتخاب تاریخ حذف شد
         handleInputChange("dateRange", [null, filters.dateRange[1]]);
       }
     } else {
-      // کاربر در حال تایپ کردن دستی است
       let value = input.value;
-      // اگر قصد داریم ارقام فارسی وارد شده را به انگلیسی تبدیل کنیم:
       for (let digit of digits) {
         value = value.replace(new RegExp(digit, "g"), digits.indexOf(digit).toString());
       }
-      // حالا باید صحت year/month/day را بسنجیم
       const parts = value.split("/");
       const numbers = parts.map(Number);
       const [year, month, day] = numbers;
 
-      // اعتبارسنجی ساده:
       if (input.value && numbers.some((num) => isNaN(num))) return false;
       if (month > 12 || month < 1) return false;
       if (day < 1 || day > 31) return false;
@@ -162,9 +144,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
     }
   };
 
-  // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
-  //    هندل تاریخ پایان (انتخاب از تقویم یا تایپ دستی)
-  // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
+
   const handleEndDateChange = (
     newDate: DateObject | null,
     { input, isTyping }: { input: { value: string }; isTyping: boolean }
@@ -180,7 +160,6 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
         handleInputChange("dateRange", [filters.dateRange[0], null]);
       }
     } else {
-      // تایپ دستی
       let value = input.value;
       for (let digit of digits) {
         value = value.replace(new RegExp(digit, "g"), digits.indexOf(digit).toString());
@@ -222,6 +201,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
           gap: "16px",
         }}
       >
+        
         {/* قیمت از */}
         <TextField
           label="قیمت از (تومان)"
@@ -271,7 +251,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
             flex: "1",
             "& .MuiOutlinedInput-root": {
               borderColor: "#ffeba7",
-              color: "#ffeba7",
+              color: "#1976d2",
               backgroundColor: "#fff",
               direction: "rtl",
             },
@@ -286,7 +266,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
         </TextField>
 
         {/* مرتب‌سازی */}
-        <TextField
+        {/* <TextField
           label="مرتب‌سازی"
           variant="outlined"
           value={filters.sortType}
@@ -307,7 +287,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
           <MenuItem value="recent">جدیدترین</MenuItem>
           <MenuItem value="cheap">ارزان‌ترین</MenuItem>
           <MenuItem value="expensive">گران‌ترین</MenuItem>
-        </TextField>
+        </TextField> */}
 
         {/* تاریخ شروع و پایان به صورت شمسی در UI */}
         <Box display="flex" gap="8px" flex="1">
