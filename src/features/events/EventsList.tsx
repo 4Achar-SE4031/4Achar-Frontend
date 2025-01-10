@@ -32,8 +32,9 @@ const EventsList: React.FC = () => {
   const [index, setIndex] = useState<number>(1);
   const [title, setTitle] = useState<string>();
   const [filters, setFilters] = useState<any>({
-    priceRange: [0, 0],
-    city: "",
+    priceFrom: "",
+    priceTo: "",
+    province: "",
     category: "",
     sortType: "",
     dateRange: [null, null],
@@ -89,26 +90,13 @@ const EventsList: React.FC = () => {
       setLoading(true);
 
       try {
-        let queryParams = new URLSearchParams(
-          filterQueryParams({
-            City: filters.city || "",
-            Category: filters.category || "",
-            TicketPriceRangeStart: filters.priceRange[0]?.toString() || "",
-            TicketPriceRangeEnd: filters.priceRange[1]?.toString() || "",
-            sortType: filters.sortType || "",
-            StartRange: filters.dateRange[0] || "",
-            EndRange: filters.dateRange[1] || "",
-          })
-        ).toString();
-        let response = await agent.Events.list(`${queryParams}`);
-        setTotalPages(Math.ceil(response.count / 15));
         const skip = 15 * (index - 1)
-        queryParams = new URLSearchParams(
+        const queryParams = new URLSearchParams(
           filterQueryParams({
-            City: filters.city || "",
+            City: filters.province || "",
             Category: filters.category || "",
-            TicketPriceRangeStart: filters.priceRange[0]?.toString() || "",
-            TicketPriceRangeEnd: filters.priceRange[1]?.toString() || "",
+            TicketPriceRangeStart: filters.priceFrom ? filters.priceFrom.toString() : "",
+            TicketPriceRangeEnd:  filters.priceTo ? filters.priceTo.toString() : "",
             sortType: filters.sortType || "",
             StartRange: filters.dateRange[0] || "",
             EndRange: filters.dateRange[1] || "",
@@ -116,14 +104,15 @@ const EventsList: React.FC = () => {
             Take: "15",
           })
         ).toString();
-        response = await agent.Events.list(`${queryParams}`);
-        setPosts(response.data);
+        const response = await agent.Events.list(`${queryParams}`);
+        setTotalPages(Math.ceil(response.totalCount / 15));
+        setPosts(response.concerts);
         console.log(posts);
         console.log(totalPages);
         if (posts.length > 0) {
-          setIsFetched(true);
+          setLoading(true);
         } else {
-          setIsFetched(false);
+          setLoading(false);
         }
         console.log(isFetched)
         console.log(response)
@@ -207,7 +196,7 @@ const EventsList: React.FC = () => {
             )) : (
               !loading && <p className="nothing">متاسفانه رویدادی یافت نشد.</p>
             )}
-            {!loading && !isFetched &&(
+            {!loading &&(
               <Stack spacing={2} className="pt-5">
                 <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
               </Stack>)}
