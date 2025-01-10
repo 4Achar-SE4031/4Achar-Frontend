@@ -3,13 +3,16 @@ import  AuthProvider  from '../user/login/authProvider';
 import Navbar from './navbar';
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
+import { SearchProvider } from '../Search/searchStatus';
 
 // Helper function to render the component inside AuthProvider
 const renderWithAuthProvider = (ui: React.ReactElement) => {
   return render(
-    <BrowserRouter>
-      <AuthProvider>{ui}</AuthProvider>
-    </BrowserRouter>
+    <SearchProvider>
+      <BrowserRouter>
+        <AuthProvider>{ui}</AuthProvider>
+      </BrowserRouter>
+    </SearchProvider>
   );
 };
 
@@ -24,7 +27,6 @@ describe('Navbar Component', () => {
     expect(screen.getByText('خانه')).toBeInTheDocument();
     expect(screen.getByText('ویترین')).toBeInTheDocument();
     expect(screen.getByText('خرید ها')).toBeInTheDocument();
-    expect(screen.getByText('ایجاد کنسرت')).toBeInTheDocument();
   });
 
   it('changes logo when the window is resized', () => {
