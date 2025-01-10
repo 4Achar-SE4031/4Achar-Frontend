@@ -48,7 +48,11 @@ body {
     align-items: center;
     margin-top: 10px;
   }
-  
+  .nothing{
+    color:#ffeba7;
+    font-size: 20px;
+    direction: rtl;
+  }
   .dot {
     height: 10px;
     width: 10px;
@@ -204,16 +208,22 @@ body {
       margin: 0 1rem;
       margin-top: 10px;
     }
+/* styles.css یا فایل CSS مربوطه */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
     .item h4 {
       color: #ffeba7;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 300;
       margin: 5px 1rem;
     }
     .item h5 {
       color: #ffeba7;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 300;
       margin: 5px 1rem;
     }
@@ -223,7 +233,7 @@ body {
       margin-left: 120px;
       gap: 0.3rem;
     }
-    .event-info__hour {
+    .event-info_price {
       font-size: 1rem;
       font-weight: 400;
       color: #ffeba7;
@@ -260,7 +270,7 @@ body {
       display: flex;
       flex-direction: row-reverse;
     }
-    .event-info__hour {
+    .event-info__price {
       display: flex;
       flex-direction: row-reverse;
     }
