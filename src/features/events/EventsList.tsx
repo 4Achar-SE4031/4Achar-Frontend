@@ -26,6 +26,7 @@ const defaultOptions = {
 const EventsList: React.FC = () => {
   const [posts, setPosts] = useState<Event[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [isFetched, setIsFetched] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [index, setIndex] = useState<number>(1);
@@ -99,10 +100,8 @@ const EventsList: React.FC = () => {
             EndRange: filters.dateRange[1] || "",
           })
         ).toString();
-        console.log(queryParams)
         let response = await agent.Events.list(`${queryParams}`);
-        console.log(response)
-        setTotalPages(Math.ceil(response.length / 15));
+        setTotalPages(Math.ceil(response.count / 15));
         const skip = 15 * (index - 1)
         queryParams = new URLSearchParams(
           filterQueryParams({
@@ -118,14 +117,23 @@ const EventsList: React.FC = () => {
           })
         ).toString();
         response = await agent.Events.list(`${queryParams}`);
-        setPosts(response);
-
+        setPosts(response.data);
+        console.log(posts);
+        console.log(totalPages);
+        if (posts.length > 0) {
+          setIsFetched(true);
+        } else {
+          setIsFetched(false);
+        }
+        console.log(isFetched)
         console.log(response)
       } catch (error) {
         console.error("Error fetching filtered events:", error);
+        setIsFetched(false);
       } finally {
         setLoading(false);
       }
+      // console.log(loading);
     };
 
     fetchFilteredEvents();
@@ -196,13 +204,13 @@ const EventsList: React.FC = () => {
               <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-5">
                 <EventItem event={event} />
               </div>
-            )): (
-              !loading && <p>رویدادی یافت نشد.</p>
+            )) : (
+              !loading && <p className="nothing">متاسفانه رویدادی یافت نشد.</p>
             )}
-            {!loading &&
+            {!loading && !isFetched &&(
               <Stack spacing={2} className="pt-5">
                 <Pagination count={totalPages} page={currentPage} onChange={handleChangePage} />
-              </Stack>}
+              </Stack>)}
           </div>
         </div>
         <Footer />
