@@ -171,6 +171,8 @@ h4 {
   margin:3px 0 0;
   color: #b3b3b3;
   font-size: 15px;
+  text-align: right;
+  direction: rtl;
 }
 #message{
   margin:10px 0 0;
