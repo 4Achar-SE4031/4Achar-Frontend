@@ -29,8 +29,8 @@ import ads_sample_image1 from "../Ads/sample_picture.jpg";
 import ads_sample_image2 from "../Ads/sample_picture2.jpg";
 import { height } from "@mui/system";
 import Suggestion from "./Suggestion.tsx";
-import YektanetAnalytics from './YektanetAds.tsx';
-import ExpandablePrice from "./ExpandablePrice.tsx"
+import YektanetAnalytics from "./YektanetAds.tsx";
+import ExpandablePrice from "./ExpandablePrice.tsx";
 
 const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
@@ -98,24 +98,23 @@ const ConcertDetails: React.FC = () => {
     //     address: "تهران، خیابان حافظ، تالار وحدت",
     //     description: `
     //   رعایت شئونات اسلامی در تالار وحدت الزامی می باشد.
-  
+
     //   کنسرت  قاف (منظومه سیمرغ)
     //   به رهبری فرهاد فخرالدینی و آرش امینی
     //   خوانندگان:
-    //   مهدی محمدی 
+    //   مهدی محمدی
     //   علی تفرشی
     //   سولیست ویلن:
     //   امین غفاری
-  
+
     //   با همکاری :
     //   ارکستر سمفونیک تهران
-  
+
     //   تهیه کننده: حبیب صبور
     //   با حمایت: شرکت کرمان موتور
     // `,
     //     tags: [],
     // });
-
 
     interface ApiConcertData {
         id: number;
@@ -133,7 +132,6 @@ const ConcertDetails: React.FC = () => {
         url: string;
     }
     const [apiData, setApiData] = useState<ApiConcertData | null>(null);
-
 
     const [eventDetails, setEventDetails] = useState({
         title: "",
@@ -155,18 +153,19 @@ const ConcertDetails: React.FC = () => {
         tags: [],
     });
 
-
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log("fetching concertDetails data:")
+                console.log("fetching concertDetails data:");
                 setLoading(true);
-                const response = await axios.get(`https://api-concertify.darkube.app/Concert/${id}`);
+                const response = await axios.get(
+                    `https://api-concertify.darkube.app/Concert/${id}`
+                );
                 // const response = await axios.get(`https://api-concertify.darkube.app/Concert/1`);
                 const data = response.data;
-                console.log("fetched concertDetails data:")
-                console.log(data)
-    
+                console.log("fetched concertDetails data:");
+                console.log(data);
+
                 // Transform API data to match your component's state structure
                 setEventDetails({
                     title: data.title || "",
@@ -188,9 +187,9 @@ const ConcertDetails: React.FC = () => {
                     // address: "تهران، خیابان حافظ، تالار وحدت",
                     description: data.description || "",
                     tags: [], // API doesn't provide tags
-                    url:data.url || "https://google.com"
+                    url: data.url || "https://google.com",
                 });
-    
+
                 // Parse and set the date/time information
                 // Note: You'll need to adjust this based on the actual format of startDate
                 const startDate = data.startDate;
@@ -207,7 +206,7 @@ const ConcertDetails: React.FC = () => {
                     endYear: "1403",
                     endDay: "25",
                 });
-    
+
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching concert details:", error);
@@ -215,14 +214,11 @@ const ConcertDetails: React.FC = () => {
                 setLoading(false);
             }
         };
-    
+
         if (id) {
             fetchData();
         }
     }, [id]);
-
-
-    
 
     const auth = useAuth();
     const [loading, setLoading] = useState(true);
@@ -490,7 +486,12 @@ const ConcertDetails: React.FC = () => {
 
                             <div
                                 className="event-details-mcard py-3 mr-0  px-3 mb-2 relative"
-                                style={{ width: "350px", maxWidth: "350px", position: "relative", overflow: "visible" }}
+                                style={{
+                                    width: "350px",
+                                    maxWidth: "350px",
+                                    position: "relative",
+                                    overflow: "visible",
+                                }}
                             >
                                 <p className="pb-3 ed-message text-right">
                                     {eventDateTime.startDay}{" "}
@@ -503,12 +504,14 @@ const ConcertDetails: React.FC = () => {
                                     {eventDetails.title}{" "}
                                 </h4>
                                 {/* <div className="row px-3 mb-2"> */}
-                                    {/* <i className="bi bi-tag-fill icons-style"></i> */}
-                                    {/* <p className="ed-message">
+                                {/* <i className="bi bi-tag-fill icons-style"></i> */}
+                                {/* <p className="ed-message">
                                         {eventDetails.ticket_price.toLocaleString()}{" "}
                                         تومان
                                     </p> */}
-                                    <ExpandablePrice prices={eventDetails.ticketPrice} />
+                                <ExpandablePrice
+                                    prices={eventDetails.ticketPrice}
+                                />
                                 {/* </div> */}
 
                                 <div className="row px-3 mb-2">
@@ -631,11 +634,17 @@ const ConcertDetails: React.FC = () => {
                                 <>
                                     <div className="row px-3 pt-1">
                                         <div className="col">
-                                            <p className="pt-2 px-0 mb-0 text-right" dir="rtl">
+                                            <p
+                                                className="pt-2 px-0 mb-0 text-right"
+                                                dir="rtl"
+                                            >
                                                 آدرس برگزاری:
                                             </p>
                                             <div className="row px-3">
-                                                <p className="pb-3 ed-message" dir="rtl">
+                                                <p
+                                                    className="pb-3 ed-message"
+                                                    dir="rtl"
+                                                >
                                                     {eventDetails.address}
                                                 </p>
                                             </div>
@@ -716,7 +725,14 @@ const ConcertDetails: React.FC = () => {
                                     >
                                         {eventDetails.description}
                                     </p>
-                                    <center style={{position:"absolute", left: "50%", bottom:"0", transform: "translate(-50%, -50%)"}}>
+                                    <center
+                                        style={{
+                                            position: "absolute",
+                                            left: "50%",
+                                            bottom: "0",
+                                            transform: "translate(-50%, -50%)",
+                                        }}
+                                    >
                                         {canPurchase && (
                                             <button
                                                 className="btn  mt-1 mx-1"
@@ -728,7 +744,10 @@ const ConcertDetails: React.FC = () => {
                                                 onClick={() => {
                                                     // window.location.href = "https://google.com";
                                                     // or you can use:
-                                                    window.open(eventDetails.url, "_blank"); // Opens in new tab
+                                                    window.open(
+                                                        eventDetails.url,
+                                                        "_blank"
+                                                    ); // Opens in new tab
                                                 }}
                                             >
                                                 خرید بلیت
@@ -790,7 +809,7 @@ const ConcertDetails: React.FC = () => {
                                         zIndex: 10,
                                         position: "relative",
                                         borderRadius: "6px",
-                                        objectFit: "cover"
+                                        objectFit: "cover",
                                     }}
                                 />
                             </div>
@@ -809,7 +828,14 @@ const ConcertDetails: React.FC = () => {
                                     >
                                         {eventDetails.description}
                                     </p>
-                                    <center style={{position:"absolute", left: "50%", bottom:"0", transform: "translate(-50%, -50%)"}}>
+                                    <center
+                                        style={{
+                                            position: "absolute",
+                                            left: "50%",
+                                            bottom: "0",
+                                            transform: "translate(-50%, -50%)",
+                                        }}
+                                    >
                                         {canPurchase && (
                                             <button
                                                 className="btn  mt-1 mx-1"
@@ -824,7 +850,10 @@ const ConcertDetails: React.FC = () => {
                                                 onClick={() => {
                                                     // window.location.href = "https://google.com";
                                                     // or you can use:
-                                                    window.open(eventDetails.url, "_blank"); // Opens in new tab
+                                                    window.open(
+                                                        eventDetails.url,
+                                                        "_blank"
+                                                    ); // Opens in new tab
                                                 }}
                                             >
                                                 خرید بلیت
@@ -875,11 +904,17 @@ const ConcertDetails: React.FC = () => {
                                         <>
                                             <div className="row px-3 pt-1">
                                                 <div className="col">
-                                                    <p className="pt-2 px-0 mb-0 text-right" dir="rtl">
+                                                    <p
+                                                        className="pt-2 px-0 mb-0 text-right"
+                                                        dir="rtl"
+                                                    >
                                                         آدرس برگزاری:
                                                     </p>
                                                     <div className="row px-3">
-                                                        <p className="pb-3 ed-message" dir="rtl">
+                                                        <p
+                                                            className="pb-3 ed-message"
+                                                            dir="rtl"
+                                                        >
                                                             {
                                                                 eventDetails.address
                                                             }
@@ -950,12 +985,14 @@ const ConcertDetails: React.FC = () => {
                                             {eventDetails.title}{" "}
                                         </h4>
                                         {/* <div className="row px-3"> */}
-                                            {/* <i className="bi bi-tag-fill icons-style"></i> */}
-                                            {/* <p className="ed-message">
+                                        {/* <i className="bi bi-tag-fill icons-style"></i> */}
+                                        {/* <p className="ed-message">
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                            <ExpandablePrice prices={eventDetails.ticketPrice} />
+                                        <ExpandablePrice
+                                            prices={eventDetails.ticketPrice}
+                                        />
                                         {/* </div> */}
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
@@ -1045,12 +1082,14 @@ const ConcertDetails: React.FC = () => {
                                             {eventDetails.title}{" "}
                                         </h4>
                                         {/* <div className="row px-3"> */}
-                                            {/* <i className="bi bi-tag-fill icons-style"></i> */}
-                                            {/* <p className="ed-message">
+                                        {/* <i className="bi bi-tag-fill icons-style"></i> */}
+                                        {/* <p className="ed-message">
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                            <ExpandablePrice prices={eventDetails.ticketPrice} />
+                                        <ExpandablePrice
+                                            prices={eventDetails.ticketPrice}
+                                        />
                                         {/* </div> */}
 
                                         <div className="row px-3">
@@ -1148,11 +1187,17 @@ const ConcertDetails: React.FC = () => {
                                         <>
                                             <div className="row px-3 pt-1">
                                                 <div className="col">
-                                                    <p className="pt-2 px-0 mb-0 text-right" dir="rtl">
+                                                    <p
+                                                        className="pt-2 px-0 mb-0 text-right"
+                                                        dir="rtl"
+                                                    >
                                                         آدرس برگزاری:
                                                     </p>
                                                     <div className="row px-3">
-                                                        <p className="pb-3 ed-message" dir="rtl">
+                                                        <p
+                                                            className="pb-3 ed-message"
+                                                            dir="rtl"
+                                                        >
                                                             {
                                                                 eventDetails.address
                                                             }
