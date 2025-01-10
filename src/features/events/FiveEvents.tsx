@@ -39,8 +39,8 @@ const FiveEvents: React.FC = () => {
           Take: "20",
         }).toString();
         const response = await agent.Events.list(`${queryParams}`);
-        setRecentEvents(response.data.slice(0, 10));
-        setPopularEvents(response.data.slice(10, 20));
+        setRecentEvents(response.concerts.slice(0, 10));
+        setPopularEvents(response.concerts.slice(10, 20));
 
         console.log(response)
       } catch (error) {
