@@ -11,6 +11,11 @@ import persian_fa from "react-date-object/locales/persian_fa";
 
 // برای تبدیل شمسی به میلادی در زمان ارسال به سرور
 import moment from "moment-jalaali";
+type DatePickerChangeOptions = {
+  validatedValue: string | string[];
+  input: HTMLElement;
+  isTyping: boolean;
+};
 
 interface EventsFilterProps {
   onFilterChange: (filters: any) => void;
@@ -114,9 +119,14 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
 
   const handleStartDateChange = (
     newDate: DateObject | null,
-    { input, isTyping }: { input: { value: string }; isTyping: boolean }
-  ) => {
+    options: DatePickerChangeOptions
+  ): false | void => {
+    const { input, isTyping } = options;
+    // اگر قرار است مقدار تایپ شده را بگیریم:
+    const typedValue = (input as HTMLInputElement).value;
+
     if (!isTyping) {
+      // یعنی کاربر از روی تقویم انتخاب کرده
       if (newDate) {
         let dateStr = newDate.format("YYYY/M/D");
         for (let i = 0; i < persianNumbers.length; i++) {
@@ -127,7 +137,8 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
         handleInputChange("dateRange", [null, filters.dateRange[1]]);
       }
     } else {
-      let value = input.value;
+      // کاربر داشت دستی تایپ می‌کرد
+      let value = typedValue; // قبلاً از (input as HTMLInputElement).value گرفتیم
       for (let digit of digits) {
         value = value.replace(new RegExp(digit, "g"), digits.indexOf(digit).toString());
       }
@@ -135,7 +146,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
       const numbers = parts.map(Number);
       const [year, month, day] = numbers;
 
-      if (input.value && numbers.some((num) => isNaN(num))) return false;
+      if (numbers.some((num) => isNaN(num))) return false;
       if (month > 12 || month < 1) return false;
       if (day < 1 || day > 31) return false;
       if (parts.some((val) => val.startsWith("00"))) return false;
@@ -147,8 +158,11 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
 
   const handleEndDateChange = (
     newDate: DateObject | null,
-    { input, isTyping }: { input: { value: string }; isTyping: boolean }
-  ) => {
+    options: DatePickerChangeOptions
+  ): false | void => {
+    const { input, isTyping } = options;
+    const typedValue = (input as HTMLInputElement).value;
+
     if (!isTyping) {
       if (newDate) {
         let dateStr = newDate.format("YYYY/M/D");
@@ -160,7 +174,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
         handleInputChange("dateRange", [filters.dateRange[0], null]);
       }
     } else {
-      let value = input.value;
+      let value = typedValue;
       for (let digit of digits) {
         value = value.replace(new RegExp(digit, "g"), digits.indexOf(digit).toString());
       }
@@ -168,7 +182,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
       const numbers = parts.map(Number);
       const [year, month, day] = numbers;
 
-      if (input.value && numbers.some((num) => isNaN(num))) return false;
+      if (numbers.some((num) => isNaN(num))) return false;
       if (month > 12 || month < 1) return false;
       if (day < 1 || day > 31) return false;
       if (parts.some((val) => val.startsWith("00"))) return false;
