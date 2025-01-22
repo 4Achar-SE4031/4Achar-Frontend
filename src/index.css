@@ -1,4 +1,5 @@
 :root {
+    --font-primary: 'IranSansWeb', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -22,12 +23,29 @@
 @tailwind utilities; */
 
 @font-face {
-  font-family: 'iransansweb';
-  src: local('iransansweb'), url(./fonts/iransansweb.ttf) format('truetype');
+    font-family: 'IranSansWeb';
+    src: url('/fonts/IranSansWeb.woff2') format('woff2'),
+         url('/fonts/IranSansWeb.woff') format('woff'),
+         url('/fonts/IranSansWeb.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
 }
+
+@font-face {
+    font-family: 'IranSansWeb';
+    src: url('/fonts/IranSansWeb-Bold.woff2') format('woff2'),
+         url('/fonts/IranSansWeb-Bold.woff') format('woff'),
+         url('/fonts/IranSansWeb-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
 * {
-  font-family: "iransansweb" !important; 
-}
+    font-family: var(--font-primary) !important;
+} 
 
 a {
   font-weight: 500;
