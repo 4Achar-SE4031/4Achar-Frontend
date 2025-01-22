@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import "./navbar.css";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,8 @@ import blogo from '/concertify-logo.png';
 import slogo from '/logo-small.png';
 import profile from '/profile.png';
 import agent from "../../app/api/agent";
-
+import { set } from "mobx";
+import { useSearch } from "../Search/searchStatus";
 interface UserData {
   email?: string;
   firstName?:string;
@@ -32,12 +33,48 @@ const Navbar: React.FC = () => {
   const [showBorder, setShowBorder] = useState<boolean>(true);
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [logo, setLogo] = useState(window.innerWidth > 1040 ? blogo : slogo);
-  useEffect(() => {
-    console.log("------------------")
-    console.log("user data: "+ userData)
-    console.log("token: "+ auth.token)
-  },[]);
+  const suggestionsRef = useRef<HTMLDivElement | null>(null);
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState<boolean>(false); // وضعیت باز یا بسته بودن پیشنهادات
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(0);
+  const { searchStatus, setSearchStatus } = useSearch();
+
+
+  const mockSuggestions = ["داریوش","ابی","گوگوش","معین","هایده","مهستی","لیلا فروهر","شهرام شب‌پره","اندی","سیروان خسروی",
+"احسان خواجه‌امیری","بنیامین بهادری","شادمهر عقیلی","مرتضی پاشایی","محسن یگانه","محسن چاوشی",
+"محمد اصفهانی","علیرضا عصار","امیر تتلو","همایون شجریان","محمدرضا شجریان","سالار عقیلی","پرواز همای",
+"رضا صادقی","حجت اشرف‌زاده","علی زندوکیلی","فرزاد فرزین","بابک جهانبخش","رضا یزدانی","مازیار فلاحی",
+"علیرضا طلیسچی","سیامک عباسی","اشوان","بهزاد لیتو","سینا حجازی","یاس","هیچکس","سینا سرلک","مهدی یراحی",
+"مهدی احمدوند","حامد همایون","حامد زمانی","رامین بی‌باک","مجید خراطها","امید حاجیلی","محسن ابراهیم‌زاده",
+"حمید هیراد","فرزاد فرخ","ماکان بند","هوروش بند","شهاب مظفری","علی لهراسبی","آرون افشار","مجید رضوی",
+"میثم ابراهیمی","پازل بند","آهنگ بند","راغب","ایوان بند","امین رستمی","محمد علیزاده","محمد معتمدی",
+"رضا بهرام","افشین","علی پیشتاز","طاها شجاع‌نوری","مهراد جم","هوروش بند","کاینی بند","زانیار خسروی",
+"بهنام بانی","کامران و هومن","حمید عسگری","فرامرز اصلانی","سامی بیگی","یگانه","رها اعتمادی","امید آمری",
+"شروین حاجی‌پور","شهرام صولتی","ستار","پروین","آرش لباف","امیر قمی","آرمین 2AFM","مرتضی جعفرزاده",
+"جواد یساری","داوود بهبودی","فریدون آسرایی","مهدی جهانی","علی خدابنده","امین بانی","شاهرخ","فرید زلاند",
+"کیوان ساکت","علیرضا قربانی","مسعود صادقلو","مجید انتظاری","رامین زمانی","سهراب پاکزاد","افشین آذری","سینا درخشنده","عرفان طهماسبی",
+"معین زندی","علی یاسینی"
+
+  ];
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const fetchSuggestions = async (query: string) => {
+    try {
+      // const response = await axios.get(`your-api-endpoint?query=${query}`);
+      // setSuggestions(response.data);
+      const filteredSuggestions = mockSuggestions.filter((suggestion) =>
+        suggestion.toLowerCase().includes(query.toLowerCase())
+      );
+
+      setSuggestions(filteredSuggestions.slice(0,5));
+
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+      setSuggestions([]);
+    }
+    
+  };
   
+
   useEffect(() => {
     const storedUserData = JSON.parse(localStorage.getItem("userData") || "null");
     setUserData(storedUserData);
@@ -106,9 +143,80 @@ const Navbar: React.FC = () => {
     }
   };
 
-  const searchHandler = () => {
-    // Add your search logic here
+  const handleSearchInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    let query = e.target.value;
+    setSearchBoxText(query);
+    query = query.trim()
+    if (query === "") {
+      setSuggestions([]);
+      setIsSuggestionsOpen(false);
+      setSelectedIndex(0);
+      return;
+    }
+    await fetchSuggestions(query);
+    if(suggestions.length==0){
+      setIsSuggestionsOpen(false);
+    }else{
+      setIsSuggestionsOpen(true);
+    }
   };
+  
+  const searchHandler = (query: string) => {
+    console.log("searching: "+ query);
+    setSearchStatus("Loading");
+    console.log("search status in NAVBAR: "+searchStatus);
+    navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
+  };
+
+  const closeSuggestions = () => {
+    setSuggestions([]);
+    setIsSuggestionsOpen(false);
+    setSelectedIndex(0);
+  };
+
+  // اثر برای اضافه کردن event listener برای کلیک‌های خارج از بخش پیشنهادات
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (suggestionsRef.current && !suggestionsRef.current.contains(event.target as Node)) {
+        closeSuggestions();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    // پاک کردن event listener هنگام unmount شدن کامپوننت
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  
+    if (suggestions.length === 0) return;
+    
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault(); // جلوگیری از جابجایی مکان‌نما در search box
+  
+      if (e.key === "ArrowDown") {
+        setSelectedIndex((prevIndex) => {
+          const newIndex = prevIndex === null ? 0 : (prevIndex + 1) % suggestions.length;
+          return newIndex;
+        });
+      } else if (e.key === "ArrowUp") {
+        setSelectedIndex((prevIndex) => {
+          const newIndex = prevIndex === null ? suggestions.length - 1 : (prevIndex - 1 + suggestions.length) % suggestions.length;
+          return newIndex;
+        });
+      }
+    } else if (e.key === "Enter" && selectedIndex !== null) {
+      const selectedSuggestion = suggestions[selectedIndex];
+      setSearchBoxText(selectedSuggestion);
+      searchHandler(selectedSuggestion);
+      setSelectedIndex(0);
+      closeSuggestions();
+    }
+  };
+  
+  
 
   return (
     <nav className="navbar">
@@ -123,19 +231,73 @@ const Navbar: React.FC = () => {
             />
           </NavLink>
         </div>
+        <div className="centered-column" ref={suggestionsRef}>
+          <div className="col" style={{paddingLeft:"0px", paddingRight:"0px"}}>
+            <div className={`search-bar ${isSuggestionsOpen && suggestions.length > 0 ? "open" : ""}`} >
+              <input
+                type="text"
+                placeholder="جستجو..."
+                className="search-input"
+                value={searchBoxText}
+                onChange={handleSearchInputChange}
+                onKeyDown={handleKeyDown} // اضافه کردن رویداد
 
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="جستجو..."
-            className="search-input"
-            value={searchBoxText}
-            onChange={(e) => setSearchBoxText(e.target.value)}
-          />
-          <button className="search-button" onClick={searchHandler}>
-            <p className="bi bi-search search-icon"></p>
-          </button>
+              />
+              <button className="search-button" onClick={() => {
+                          searchHandler(searchBoxText);
+                        }}>
+                <p className="bi bi-search search-icon"></p>
+              </button>
+            </div>
+            <div style={{paddingLeft:"15px", paddingRight:"15px"}}>
+            <div className="suggestions-container" >
+              {isSuggestionsOpen && suggestions.length > 0 && (
+                <ul className="suggestions-list">
+                  {suggestions.map((suggestion, index) => (
+                    <li
+                    key={index}
+                    className={`suggestion-item ${
+                      index === selectedIndex ? "selected" : ""
+                    }`}
+                    style={{
+                      fontFamily: "iransansweb",
+                      backgroundColor: index === selectedIndex ? "#f9d966" : "#fef9e5", // استایل برجسته
+                      display: "flex", // چینش افقی
+                      justifyContent: "space-between", // فاصله بین آیکون و متن
+                      alignItems: "center", // هم‌تراز کردن متن و آیکون
+                      padding: "8px", // فضای داخلی برای آیتم‌ها
+                    }}
+                    onMouseEnter={()=>{
+                      console.log("Mouse enter")
+                      setSelectedIndex(index);
+                    }}
+                    onClick={() => {
+                      setSearchBoxText(suggestion);
+                      searchHandler(suggestion);
+                      closeSuggestions();
+                    }}
+                  >
+                    <span style={{ flex: 1, textAlign: "right" }}>{suggestion}</span>
+                  
+                    <span
+                      className="bi bi-chevron-left"
+                      style={{
+                        marginLeft: "15px", // فاصله از متن
+                        fontSize: "1.2rem", // اندازه آیکون
+                        color: "#666", // رنگ آیکون
+                      }}
+                    ></span>
+                  </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+            </div>
+          </div>
         </div>
+
+        
+        
 
         <div className="menu-icon" onClick={handleShowDrawer}>
           <i className="bi bi-list" style={{ fontSize: "28px", paddingBottom: "15px" }}></i>
@@ -149,7 +311,7 @@ const Navbar: React.FC = () => {
               </li>
             )} */}
             <li>
-              <NavLink to="/home">خانه</NavLink>
+              <NavLink to="/home" >خانه</NavLink>
             </li>
             <li>
               <NavLink to="/create-event">ویترین</NavLink>
@@ -157,17 +319,16 @@ const Navbar: React.FC = () => {
             <li>
               <NavLink to="/create-event"> خرید ها</NavLink>
             </li>
-            <li>
+            {/* <li>
               <NavLink to="/create-event">ایجاد کنسرت </NavLink>
-            </li>
+            </li> */}
             
             {!showDrawer && !auth.token && showBorder && (
               <div className="auth-link">
-                <li className="auth-link-li">
+                  <NavLink to="/register" style={{marginLeft:"30px",marginBottom:"3px",marginRight:"13px"}}>عضویت</NavLink>
+                
+                <li className="auth-link-li" onClick={()=> navigate('/login')} style={{cursor:"pointer"}}>
                   <NavLink to="/login">ورود</NavLink>
-                </li>
-                <li className="auth-link-li">
-                  <NavLink to="/register">عضویت</NavLink>
                 </li>
               </div>
             )}
@@ -223,10 +384,10 @@ const Navbar: React.FC = () => {
 
             {showDrawer && !auth.token && (
               <>
-                <li className="auth-link-li">
+                <li className="auth-link-li-drawer">
                   <NavLink to="/login">ورود</NavLink>
                 </li>
-                <li className="auth-link-li">
+                <li className="auth-link-li-drawer">
                   <NavLink to="/register">عضویت</NavLink>
                 </li>
               </>

@@ -28,6 +28,10 @@ import AdvertisementCard from "../Ads/Ads.tsx";
 import ads_sample_image1 from "../Ads/sample_picture.jpg";
 import ads_sample_image2 from "../Ads/sample_picture2.jpg";
 import { height } from "@mui/system";
+import Suggestion from "./Suggestion.tsx";
+import YektanetAnalytics from "./YektanetAds.tsx";
+import ExpandablePrice from "./ExpandablePrice.tsx";
+import { parseDateTimeToJalali } from './dateParserToJalali.tsx';
 
 const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
@@ -43,75 +47,130 @@ const ConcertDetails: React.FC = () => {
     };
     const navigator = useNavigate();
     let { id } = useParams<{ id: string }>();
-    const monthDict = {
-        0: "فروردین",
-        1: "اردیبهشت",
-        2: "خرداد",
-        3: "تیر",
-        4: "مرداد",
-        5: "شهریور",
-        6: "مهر",
-        7: "آبان",
-        8: "آذر",
-        9: "دی",
-        10: "بهمن",
-        11: "اسفند",
-    };
-    const dayDict = {
-        Monday: "دوشنبه",
-        Tuesday: "سه شنبه",
-        Wednesday: "چهارشنبه",
-        Thursday: "پنج شنبه",
-        Friday: "جمعه",
-        Saturday: "شنبه",
-        Sunday: "یک شنبه",
-    };
+
     const [eventDateTime, setEventDateTime] = useState({
         startWeekDay: "جمعه",
         startMonth: "آذر",
         startTime: "21:00",
         startYear: "1403",
         startDay: "25",
-        endWeekDay: "جمعه",
-        endMonth: "آذر",
-        endTime: "23:00",
-        endYear: "1403",
-        endDay: "25",
+        // endWeekDay: "جمعه",
+        // endMonth: "آذر",
+        // endTime: "23:00",
+        // endYear: "1403",
+        // endDay: "25",
     });
+    interface ApiConcertData {
+        id: number;
+        title: string;
+        description: string;
+        startDateTime: string;
+        city: string;
+        address: string;
+        location: string;
+        category: string;
+        ticketPrice: number[];
+        latitude: number;
+        longtitude: number;
+        coverImage: string;
+        url: string;
+    }
+    const [apiData, setApiData] = useState<ApiConcertData | null>(null);
+
     const [eventDetails, setEventDetails] = useState({
-        title: "کنسرت ارکستر سمفونیک قاف (منظومه سیمرغ)",
-        ticket_price: "600000",
-        attendance: "I",
-        province: "تهران",
-        city: "تهران",
+        title: "",
+        ticketPrice: [],
+        attendance: "",
+        province: "",
+        city: "",
         photo: "/img.png",
-        category: "ارکستر سمفونی",
+        category: "",
         organizer_photo: "/profile2.png",
-        organizer_name: "4AChar-Band",
-        organizer_phone: "09123456789",
-        organizer_email: "organizer@gmail.com",
-        location_lat: "35.7021",
-        location_lon: "51.4051",
-        address: "تهران، خیابان حافظ، تالار وحدت",
-        description: `
-      رعایت شئونات اسلامی در تالار وحدت الزامی می باشد.
-  
-      کنسرت  قاف (منظومه سیمرغ)
-      به رهبری فرهاد فخرالدینی و آرش امینی
-      خوانندگان:
-      مهدی محمدی 
-      علی تفرشی
-      سولیست ویلن:
-      امین غفاری
-  
-      با همکاری :
-      ارکستر سمفونیک تهران
-  
-      تهیه کننده: حبیب صبور
-      با حمایت: شرکت کرمان موتور
-    `,
+        organizer_name: "",
+        organizer_phone: "",
+        organizer_email: "",
+        location_lat: "",
+        location_lon: "",
+        address: "",
+        description: "",
+        url: "",
         tags: [],
     });
+
+    const parseDateTime = (dateTimeStr: string) => {
+        // Create moment-jalaali instance from UTC string
+        const m = moment(dateTimeStr);
+        
+        // Convert to Tehran timezone (UTC+3:30)
+        m.utcOffset('+03:30');
+    
+        return {
+            startWeekDay: m.format('dddd'), // Returns Persian weekday name
+            startMonth: m.jMonth(), // Returns Persian month (0-11)
+            startTime: m.format('HH:mm'),
+            startYear: m.jYear().toString(), // Returns Persian year
+            startDay: m.jDate().toString(), // Returns Persian day of month
+        };
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                console.log("fetching concertDetails data:");
+                setLoading(true);
+                const response = await axios.get(
+                    `https://api-concertify.darkube.app/Concert/${id}`
+                );
+                // const response = await axios.get(`https://api-concertify.darkube.app/Concert/1`);
+                const data = response.data;
+                if (data.startDateTime) {
+                    const parsedDateTime = parseDateTimeToJalali(data.startDateTime);
+                    setEventDateTime(parsedDateTime);
+                }
+    
+                // Transform API data to match your component's state structure
+                setEventDetails({
+                    title: data.title || "",
+                    ticketPrice: data.ticketPrice || [],
+                    // ticketPrice:"رایگان",
+                    attendance: "I",
+                    province: "",
+                    city: data.city || "بندرعباس",
+                    photo: data.coverImage || "/img.png", // Default value since API doesn't provide this
+                    // photo: "/img.png" || "/img2.png", // Default value since API doesn't provide this
+                    category: data.category || "",
+                    organizer_photo:    "/profile2.png", // Default value
+                    organizer_name: "", // Not provided by API
+                    organizer_phone: "", // Not provided by API
+                    organizer_email: "", // Not provided by API
+                    location_lat: data.latitude?.toString() || "",
+                    location_lon: data.longitude?.toString() || "",
+                    address: data.address || "",
+                    // address: "تهران، خیابان حافظ، تالار وحدت",
+                    description: data.description || "",
+                    tags: [], // API doesn't provide tags
+                    url: data.url || "https://google.com",
+                });
+
+                // useEffect(() => {
+                // if (data.startDateTime) {
+                //     const parsedDateTime = parseToJalali(data.startDateTime);
+                //     setEventDateTime(parsedDateTime);
+                // }
+                // }, [data.startDateTime]);
+
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching concert details:", error);
+                setError(true);
+                setLoading(false);
+            }
+        };
+
+        if (id) {
+            fetchData();
+        }
+    }, [id]);
 
     const auth = useAuth();
     const [loading, setLoading] = useState(true);
@@ -366,18 +425,26 @@ const ConcertDetails: React.FC = () => {
                         >
                             {/* Left Section */}
                             <div className="col-md-2 left-section">
-                                <AdvertisementCard
+                                {/* <AdvertisementCard
                                     title="Special Offer"
                                     description="Get 50% off on all premium features this week!"
                                     linkUrl="https://www.digikala.com/product/dkp-13969461/%DA%AF%D9%88%D8%B4%DB%8C-%D9%85%D9%88%D8%A8%D8%A7%DB%8C%D9%84-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%DA%AF-%D9%85%D8%AF%D9%84-galaxy-a15-%D8%AF%D9%88-%D8%B3%DB%8C%D9%85-%DA%A9%D8%A7%D8%B1%D8%AA-%D8%B8%D8%B1%D9%81%DB%8C%D8%AA-128-%DA%AF%DB%8C%DA%AF%D8%A7%D8%A8%D8%A7%DB%8C%D8%AA-%D9%88-%D8%B1%D9%85-6-%DA%AF%DB%8C%DA%AF%D8%A7%D8%A8%D8%A7%DB%8C%D8%AA-%D9%88%DB%8C%D8%AA%D9%86%D8%A7%D9%85/"
                                     linkText="Claim Offer"
                                     imageUrl={ads_sample_image1}
-                                />
+                                /> */}
+                                <div id="pos-article-display-103849"></div>
+                                {/* <YektanetAnalytics/> */}
+                                {/* <div id="pos-article-display-103849"></div> */}
                             </div>
 
                             <div
-                                className="event-details-mcard py-3 mr-0  px-3 mb-2"
-                                style={{ width: "350px", maxWidth: "350px" }}
+                                className="event-details-mcard py-3 mr-0  px-3 mb-2 relative"
+                                style={{
+                                    width: "350px",
+                                    maxWidth: "350px",
+                                    position: "relative",
+                                    overflow: "visible",
+                                }}
                             >
                                 <p className="pb-3 ed-message text-right">
                                     {eventDateTime.startDay}{" "}
@@ -385,22 +452,23 @@ const ConcertDetails: React.FC = () => {
                                     {eventDateTime.startYear} ساعت{" "}
                                     {eventDateTime.startTime}{" "}
                                 </p>
-                                <h4 className=" pb-3 text-right">
+                                <h2 className=" pb-3 text-right">
                                     {" "}
                                     {eventDetails.title}{" "}
-                                </h4>
-                                <div className="row px-3 mb-2">
-                                    <i className="bi bi-tag-fill icons-style"></i>
-                                    <p className="ed-message">
+                                </h2>
+                                {/* <div className="row px-3 mb-2"> */}
+                                {/* <i className="bi bi-tag-fill icons-style"></i> */}
+                                {/* <p className="ed-message">
                                         {eventDetails.ticket_price.toLocaleString()}{" "}
                                         تومان
-                                    </p>
-                                </div>
+                                    </p> */}
+                                    {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                {/* </div> */}
 
                                 <div className="row px-3 mb-2">
                                     <i className="bi bi-geo-alt-fill icons-style"></i>
                                     <p className="ed-message">
-                                        {eventDetails.province}-
+                                        {eventDetails.province}
                                         {eventDetails.city}
                                     </p>
                                 </div>
@@ -424,7 +492,7 @@ const ConcertDetails: React.FC = () => {
                                         }
                                         style={{
                                             height: "45px",
-                                            borderRadius: "50%",
+                                            borderRadius: "6px",
                                         }}
                                         alt="profile"
                                     />
@@ -465,6 +533,8 @@ const ConcertDetails: React.FC = () => {
                                         height: "400px",
                                         zIndex: 10,
                                         position: "relative",
+                                        borderRadius: "6px",
+                                        objectFit: "cover",
                                     }}
                                 />
                             </div>
@@ -503,23 +573,29 @@ const ConcertDetails: React.FC = () => {
                                     </p>
                                 </div>
                                 <div className="row px-3">
-                                    <i className="bi bi-clock  icons-style"></i>
-                                    <p className="pb-3 ed-message">
+                                    {/* <i className="bi bi-clock  icons-style"></i> */}
+                                    {/* <p className="pb-3 ed-message">
                                         پایان: {eventDateTime.endWeekDay}{" "}
                                         {eventDateTime.endDay}{" "}
                                         {eventDateTime.endMonth}{" "}
                                         {eventDateTime.endYear} ساعت{" "}
                                         {eventDateTime.endTime}{" "}
-                                    </p>
+                                    </p> */}
                                 </div>
                                 <>
                                     <div className="row px-3 pt-1">
                                         <div className="col">
-                                            <p className="pt-2 px-0 mb-0 text-right">
-                                                آدرس برگزاری
+                                            <p
+                                                className="pt-2 px-0 mb-0 text-right"
+                                                dir="rtl"
+                                            >
+                                                آدرس برگزاری:
                                             </p>
                                             <div className="row px-3">
-                                                <p className="pb-3 ed-message">
+                                                <p
+                                                    className="pb-3 ed-message"
+                                                    dir="rtl"
+                                                >
                                                     {eventDetails.address}
                                                 </p>
                                             </div>
@@ -531,6 +607,7 @@ const ConcertDetails: React.FC = () => {
                                         long={eventDetails.location_lon}
                                         onlyShow={true}
                                         name="EventDetails"
+                                        address={eventDetails.address}
                                     />
                                 </>
 
@@ -580,7 +657,7 @@ const ConcertDetails: React.FC = () => {
                                     style={{
                                         width: "765px",
                                         maxWidth: "100%",
-                                        height:"480px",
+                                        height: "480px",
                                         zIndex: 10,
                                         position: "relative",
                                     }}
@@ -600,18 +677,30 @@ const ConcertDetails: React.FC = () => {
                                     >
                                         {eventDetails.description}
                                     </p>
-                                    <center>
+                                    <center
+                                        style={{
+                                            position: "absolute",
+                                            left: "50%",
+                                            bottom: "0",
+                                            transform: "translate(-50%, -50%)",
+                                        }}
+                                    >
                                         {canPurchase && (
                                             <button
                                                 className="btn  mt-1 mx-1"
-                                                onClick={(e) =>
-                                                    navigator(
-                                                        "/register-event/" +
-                                                            Number(
-                                                                id
-                                                            ).toString()
-                                                    )
-                                                }
+                                                // onClick={(e) =>
+                                                //     navigator(
+                                                //     eventDetails.url
+                                                //     )
+                                                // }
+                                                onClick={() => {
+                                                    // window.location.href = "https://google.com";
+                                                    // or you can use:
+                                                    window.open(
+                                                        eventDetails.url,
+                                                        "_blank"
+                                                    ); // Opens in new tab
+                                                }}
                                             >
                                                 خرید بلیت
                                             </button>
@@ -634,17 +723,16 @@ const ConcertDetails: React.FC = () => {
                             </div>
 
                             {/* Right Section */}
-                            <div 
-                                className="col-md-2 left-section"
-                                >
-                                <AdvertisementCard
+                            <div className="col-md-2 left-section">
+                                {/* <AdvertisementCard
                                     title=""
                                     description=""
                                     linkUrl="https://www.snapptrip.com/"
                                     linkText="با اسنپ خیالت از سفر راحته!"
                                     imageUrl={ads_sample_image2}
                                     height="480px"
-                                    />
+                                /> */}
+                            <div id="pos-article-display-103849"></div>
                             </div>
                         </div>
                     </>
@@ -673,6 +761,8 @@ const ConcertDetails: React.FC = () => {
                                         marginLeft: "10px",
                                         zIndex: 10,
                                         position: "relative",
+                                        borderRadius: "6px",
+                                        objectFit: "cover",
                                     }}
                                 />
                             </div>
@@ -691,18 +781,33 @@ const ConcertDetails: React.FC = () => {
                                     >
                                         {eventDetails.description}
                                     </p>
-                                    <center>
+                                    <center
+                                        style={{
+                                            position: "absolute",
+                                            left: "50%",
+                                            bottom: "0",
+                                            transform: "translate(-50%, -50%)",
+                                        }}
+                                    >
                                         {canPurchase && (
                                             <button
                                                 className="btn  mt-1 mx-1"
-                                                onClick={(e) =>
-                                                    navigator(
-                                                        "/register-concert/" +
-                                                            Number(
-                                                                id
-                                                            ).toString()
-                                                    )
-                                                }
+                                                // onClick={(e) =>
+                                                //     navigator(
+                                                //         "/register-concert/" +
+                                                //             Number(
+                                                //                 id
+                                                //             ).toString()
+                                                //     )
+                                                // }
+                                                onClick={() => {
+                                                    // window.location.href = "https://google.com";
+                                                    // or you can use:
+                                                    window.open(
+                                                        eventDetails.url,
+                                                        "_blank"
+                                                    ); // Opens in new tab
+                                                }}
                                             >
                                                 خرید بلیت
                                             </button>
@@ -739,24 +844,30 @@ const ConcertDetails: React.FC = () => {
                                             </p>
                                         </div>
                                         <div className="row px-3">
-                                            <i className="bi bi-clock  icons-style"></i>
-                                            <p className="pb-3 ed-message">
+                                            {/* <i className="bi bi-clock  icons-style"></i> */}
+                                            {/* <p className="pb-3 ed-message">
                                                 پایان:{" "}
                                                 {eventDateTime.endWeekDay}{" "}
                                                 {eventDateTime.endDay}{" "}
                                                 {eventDateTime.endMonth}{" "}
                                                 {eventDateTime.endYear} ساعت{" "}
                                                 {eventDateTime.endTime}{" "}
-                                            </p>
+                                            </p> */}
                                         </div>
                                         <>
                                             <div className="row px-3 pt-1">
                                                 <div className="col">
-                                                    <p className="pt-2 px-0 mb-0 text-right">
-                                                        آدرس برگزاری
+                                                    <p
+                                                        className="pt-2 px-0 mb-0 text-right"
+                                                        dir="rtl"
+                                                    >
+                                                        آدرس برگزاری:
                                                     </p>
                                                     <div className="row px-3">
-                                                        <p className="pb-3 ed-message">
+                                                        <p
+                                                            className="pb-3 ed-message"
+                                                            dir="rtl"
+                                                        >
                                                             {
                                                                 eventDetails.address
                                                             }
@@ -770,6 +881,7 @@ const ConcertDetails: React.FC = () => {
                                                 long={eventDetails.location_lon}
                                                 onlyShow={true}
                                                 name="EventDetails"
+                                                address={eventDetails.address}
                                             />
                                         </>
 
@@ -826,17 +938,18 @@ const ConcertDetails: React.FC = () => {
                                             {" "}
                                             {eventDetails.title}{" "}
                                         </h4>
-                                        <div className="row px-3">
-                                            <i className="bi bi-tag-fill icons-style"></i>
-                                            <p className="ed-message">
-                                                {eventDetails.ticket_price.toLocaleString()}{" "}
+                                        {/* <div className="row px-3"> */}
+                                        {/* <i className="bi bi-tag-fill icons-style"></i> */}
+                                        {/* <p className="ed-message">
+                                                {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
-                                            </p>
-                                        </div>
+                                            </p> */}
+                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                        {/* </div> */}
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
                                             <p className="ed-message">
-                                                {eventDetails.province}-
+                                                {eventDetails.province}
                                                 {eventDetails.city}
                                             </p>
                                         </div>
@@ -859,7 +972,7 @@ const ConcertDetails: React.FC = () => {
                                                 }
                                                 style={{
                                                     height: "45px",
-                                                    borderRadius: "50%",
+                                                    borderRadius: "6px",
                                                 }}
                                                 alt="profile"
                                             />
@@ -920,18 +1033,19 @@ const ConcertDetails: React.FC = () => {
                                             {" "}
                                             {eventDetails.title}{" "}
                                         </h4>
-                                        <div className="row px-3">
-                                            <i className="bi bi-tag-fill icons-style"></i>
-                                            <p className="ed-message">
-                                                {eventDetails.ticket_price.toLocaleString()}{" "}
+                                        {/* <div className="row px-3"> */}
+                                        {/* <i className="bi bi-tag-fill icons-style"></i> */}
+                                        {/* <p className="ed-message">
+                                                {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
-                                            </p>
-                                        </div>
+                                            </p> */}
+                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                        {/* </div> */}
 
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
                                             <p className="ed-message">
-                                                {eventDetails.province}-
+                                                {eventDetails.province}
                                                 {eventDetails.city}
                                             </p>
                                         </div>
@@ -954,7 +1068,7 @@ const ConcertDetails: React.FC = () => {
                                                 }
                                                 style={{
                                                     height: "45px",
-                                                    borderRadius: "50%",
+                                                    borderRadius: "6px",
                                                 }}
                                                 alt="profile"
                                             />
@@ -1009,25 +1123,31 @@ const ConcertDetails: React.FC = () => {
                                             </p>
                                         </div>
                                         <div className="row px-3">
-                                            <i className="bi bi-clock  icons-style"></i>
-                                            <p className="pb-3 ed-message">
+                                            {/* <i className="bi bi-clock  icons-style"></i> */}
+                                            {/* <p className="pb-3 ed-message">
                                                 پایان:{" "}
                                                 {eventDateTime.endWeekDay}{" "}
                                                 {eventDateTime.endDay}{" "}
                                                 {eventDateTime.endMonth}{" "}
                                                 {eventDateTime.endYear} ساعت{" "}
                                                 {eventDateTime.endTime}{" "}
-                                            </p>
+                                            </p> */}
                                         </div>
 
                                         <>
                                             <div className="row px-3 pt-1">
                                                 <div className="col">
-                                                    <p className="pt-2 px-0 mb-0 text-right">
-                                                        آدرس برگزاری
+                                                    <p
+                                                        className="pt-2 px-0 mb-0 text-right"
+                                                        dir="rtl"
+                                                    >
+                                                        آدرس برگزاری:
                                                     </p>
                                                     <div className="row px-3">
-                                                        <p className="pb-3 ed-message">
+                                                        <p
+                                                            className="pb-3 ed-message"
+                                                            dir="rtl"
+                                                        >
                                                             {
                                                                 eventDetails.address
                                                             }
@@ -1042,6 +1162,7 @@ const ConcertDetails: React.FC = () => {
                                                 long={eventDetails.location_lon}
                                                 onlyShow={true}
                                                 name="EventDetails"
+                                                address={eventDetails.address}
                                             />
                                         </>
 
@@ -1109,6 +1230,7 @@ const ConcertDetails: React.FC = () => {
                         imageUrl={ads_sample_image}
                         />
                     </div> */}
+                <Suggestion />
                 <MainComment id={Number(id)} />
                 {/* Left Section */}
                 {/* <div className="col-md-2 left-section">

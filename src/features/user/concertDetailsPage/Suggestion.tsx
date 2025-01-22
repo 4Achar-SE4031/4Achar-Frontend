@@ -1,20 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { observer } from "mobx-react-lite";
 
-import EventItem from "./EventItem";
-import Card from "../../app/common/Card/Card";
-import animationData from "../../app/common/lottie/Animation - 1715854965467.json";
-import "./EventsList.css";
-import mockEvents from "../../app/common/Mock Data/MOCK_DATA.json";
+import Card from "../../../app/common/Card/Card";
+import animationData from "../../../app/common/lottie/Animation - 1715854965467.json";
+import "../../events/EventsList.css";
 import { useNavigate } from "react-router-dom";
-import agent from "../../app/api/agent";
-import { Event } from "../../app/models/event";
+import agent from "../../../app/api/agent";
+import { Event } from "../../../app/models/event";
+import EventItem from "../../events/EventItem";
 
-const FiveEvents: React.FC = () => {
+const Suggestion: React.FC = () => {
   const [recentEventIndex, setRecentEventIndex] = useState(0);
-  const [popularEventIndex, setPopularEventIndex] = useState(0);
   const [recentEvents, setRecentEvents] = useState<Event[] | undefined>();
-  const [popularEvents, setPopularEvents] = useState<Event[] | undefined>();
   const [loading, setLoading] = useState(false);
   const eventsToShow = 5;
   // const mockEvents = mock.slice(0, 10)
@@ -40,7 +37,6 @@ const FiveEvents: React.FC = () => {
         }).toString();
         const response = await agent.Events.list(`${queryParams}`);
         setRecentEvents(response.concerts.slice(0, 10));
-        setPopularEvents(response.concerts.slice(10, 20));
 
         console.log(response)
       } catch (error) {
@@ -55,7 +51,6 @@ const FiveEvents: React.FC = () => {
   useEffect(() => {
     const autoAdvance = setInterval(() => {
       setRecentEventIndex((prevIndex) => (prevIndex + 1) % 10);
-      setTimeout(() => setPopularEventIndex((prevIndex) => (prevIndex + 1) % 10), 1000);
     }, 6000); // 6 seconds
 
     // Clear the interval when the component unmounts
@@ -105,23 +100,9 @@ const FiveEvents: React.FC = () => {
     navigate(`/events/${value}`)
   }
 
-  const renderIndicators = (currentIndex: number, eventCount: number, setIndex: React.Dispatch<React.SetStateAction<number>>) => (
-    <div className="slider-indicators">
-      {Array.from({ length: Math.ceil(eventCount - 5) }, (_, index) => (
-        <div>
-          <button onClick={() => console.log(index, currentIndex)} />
-          <span
-            key={index}
-            className={`dot ${currentIndex === index + eventsToShow ? "active" : ""}`}
-            onClick={() => setIndex(index + eventsToShow)}
-          />
-        </div>
-      ))}
-    </div>
-  );
 
   return (
-    <div className="RecentEvents">
+    <div className="RecentEvents mb-5">
       <Card className="events-list pb-5" lang="fa" >
         <div className="container-fluid" lang="fa">
           <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
@@ -132,7 +113,7 @@ const FiveEvents: React.FC = () => {
               نمایش همه
             </button>
             <h2 className="section-title" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
-              رویدادهای جدید
+              رویدادهای پیشنهادی
             </h2>
           </div>
           <div className="position-relative row justify-content-center align-content-center">
@@ -172,54 +153,10 @@ const FiveEvents: React.FC = () => {
           {/* {renderIndicators(recentEventIndex, mockEvents.length, setRecentEventIndex)} */}
 
 
-          <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
-            <button
-              className="btn btn-primary show-all ml-5"
-              // onClick={() => window.location.href = '/events/popular'}
-              onClick={() => handleShowTypeButton("popular")}
-            >
-              نمایش همه
-            </button>
-            <h2 className="section-title" style={{ color: '#ffeba7' }}>
-              رویدادهای محبوب
-            </h2>
-          </div>
-
-          <div className="position-relative row justify-content-center align-content-center">
-            <button
-              className="slider-arrow left col ml-5"
-              onClick={() =>
-                handleIndexChange(popularEventIndex, setPopularEventIndex, "prev")
-              }
-            >
-              &#8249;
-            </button>
-            <div className="items col-lg-11 col-sm-9">
-              {/* {loading && (
-            <div className="loading"> 
-              <Lottie options={defaultOptions} />
-            </div>
-          )} */}
-              {getVisibleEvents(popularEvents || [], popularEventIndex).map((event) => (
-                <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
-                  <EventItem event={event} />
-                </div>
-              ))}
-            </div>
-            <button
-              className="slider-arrow right col mr-5"
-              onClick={() =>
-                handleIndexChange(popularEventIndex, setPopularEventIndex, "next")
-              }
-            >
-              &#8250;
-            </button>
-          </div>
-          {/* {renderIndicators(popularEventIndex, mockEvents.length, setPopularEventIndex)} */}
         </div>
       </Card>
     </div>
   );
 };
 
-export default observer(FiveEvents);
+export default observer(Suggestion);

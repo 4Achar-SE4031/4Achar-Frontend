@@ -48,7 +48,11 @@ body {
     align-items: center;
     margin-top: 10px;
   }
-  
+  .nothing{
+    color:#ffeba7;
+    font-size: 20px;
+    direction: rtl;
+  }
   .dot {
     height: 10px;
     width: 10px;
@@ -92,6 +96,8 @@ body {
     padding: 1rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     z-index: 10;
+    background-color: #121a49;
+    color: #ffeba7;
   }
   .slider-arrow{
     max-height: 35px;
@@ -183,7 +189,12 @@ body {
       border-radius: 10px;
       transition: transform 0.3s, filter 0.3s;
     }
-
+    .event-info__details,
+    .event-info__address,
+    .event-info__date,
+    .event-info__price {
+      margin-left: 1rem; /* if using RTL, margin-left visually pushes them to the right */
+    }
     .event-info {
       position: absolute;
       display: none;
@@ -204,16 +215,21 @@ body {
       margin: 0 1rem;
       margin-top: 10px;
     }
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 
     .item h4 {
       color: #ffeba7;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 300;
-      margin: 5px 1rem;
+      margin: 5px 0rem;
     }
     .item h5 {
       color: #ffeba7;
-      font-size: 9px;
+      font-size: 10px;
       font-weight: 300;
       margin: 5px 1rem;
     }
@@ -223,7 +239,13 @@ body {
       margin-left: 120px;
       gap: 0.3rem;
     }
-    .event-info__hour {
+    .event-info__fields {
+      margin-left: 20px; /* کمی به سمت راست حرکت فیلدها */
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+    .event-info_price {
       font-size: 1rem;
       font-weight: 400;
       color: #ffeba7;
@@ -241,6 +263,7 @@ body {
       height: 0.5px;
       transform: scale(0.5);
       top: 4px;
+      right: 6px;
     }
     .input-icon {
       color: #ffeba7;
@@ -251,6 +274,7 @@ body {
       display: flex;
       flex-direction: row-reverse;
       justify-content: center;
+      right: 5px;
     }
     .event-info__address {
       display: flex;
@@ -260,7 +284,7 @@ body {
       display: flex;
       flex-direction: row-reverse;
     }
-    .event-info__hour {
+    .event-info__price {
       display: flex;
       flex-direction: row-reverse;
     }

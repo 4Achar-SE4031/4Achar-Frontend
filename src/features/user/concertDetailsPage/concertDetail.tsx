@@ -65,6 +65,7 @@ interface EventDetails {
   creator_id?: number;
   bookmarked?: boolean;
   title?: string;
+  address?: string;
 }
 
 // change
@@ -141,6 +142,7 @@ const EventDetails: React.FC = () => {
     eventName: "کنسرت ارکستر سمفونیک قاف (منظومه سیمرغ) (تمدید شد)",
     price: 600000,
     location: "تهران/تالار وحدت",
+    address: "",
     category: "ارکستر سمفونی",
     organizerPhoto: "./img.webp",
     organizerName: "فرهاد فخر الدینی",
@@ -490,6 +492,7 @@ const EventDetails: React.FC = () => {
                     long={eventDetails.inpersonevent.location_lon}
                     onlyShow={true}
                     name="EventDetails"
+                    address={eventDetails.address}
                   />
                 </center>
               </div>

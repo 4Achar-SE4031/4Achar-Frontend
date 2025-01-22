@@ -29,6 +29,7 @@ const AdvertisementCard: React.FC<AdProps> = ({
                 href={linkUrl}
                 className="ads_link inline-flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-lg font-semibold text-gray-900 transition-all duration-300 hover:bg-blue-500 hover:text-white hover:scale-105 hover:shadow-lg active:scale-95"
                 dir="rtl"
+                target="_blank"
             >
                 <div
                     className="ad-card group relative overflow-hidden rounded-xl bg-white shadow-xl transition-all hover:shadow-2xl"
