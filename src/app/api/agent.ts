@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { ChangePassword, UpdateUser, User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
 import { Event } from "../models/event";
-import { useAuth } from "../../features/user/login/authProvider";
+import { ConcertsResponse } from "../models/concertResponse";
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
         setTimeout(resolve, delay);
@@ -20,7 +20,7 @@ axios.interceptors.request.use((config) => {
     return config;
 });
 
-axios.defaults.baseURL = "http://localhost:5000";
+axios.defaults.baseURL = "https://api-concertify.darkube.app";
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data;
 
@@ -45,8 +45,10 @@ const Account = {
 };
 
 const Events = {
-    list: (): Promise<Event[]> => requests.get<Event[]>('/events'),
-};
+    list: (queryParams?: any): Promise<ConcertsResponse> =>
+        requests.get<ConcertsResponse>(
+          `/Concert${queryParams ? "?" + queryParams : ""}`
+        ),};
 
 const agent = {
     Account,
@@ -54,3 +56,25 @@ const agent = {
 };
 
 export default agent;
+
+
+// Name	Description
+// Title   string
+
+// StartRange  string
+
+// EndRange    string
+
+// Province    string
+
+// City    string
+
+// Category    string
+
+// TicketPriceRangeStart   string
+
+// TicketPriceRangeEnd string
+
+// Skip    integer($int32)
+
+// Take    integer($int32)

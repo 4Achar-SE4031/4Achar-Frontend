@@ -12,6 +12,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+::selection {
+  background-color: #0d84fc !important;
+  color: white !important; 
+}
 
 /* @tailwind base;
 @tailwind components;
@@ -21,7 +25,7 @@
   font-family: 'iransansweb';
   src: local('iransansweb'), url(./fonts/iransansweb.ttf) format('truetype');
 }
-:lang(fa) {
+* {
   font-family: "iransansweb" !important; 
 }
 

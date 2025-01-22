@@ -3,5 +3,18 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilerOptions": {
+    "allowJs": true,
+    "checkJs": false,
+    "jsx": "react-jsx",
+    "noUnusedLocals": false,
+    "module": "ESNext",  
+    "outDir": "./build",
+    "types": ["node", "react", "react-dom","vitest/globals", "vitest"],
+    "noImplicitAny": false,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "moduleResolution": "node",
+    "target": "es6"
+  }
 }

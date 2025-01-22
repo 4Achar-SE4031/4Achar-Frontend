@@ -6,13 +6,14 @@
   width: 100%;
   height: 100%;
   pointer-events: none; /* Ensure the notes don't block interactions */
-  z-index: -1; /* Ensure notes appear behind content */
+  z-index: -5; /* Ensure notes appear behind content */
 }
 
 .music-note {
   position: absolute;
   font-size: 30px;
   animation: float 6s linear infinite;
+  z-index: -100;
   color: rgba(255, 255, 255, 0.8); /* Light color for the music notes */
 }
 

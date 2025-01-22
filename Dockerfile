@@ -5,7 +5,7 @@ FROM node:18 AS build
 WORKDIR /app
 
 # Copy the package.json and package-lock.json (or yarn.lock)
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 # Install dependencies
 RUN npm install
@@ -26,7 +26,8 @@ COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose port 80 for the Nginx server
-EXPOSE 80
+# EXPOSE 80
+EXPOSE 3000
 
 # Start Nginx in the foreground (necessary for Docker containers)
 CMD ["nginx", "-g", "daemon off;"]

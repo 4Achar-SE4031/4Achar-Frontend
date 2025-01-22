@@ -3,7 +3,7 @@ import React from "react";
 import "./PageNotFound.css";
 import Lottie from "react-lottie";
 import animationData from "./Animation - 1711566412254.json";
-
+import Navbar from '../../../Navbar/navbar'
 interface PageNotFoundProps {}
 
 const PageNotFound: React.FC<PageNotFoundProps> = () => {
@@ -17,6 +17,9 @@ const PageNotFound: React.FC<PageNotFoundProps> = () => {
   };
 
   return (
+    <div>
+      <Navbar/>
+    
     <div className="pagenotfound">
       {/* <Navbar /> */}
       <div className="pagenotfound__content">
@@ -31,6 +34,7 @@ const PageNotFound: React.FC<PageNotFoundProps> = () => {
           </button>
         </div>
       </div>
+    </div>
     </div>
   );
 };

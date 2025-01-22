@@ -11,7 +11,7 @@ const ForgetPassword: React.FC = () => {
   const [showViolations, setShowViolation] = useState<boolean>(false);
   const [enteredRecoveryEmail, setEnteredRecoveryEmail] = useState<string>("");
   const [recoveryEmailValidation, setRecoveryEmailValidation] = useState<boolean>(false);
-  const [recoveryEmailValidationMsg, setRecoveryEmailValidationMsg] = useState<string>("فرمت ایمیل نادرست است");
+  const [recoveryEmailValidationMsg, setRecoveryEmailValidationMsg] = useState<string>("لطفا یک ایمیل معتبر وارد کنید");
   const [isRunning, setIsRunning] = useState(false);
 
   useEffect(() => {
@@ -28,7 +28,7 @@ const ForgetPassword: React.FC = () => {
         if (recoveryEmailValidation === true) {
             
             setIsRunning(true);
-            axios.post('http://localhost:5000/Account/send_reset_password_email', { email: enteredRecoveryEmail })
+            axios.post('https://api-concertify.darkube.app/Account/send_reset_password_email', { email: enteredRecoveryEmail })
                 .then(response => {
                 setShowViolation(false);
                 console.log(response)

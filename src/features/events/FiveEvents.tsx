@@ -1,161 +1,224 @@
 import React, { useState, useEffect } from "react";
-import Pagination from "@mui/material/Pagination";
-import Stack from "@mui/material/Stack";
-import Lottie from "react-lottie";
 import { observer } from "mobx-react-lite";
 
-import { Event } from "../../app/models/event";
 import EventItem from "./EventItem";
 import Card from "../../app/common/Card/Card";
-import agent from "../../app/api/agent";
 import animationData from "../../app/common/lottie/Animation - 1715854965467.json";
 import "./EventsList.css";
 import mockEvents from "../../app/common/Mock Data/MOCK_DATA.json";
-import { useStore } from "../../app/store/Store";
 import { useNavigate } from "react-router-dom";
+import agent from "../../app/api/agent";
+import { Event } from "../../app/models/event";
 
 const FiveEvents: React.FC = () => {
-  const [posts, setPosts] = useState<Event[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const { eventStore } = useStore()
   const [recentEventIndex, setRecentEventIndex] = useState(0);
   const [popularEventIndex, setPopularEventIndex] = useState(0);
+  const [recentEvents, setRecentEvents] = useState<Event[] | undefined>();
+  const [popularEvents, setPopularEvents] = useState<Event[] | undefined>();
+  const [loading, setLoading] = useState(false);
   const eventsToShow = 5;
-  const { eventType, showType, setEventType } = eventStore;
+  // const mockEvents = mock.slice(0, 10)
+
   const navigate = useNavigate();
 
-  const recentEvents = [...mockEvents]
-    .sort((a, b) => Date.parse(b.start_date) - Date.parse(a.start_date))
-    .slice(recentEventIndex, recentEventIndex + eventsToShow);
+  // const recentEvents = [...mockEvents]
+  //   .sort((a, b) => Date.parse(b.startDate) - Date.parse(a.startDate))
+  //   .slice(recentEventIndex, recentEventIndex + eventsToShow);
 
-  const popularEvents = [...mockEvents]
-    .sort((a, b) => b.rating - a.rating)
-    .slice(popularEventIndex, popularEventIndex + eventsToShow);
-  const defaultOptions = {
-    loop: true,
-    autoplay: true,
-    animationData,
-  };
-
+  // const popularEvents = [...mockEvents]
+  //   .sort((a, b) => b.rating - a.rating)
+  //   .slice(popularEventIndex, popularEventIndex + eventsToShow);
   useEffect(() => {
-    const timer = setInterval(() => {
-      setRecentEventIndex((prevIndex) =>
-        prevIndex + 1 >= mockEvents.length - eventsToShow ? 0 : prevIndex + 1
-      );
-      setPopularEventIndex((prevIndex) =>
-        prevIndex + 1 >= mockEvents.length - eventsToShow ? 0 : prevIndex + 1
-      );
-    }, 5000);
+    const fetchFilteredEvents = async () => {
 
-    return () => clearInterval(timer);
+      setLoading(true);
+
+      try {
+        const queryParams = new URLSearchParams({
+          Skip: "0",
+          Take: "20",
+        }).toString();
+        const response = await agent.Events.list(`${queryParams}`);
+        setRecentEvents(response.concerts.slice(0, 10));
+        setPopularEvents(response.concerts.slice(10, 20));
+
+        console.log(response)
+      } catch (error) {
+        console.error("Error fetching filtered events:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFilteredEvents();
   }, []);
+  useEffect(() => {
+    const autoAdvance = setInterval(() => {
+      setRecentEventIndex((prevIndex) => (prevIndex + 1) % 10);
+      setTimeout(() => setPopularEventIndex((prevIndex) => (prevIndex + 1) % 10), 1000);
+    }, 6000); // 6 seconds
 
-
-  const handleChangePage = (_event: React.ChangeEvent<unknown>, value: number) => {
-    setCurrentPage(value);
+    // Clear the interval when the component unmounts
+    return () => clearInterval(autoAdvance);
+  }, []);
+  const handleIndexChange = (
+    currentIndex: number,
+    setIndex: React.Dispatch<React.SetStateAction<number>>,
+    direction: "next" | "prev"
+  ) => {
+    setIndex((prevIndex) => {
+      if (direction === "next") {
+        return (prevIndex + 1) % 10;
+      } else {
+        return (prevIndex - 1 + 10) % 10;
+      }
+    });
   };
+
+  const getVisibleEvents = (events: Event[], currentIndex: number) => {
+    return [
+      ...events.slice(currentIndex, currentIndex + eventsToShow),
+      ...events.slice(0, Math.max(0, currentIndex + eventsToShow - 10)),
+    ].slice(0, eventsToShow);
+  };
+
+
+  // useEffect(() => {
+  //   const timer = setInterval(() => {
+  //     setRecentEventIndex((prevIndex) =>
+  //       prevIndex + 1 >= 10 ? 0 : prevIndex + 1
+  //     );
+  //     setPopularEventIndex((prevIndex) =>
+  //       prevIndex + 1 >= 10 ? 0 : prevIndex + 1
+  //     );
+  //   }, 5000);
+
+  //   return () => clearInterval(timer);
+  // }, [recentEventIndex, popularEventIndex]);
+
+
+
+
 
   const handleShowTypeButton = (value: string) => {
-    setEventType(value)
     console.log(value)
     navigate(`/events/${value}`)
   }
 
-  return (
-    <Card className="events-list">
-      <div className="container-fluid" lang="fa">
-        <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
-          <button
-            className="btn btn-primary show-all"
-            onClick={() => handleShowTypeButton("recent")}
-          >
-            نمایش همه
-          </button>
-          <h2 className="section-title" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
-            رویدادهای جدید
-          </h2>
+  const renderIndicators = (currentIndex: number, eventCount: number, setIndex: React.Dispatch<React.SetStateAction<number>>) => (
+    <div className="slider-indicators">
+      {Array.from({ length: Math.ceil(eventCount - 5) }, (_, index) => (
+        <div>
+          <button onClick={() => console.log(index, currentIndex)} />
+          <span
+            key={index}
+            className={`dot ${currentIndex === index + eventsToShow ? "active" : ""}`}
+            onClick={() => setIndex(index + eventsToShow)}
+          />
         </div>
-        <div className="position-relative">
-          <button
-            className="slider-arrow left"
-            onClick={() => setRecentEventIndex(prev =>
-              prev === 0 ? mockEvents.length - eventsToShow : prev - 1
-            )}
-          >
-            &#8249;
-          </button>
-          <div className="items">
-            {/* {loading && (
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="RecentEvents">
+      <Card className="events-list pb-5" lang="fa" >
+        <div className="container-fluid" lang="fa">
+          <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
+            <button
+              className="btn btn-primary show-all ml-5"
+              onClick={() => handleShowTypeButton("recent")}
+            >
+              نمایش همه
+            </button>
+            <h2 className="section-title" style={{ color: '#ffeba7', fontFamily: 'iransansweb' }}>
+              رویدادهای جدید
+            </h2>
+          </div>
+          <div className="position-relative row justify-content-center align-content-center">
+            <button
+              className="slider-arrow left col ml-5"
+              onClick={() =>
+                handleIndexChange(recentEventIndex, setRecentEventIndex, "prev")
+              }
+            >
+              &#8249;
+            </button>
+            <div className="items col-lg-11 col-sm-9">
+              {/* {loading && (
             <div className="loading">
               <Lottie options={defaultOptions} />
             </div>
           )} */}
-            {recentEvents.map(event => (
-              <div key={event.id} className="col-lg-2 col-md-3 col-sm-5 mb-3">
-                <EventItem event={event} />
-              </div>
-            ))}
 
+              {getVisibleEvents(recentEvents || [], recentEventIndex).map((event) => (
+                <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                  <EventItem event={event} />
+                </div>
+              ))}
+
+
+            </div>
             <button
-              className="slider-arrow right"
-              onClick={() => setRecentEventIndex(prev =>
-                prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
-              )}
+              className="slider-arrow right col mr-5"
+              onClick={() =>
+                handleIndexChange(recentEventIndex, setRecentEventIndex, "next")
+              }
             >
               &#8250;
             </button>
+
+          </div>
+          {/* {renderIndicators(recentEventIndex, mockEvents.length, setRecentEventIndex)} */}
+
+
+          <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
+            <button
+              className="btn btn-primary show-all ml-5"
+              // onClick={() => window.location.href = '/events/popular'}
+              onClick={() => handleShowTypeButton("popular")}
+            >
+              نمایش همه
+            </button>
+            <h2 className="section-title" style={{ color: '#ffeba7' }}>
+              رویدادهای محبوب
+            </h2>
           </div>
 
-        </div>
-
-
-        <div className="d-flex justify-content-between align-items-center mb-2 mt-4">
-          <button
-            className="btn btn-primary show-all"
-            // onClick={() => window.location.href = '/events/popular'}
-            onClick={() => handleShowTypeButton("popular")}
-          >
-            نمایش همه
-          </button>
-          <h2 className="section-title" style={{ color: '#ffeba7' }}>
-            رویدادهای محبوب
-          </h2>
-        </div>
-
-        <div className="position-relative">
-          <button
-            className="slider-arrow left"
-            onClick={() => setPopularEventIndex(prev =>
-              prev === 0 ? mockEvents.length - eventsToShow : prev - 1
-            )}
-          >
-            &#8249;
-          </button>
-          <div className="items">
-            {/* {loading && (
+          <div className="position-relative row justify-content-center align-content-center">
+            <button
+              className="slider-arrow left col ml-5"
+              onClick={() =>
+                handleIndexChange(popularEventIndex, setPopularEventIndex, "prev")
+              }
+            >
+              &#8249;
+            </button>
+            <div className="items col-lg-11 col-sm-9">
+              {/* {loading && (
             <div className="loading"> 
               <Lottie options={defaultOptions} />
             </div>
           )} */}
-            {popularEvents.map(event => (
-              <div key={event.id} className="col-md-2 col-sm-6 mb-3">
-                <EventItem event={event} />
-              </div>
-            ))}
+              {getVisibleEvents(popularEvents || [], popularEventIndex).map((event) => (
+                <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
+                  <EventItem event={event} />
+                </div>
+              ))}
+            </div>
+            <button
+              className="slider-arrow right col mr-5"
+              onClick={() =>
+                handleIndexChange(popularEventIndex, setPopularEventIndex, "next")
+              }
+            >
+              &#8250;
+            </button>
           </div>
-          <button
-            className="slider-arrow right"
-            onClick={() => setPopularEventIndex(prev =>
-              prev + 1 >= mockEvents.length - eventsToShow ? 0 : prev + 1
-            )}
-          >
-            &#8250;
-          </button>
+          {/* {renderIndicators(popularEventIndex, mockEvents.length, setPopularEventIndex)} */}
         </div>
-      </div>
-    </Card>
+      </Card>
+    </div>
   );
 };
 
