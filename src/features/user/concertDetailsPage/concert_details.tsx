@@ -31,7 +31,7 @@ import { height } from "@mui/system";
 import Suggestion from "./Suggestion.tsx";
 import YektanetAnalytics from "./YektanetAds.tsx";
 import ExpandablePrice from "./ExpandablePrice.tsx";
-import { parseDateTimeToJalali } from './dateParserToJalali.tsx';
+import { parseDateTimeToJalali } from "./dateParserToJalali.tsx";
 
 const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
@@ -100,14 +100,14 @@ const ConcertDetails: React.FC = () => {
     const parseDateTime = (dateTimeStr: string) => {
         // Create moment-jalaali instance from UTC string
         const m = moment(dateTimeStr);
-        
+
         // Convert to Tehran timezone (UTC+3:30)
-        m.utcOffset('+03:30');
-    
+        m.utcOffset("+03:30");
+
         return {
-            startWeekDay: m.format('dddd'), // Returns Persian weekday name
+            startWeekDay: m.format("dddd"), // Returns Persian weekday name
             startMonth: m.jMonth(), // Returns Persian month (0-11)
-            startTime: m.format('HH:mm'),
+            startTime: m.format("HH:mm"),
             startYear: m.jYear().toString(), // Returns Persian year
             startDay: m.jDate().toString(), // Returns Persian day of month
         };
@@ -124,10 +124,12 @@ const ConcertDetails: React.FC = () => {
                 // const response = await axios.get(`https://api-concertify.darkube.app/Concert/1`);
                 const data = response.data;
                 if (data.startDateTime) {
-                    const parsedDateTime = parseDateTimeToJalali(data.startDateTime);
+                    const parsedDateTime = parseDateTimeToJalali(
+                        data.startDateTime
+                    );
                     setEventDateTime(parsedDateTime);
                 }
-    
+
                 // Transform API data to match your component's state structure
                 setEventDetails({
                     title: data.title || "",
@@ -139,7 +141,7 @@ const ConcertDetails: React.FC = () => {
                     photo: data.coverImage || "/img.png", // Default value since API doesn't provide this
                     // photo: "/img.png" || "/img2.png", // Default value since API doesn't provide this
                     category: data.category || "",
-                    organizer_photo:    "/profile2.png", // Default value
+                    organizer_photo: "/profile2.png", // Default value
                     organizer_name: "", // Not provided by API
                     organizer_phone: "", // Not provided by API
                     organizer_email: "", // Not provided by API
@@ -425,15 +427,16 @@ const ConcertDetails: React.FC = () => {
                         >
                             {/* Left Section */}
                             <div className="col-md-2 left-section">
-                                <AdvertisementCard
+                                {/* <AdvertisementCard
                                     title="Special Offer"
                                     description="Get 50% off on all premium features this week!"
                                     linkUrl="https://www.digikala.com/product/dkp-13969461/%DA%AF%D9%88%D8%B4%DB%8C-%D9%85%D9%88%D8%A8%D8%A7%DB%8C%D9%84-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%DA%AF-%D9%85%D8%AF%D9%84-galaxy-a15-%D8%AF%D9%88-%D8%B3%DB%8C%D9%85-%DA%A9%D8%A7%D8%B1%D8%AA-%D8%B8%D8%B1%D9%81%DB%8C%D8%AA-128-%DA%AF%DB%8C%DA%AF%D8%A7%D8%A8%D8%A7%DB%8C%D8%AA-%D9%88-%D8%B1%D9%85-6-%DA%AF%DB%8C%DA%AF%D8%A7%D8%A8%D8%A7%DB%8C%D8%AA-%D9%88%DB%8C%D8%AA%D9%86%D8%A7%D9%85/"
                                     linkText="Claim Offer"
                                     imageUrl={ads_sample_image1}
-                                />
-                                {/* <YektanetAnalytics/> */}
+                                /> */}
                                 <div id="pos-article-display-103849"></div>
+                                {/* <YektanetAnalytics/> */}
+                                {/* <div id="pos-article-display-103849"></div> */}
                             </div>
 
                             <div
@@ -461,7 +464,11 @@ const ConcertDetails: React.FC = () => {
                                         {eventDetails.ticket_price.toLocaleString()}{" "}
                                         تومان
                                     </p> */}
-                                    {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                {eventDetails.ticketPrice.length > 0 && (
+                                    <ExpandablePrice
+                                        prices={eventDetails.ticketPrice}
+                                    />
+                                )}
                                 {/* </div> */}
 
                                 <div className="row px-3 mb-2">
@@ -723,14 +730,15 @@ const ConcertDetails: React.FC = () => {
 
                             {/* Right Section */}
                             <div className="col-md-2 left-section">
-                                <AdvertisementCard
+                                {/* <AdvertisementCard
                                     title=""
                                     description=""
                                     linkUrl="https://www.snapptrip.com/"
                                     linkText="با اسنپ خیالت از سفر راحته!"
                                     imageUrl={ads_sample_image2}
                                     height="480px"
-                                />
+                                /> */}
+                                <div id="pos-article-display-103849"></div>
                             </div>
                         </div>
                     </>
@@ -942,7 +950,14 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                        {eventDetails.ticketPrice.length >
+                                            0 && (
+                                            <ExpandablePrice
+                                                prices={
+                                                    eventDetails.ticketPrice
+                                                }
+                                            />
+                                        )}
                                         {/* </div> */}
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
@@ -1037,7 +1052,14 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                        {eventDetails.ticketPrice.length >
+                                            0 && (
+                                            <ExpandablePrice
+                                                prices={
+                                                    eventDetails.ticketPrice
+                                                }
+                                            />
+                                        )}
                                         {/* </div> */}
 
                                         <div className="row px-3">
