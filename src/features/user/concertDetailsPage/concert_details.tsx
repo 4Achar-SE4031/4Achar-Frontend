@@ -31,7 +31,7 @@ import { height } from "@mui/system";
 import Suggestion from "./Suggestion.tsx";
 import YektanetAnalytics from "./YektanetAds.tsx";
 import ExpandablePrice from "./ExpandablePrice.tsx";
-import { parseDateTimeToJalali } from "./dateParserToJalali.tsx";
+import { parseDateTimeToJalali } from './dateParserToJalali.tsx';
 
 const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
@@ -100,14 +100,14 @@ const ConcertDetails: React.FC = () => {
     const parseDateTime = (dateTimeStr: string) => {
         // Create moment-jalaali instance from UTC string
         const m = moment(dateTimeStr);
-
+        
         // Convert to Tehran timezone (UTC+3:30)
-        m.utcOffset("+03:30");
-
+        m.utcOffset('+03:30');
+    
         return {
-            startWeekDay: m.format("dddd"), // Returns Persian weekday name
+            startWeekDay: m.format('dddd'), // Returns Persian weekday name
             startMonth: m.jMonth(), // Returns Persian month (0-11)
-            startTime: m.format("HH:mm"),
+            startTime: m.format('HH:mm'),
             startYear: m.jYear().toString(), // Returns Persian year
             startDay: m.jDate().toString(), // Returns Persian day of month
         };
@@ -124,12 +124,10 @@ const ConcertDetails: React.FC = () => {
                 // const response = await axios.get(`https://api-concertify.darkube.app/Concert/1`);
                 const data = response.data;
                 if (data.startDateTime) {
-                    const parsedDateTime = parseDateTimeToJalali(
-                        data.startDateTime
-                    );
+                    const parsedDateTime = parseDateTimeToJalali(data.startDateTime);
                     setEventDateTime(parsedDateTime);
                 }
-
+    
                 // Transform API data to match your component's state structure
                 setEventDetails({
                     title: data.title || "",
@@ -141,7 +139,7 @@ const ConcertDetails: React.FC = () => {
                     photo: data.coverImage || "/img.png", // Default value since API doesn't provide this
                     // photo: "/img.png" || "/img2.png", // Default value since API doesn't provide this
                     category: data.category || "",
-                    organizer_photo: "/profile2.png", // Default value
+                    organizer_photo:    "/profile2.png", // Default value
                     organizer_name: "", // Not provided by API
                     organizer_phone: "", // Not provided by API
                     organizer_email: "", // Not provided by API
@@ -464,11 +462,7 @@ const ConcertDetails: React.FC = () => {
                                         {eventDetails.ticket_price.toLocaleString()}{" "}
                                         تومان
                                     </p> */}
-                                {eventDetails.ticketPrice.length > 0 && (
-                                    <ExpandablePrice
-                                        prices={eventDetails.ticketPrice}
-                                    />
-                                )}
+                                    {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
                                 {/* </div> */}
 
                                 <div className="row px-3 mb-2">
@@ -738,7 +732,7 @@ const ConcertDetails: React.FC = () => {
                                     imageUrl={ads_sample_image2}
                                     height="480px"
                                 /> */}
-                                <div id="pos-article-display-103849"></div>
+                            <div id="pos-article-display-103849"></div>
                             </div>
                         </div>
                     </>
@@ -950,14 +944,7 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                        {eventDetails.ticketPrice.length >
-                                            0 && (
-                                            <ExpandablePrice
-                                                prices={
-                                                    eventDetails.ticketPrice
-                                                }
-                                            />
-                                        )}
+                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
                                         {/* </div> */}
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
@@ -1052,14 +1039,7 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                        {eventDetails.ticketPrice.length >
-                                            0 && (
-                                            <ExpandablePrice
-                                                prices={
-                                                    eventDetails.ticketPrice
-                                                }
-                                            />
-                                        )}
+                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
                                         {/* </div> */}
 
                                         <div className="row px-3">
