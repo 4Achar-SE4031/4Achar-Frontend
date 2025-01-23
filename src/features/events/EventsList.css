@@ -104,15 +104,15 @@ body {
   }
 
   button {
-    background-color: #1f2029 !important;
-    border: 1px solid #ffeba7 !important;
-    color: #ffeba7 !important;
-    border-radius: 10px !important;
-    padding: 5px, 10px !important;
+    background-color: #1f2029 ;
+    border: 1px solid #ffeba7 ;
+    color: #ffeba7 ;
+    border-radius: 10px ;
+    padding: 5px, 10px;
   }
   button:hover {
-    background-color: #ffeba7 !important;
-    color: #1f2029 !important;
+    background-color: #ffeba7 ;
+    color: #1f2029 ;
   }
   .items {
     font-family: "iransansweb";
