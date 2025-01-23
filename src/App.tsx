@@ -1,9 +1,9 @@
 import { Outlet, useLocation } from 'react-router-dom'
 import './App.css'
 // import '@testing-library/jest-dom';
-import AuthProvider from './features/user/Authentication/authProvider';
 import { ToastContainer } from 'react-toastify';
 import { SearchProvider } from "./features/Search/searchStatus";
+import AuthProvider from './features/user/login/authProvider';
 
 function App() {
   const location = useLocation();

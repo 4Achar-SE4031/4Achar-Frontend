@@ -538,3 +538,4 @@ const EventDetails: React.FC = () => {
 };
 
 export default EventDetails;
+
