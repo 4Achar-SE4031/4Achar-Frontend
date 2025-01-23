@@ -38,6 +38,7 @@ const ConcertDetails: React.FC = () => {
     const [canPurchase, setCanPurchase] = useState(true);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const auth = useAuth();
     const currentUrl = window.location.href;
     const defaultOptions = {
         loop: true,
@@ -48,6 +49,37 @@ const ConcertDetails: React.FC = () => {
     const navigator = useNavigate();
     let { id } = useParams<{ id: string }>();
 
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const toggleFavorite = async () => {
+        setIsFavorite(!isFavorite);
+        try {
+            console.log("Sending favorite request...");
+            if(auth.token === "") {
+                toast.error("برای افزودن به علاقه مندی ها باید وارد سیستم شوید!");
+                return;
+            }
+            setIsFavorite(!isFavorite);
+            const response = await axios.post(
+                "https://api-concertify.darkube.app/favorite",
+                { concertId: id },  
+                {
+                    headers: {
+                        Authorization: `Bearer ${auth.token}`, 
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+    
+            console.log("Favorite response:", response.data);
+        } catch (error) {
+            console.error("Error adding to favorites:", error);
+            setIsFavorite(false);
+        } finally {
+            console.log("Favorite request completed.");
+        }
+    };
+    
     const [eventDateTime, setEventDateTime] = useState({
         startWeekDay: "جمعه",
         startMonth: "آذر",
@@ -172,7 +204,6 @@ const ConcertDetails: React.FC = () => {
         }
     }, [id]);
 
-    const auth = useAuth();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [isBookmarked, setBookmark] = useState(false);
@@ -445,12 +476,27 @@ const ConcertDetails: React.FC = () => {
                                     overflow: "visible",
                                 }}
                             >
-                                <p className="pb-3 ed-message text-right">
-                                    {eventDateTime.startDay}{" "}
-                                    {eventDateTime.startMonth}{" "}
-                                    {eventDateTime.startYear} ساعت{" "}
-                                    {eventDateTime.startTime}{" "}
-                                </p>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <p className="pb-3 ed-message text-right mb-0">
+                                        {eventDateTime.startDay}{" "}
+                                        {eventDateTime.startMonth}{" "}
+                                        {eventDateTime.startYear} ساعت{" "}
+                                        {eventDateTime.startTime}{" "}
+                                    </p>
+                                    <i
+                                        className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}
+                                        style={{
+                                        fontSize: "25px",
+                                        padding: "5px",
+                                        transition: "all 0.3s ease",
+                                        cursor: "pointer",
+                                        backgroundColor: "transparent",
+                                        color:  "red",
+                                        }}
+                                        onClick={toggleFavorite}
+                                    ></i>
+                                </div>
+
                                 <h2 className=" pb-3 text-right">
                                     {" "}
                                     {eventDetails.title}{" "}
@@ -504,17 +550,6 @@ const ConcertDetails: React.FC = () => {
                                 </div>
                                 <center>
                                     <HoverRating />
-                                </center>
-                                <center>
-                                    <button
-                                        className="btn  mt-1 mx-1"
-                                        onClick={handleShow}
-                                    >
-                                        <div className="row">
-                                            <h6 className="bi bi-bookmark-plus mb-0"></h6>
-                                            بعدا یادآوری کن
-                                        </div>
-                                    </button>
                                 </center>
                             </div>
 
@@ -926,12 +961,26 @@ const ConcertDetails: React.FC = () => {
                                             marginLeft: "10px",
                                         }}
                                     >
-                                        <p className="pb-3 ed-message text-right">
-                                            {eventDateTime.startDay}{" "}
-                                            {eventDateTime.startMonth}{" "}
-                                            {eventDateTime.startYear} ساعت{" "}
-                                            {eventDateTime.startTime}{" "}
-                                        </p>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <p className="pb-3 ed-message text-right mb-0">
+                                                {eventDateTime.startDay}{" "}
+                                                {eventDateTime.startMonth}{" "}
+                                                {eventDateTime.startYear} ساعت{" "}
+                                                {eventDateTime.startTime}{" "}
+                                            </p>
+                                            <i
+                                                className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}
+                                                style={{
+                                                fontSize: "25px",
+                                                padding: "5px",
+                                                transition: "all 0.3s ease",
+                                                cursor: "pointer",
+                                                backgroundColor: "transparent",
+                                                color:  "red",
+                                                }}
+                                                onClick={toggleFavorite}
+                                            ></i>
+                                        </div>
                                         <h4 className=" pb-3 text-right">
                                             {" "}
                                             {eventDetails.title}{" "}
@@ -993,17 +1042,6 @@ const ConcertDetails: React.FC = () => {
                                             <center>
                                                 <HoverRating />
                                             </center>
-                                            <center>
-                                                <button
-                                                    className="btn  mt-1 mx-1"
-                                                    onClick={handleShow}
-                                                >
-                                                    <div className="row">
-                                                        <h6 className="bi bi-bookmark-plus mb-0"></h6>
-                                                        بعدا یادآوری کن
-                                                    </div>
-                                                </button>
-                                            </center>
                                         </div>
                                     </div>
                                 </div>
@@ -1021,12 +1059,26 @@ const ConcertDetails: React.FC = () => {
                                             position: "relative",
                                         }}
                                     >
-                                        <p className="pb-3 ed-message text-right">
-                                            {eventDateTime.startDay}{" "}
-                                            {eventDateTime.startMonth}{" "}
-                                            {eventDateTime.startYear} ساعت{" "}
-                                            {eventDateTime.startTime}{" "}
-                                        </p>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <p className="pb-3 ed-message text-right mb-0">
+                                                {eventDateTime.startDay}{" "}
+                                                {eventDateTime.startMonth}{" "}
+                                                {eventDateTime.startYear} ساعت{" "}
+                                                {eventDateTime.startTime}{" "}
+                                            </p>
+                                            <i
+                                                className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}
+                                                style={{
+                                                fontSize: "22px",
+                                                padding: "5px",
+                                                transition: "all 0.3s ease",
+                                                cursor: "pointer",
+                                                backgroundColor: "transparent",
+                                                color:  "red",
+                                                }}
+                                                onClick={toggleFavorite}
+                                            ></i>
+                                        </div>
                                         <h4 className=" pb-3 text-right">
                                             {" "}
                                             {eventDetails.title}{" "}
@@ -1087,17 +1139,6 @@ const ConcertDetails: React.FC = () => {
                                             }}
                                         >
                                             <HoverRating />
-                                            <center>
-                                                <button
-                                                    className="btn  mt-1 mx-1"
-                                                    onClick={handleShow}
-                                                >
-                                                    <div className="row">
-                                                        <h6 className="bi bi-bookmark-plus mb-0"></h6>
-                                                        بعدا یادآوری کن
-                                                    </div>
-                                                </button>
-                                            </center>
                                         </div>
                                     </div>
 
