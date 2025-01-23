@@ -232,7 +232,7 @@ const Navbar: React.FC = () => {
           </NavLink>
         </div>
         <div className="centered-column" ref={suggestionsRef}>
-          <div className="col" style={{paddingLeft:"0px", paddingRight:"0px"}}>
+          <div style={{paddingLeft:"0px", paddingRight:"0px"}}>
             <div className={`search-bar ${isSuggestionsOpen && suggestions.length > 0 ? "open" : ""}`} >
               <input
                 type="text"
