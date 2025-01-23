@@ -320,9 +320,14 @@ const ConcertDetails: React.FC = () => {
                                         
                                         </div>
                                     </div>
-                                    <MapComponent  sendDataToParent={handleMapData} lati={eventDetails.location_lat} long={eventDetails.location_lon} onlyShow={true} name="EventDetails"/>
-                                    
-
+                                    <MapComponent  
+                                        sendDataToParent={handleMapData} 
+                                        lati={eventDetails.location_lat} 
+                                        long={eventDetails.location_lon} 
+                                        address={eventDetails.address}
+                                        onlyShow={true} 
+                                        name="EventDetails"
+                                        />
                                 </>
                                 
                                 
