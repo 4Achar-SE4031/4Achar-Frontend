@@ -162,10 +162,12 @@ const Navbar: React.FC = () => {
   };
   
   const searchHandler = (query: string) => {
-    console.log("searching: "+ query);
-    setSearchStatus("Loading");
-    console.log("search status in NAVBAR: "+searchStatus);
-    navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
+    if(query.trim()!==""){
+      console.log("searching: "+ query);
+      setSearchStatus("Loading");
+      console.log("search status in NAVBAR: "+searchStatus);
+      navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
+    }
   };
 
   const closeSuggestions = () => {
