@@ -137,7 +137,7 @@ const Search: React.FC = () => {
           {data.map((item: any) => (
             <div
               key={item.id}
-              className="result-card"
+              className="concert-card"
               style={{ backgroundImage: `url(${item.cardImage})` }}
             >
               <div className="card-content">

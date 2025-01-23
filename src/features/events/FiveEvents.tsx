@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import agent from "../../app/api/agent";
 import { Event } from "../../app/models/event";
 
+
 const FiveEvents: React.FC = () => {
   const [recentEventIndex, setRecentEventIndex] = useState(0);
   const [popularEventIndex, setPopularEventIndex] = useState(0);
@@ -52,15 +53,15 @@ const FiveEvents: React.FC = () => {
 
     fetchFilteredEvents();
   }, []);
-  useEffect(() => {
-    const autoAdvance = setInterval(() => {
-      setRecentEventIndex((prevIndex) => (prevIndex + 1) % 10);
-      setTimeout(() => setPopularEventIndex((prevIndex) => (prevIndex + 1) % 10), 1000);
-    }, 6000); // 6 seconds
+  // useEffect(() => {
+  //   const autoAdvance = setInterval(() => {
+  //     setRecentEventIndex((prevIndex) => (prevIndex + 1) % 10);
+  //     setTimeout(() => setPopularEventIndex((prevIndex) => (prevIndex + 1) % 10), 1000);
+  //   }, 6000); // 6 seconds
 
-    // Clear the interval when the component unmounts
-    return () => clearInterval(autoAdvance);
-  }, []);
+  //   // Clear the interval when the component unmounts
+  //   return () => clearInterval(autoAdvance);
+  // }, []);
   const handleIndexChange = (
     currentIndex: number,
     setIndex: React.Dispatch<React.SetStateAction<number>>,
@@ -152,6 +153,8 @@ const FiveEvents: React.FC = () => {
           )} */}
 
               {getVisibleEvents(recentEvents || [], recentEventIndex).map((event) => (
+                console.log(event),
+                
                 <div key={event.id} className="col-xl-2 col-lg-3 col-md-4 col-sm-6">
                   <EventItem event={event} />
                 </div>
