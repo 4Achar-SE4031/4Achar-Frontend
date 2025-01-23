@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import "react-toastify/dist/ReactToastify.css";
 import axios from "axios";
-import { useAuth } from "../Authentication/authProvider";
+import { useAuth } from "../login/authProvider";
 
 interface UserData {
   userName: string;

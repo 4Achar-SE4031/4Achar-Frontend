@@ -20,7 +20,7 @@ import Lottie from "react-lottie";
 // import { toast } from "react-toastify";
 import MapComponent from "./MapComponent/MapComponent.tsx";
 
-import { useAuth } from "../Authentication/authProvider.tsx";
+import { useAuth } from "../login/authProvider.tsx";
 import HoverRating from "./Rating.tsx";
 import MusicNotes from "./MusicNotes.tsx";
 import Footer from "../../../app/layout/Footer.tsx";

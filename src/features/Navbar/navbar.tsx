@@ -316,12 +316,22 @@ const Navbar: React.FC = () => {
             <li>
               <NavLink to="/create-event">ویترین</NavLink>
             </li>
-            <li>
-              <NavLink to="/create-event"> خرید ها</NavLink>
-            </li>
+            
             {/* <li>
               <NavLink to="/create-event">ایجاد کنسرت </NavLink>
             </li> */}
+            {showBorder &&
+              <li>
+                <i className="bi bi-heart-fill" style={{color: "red",fontSize:"22px",cursor:"pointer"}} onClick={() => window.location.href = "/favorites"}></i>
+              </li>
+            }
+            {!showBorder && 
+            <li >
+              <NavLink to="/favorites">موردعلاقه‌ها</NavLink>
+            </li>
+
+            }
+            
             
             {!showDrawer && !auth.token && showBorder && (
               <div className="auth-link">
@@ -334,6 +344,7 @@ const Navbar: React.FC = () => {
             )}
 
                 {!showDrawer && auth.token && 
+                
                         <div className="dropdown-container" onMouseEnter={() => setIsOpen(true)}>
                         
                         <div className="row" >
