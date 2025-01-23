@@ -656,7 +656,7 @@ const ConcertDetails: React.FC = () => {
                                     style={{
                                         width: "765px",
                                         maxWidth: "100%",
-                                        height: "480px",
+                                        height: "460px",
                                         zIndex: 10,
                                         position: "relative",
                                     }}
@@ -686,7 +686,7 @@ const ConcertDetails: React.FC = () => {
                                     >
                                         {canPurchase && (
                                             <button
-                                                className="btn  mt-1 mx-1"
+                                                className="btn  mt-1 mx-1" 
                                                 // onClick={(e) =>
                                                 //     navigator(
                                                 //     eventDetails.url
