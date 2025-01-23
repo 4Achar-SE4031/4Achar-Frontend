@@ -18,7 +18,8 @@ import animationData from "./Animation - 1715854965467.json";
 import Lottie from "react-lottie";
 import MapComponent from "./MapComponent/MapComponent.tsx";
 
-import { useAuth } from "../Authentication/authProvider.tsx";
+import { useAuth } from "../login/authProvider";
+
 import HoverRating from "./Rating.tsx"
 import MusicNotes from './MusicNotes.tsx';
 import Footer from "../../../app/layout/Footer.tsx";
