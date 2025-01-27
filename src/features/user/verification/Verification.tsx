@@ -16,9 +16,9 @@ const Verification: React.FC = () => {
   const [isRunning2, setisRunning2] = useState(false);
   const location = useLocation();
 
-  const username = location.state.username || " "
-  const password = location.state.password || " "
-  const email = location.state.email || " "
+  const username = location.state?.username || " "
+  const password = location.state?.password || " "
+  const email = location.state?.email || " "
   useEffect(() => {
     // disable vertical scrollbar
     // document.documentElement.style.overflowY = 'hidden';
