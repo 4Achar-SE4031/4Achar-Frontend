@@ -18,7 +18,7 @@ const Login : React.FC = () => {
     const [enteredLoginUserName, setEnteredLoginUserName] = useState("");
     const [enteredLoginPassword, setEnteredLoginPassword] = useState("");
 
-    const [autoHeight,setAutoHeight] = useState(450);
+    const [autoHeight,setAutoHeight] = useState(350);
     const [showLoginPassword, setShowLoginPassword] = useState(false);
     const [showViolations, setShowViolation] = useState(false);
 
@@ -231,7 +231,7 @@ const Login : React.FC = () => {
                           >
                             ورود
                           </button>
-                          <div className="container">
+                          {/* <div className="container">
                             <div className="row"> 
                                 <hr className="custom-hr"/>
                                 <h6 className="separator-text">یا</h6>
@@ -249,7 +249,7 @@ const Login : React.FC = () => {
                                   </div>
                                   <h6 style={{paddingLeft:"5px",paddingTop:"5px"}}>ورود با گوگل</h6>
                               </div> 
-                          </button>
+                          </button> */}
                           <p className="message">
                            حساب کاربری ندارید؟{" "}
                             <a href="/register">
