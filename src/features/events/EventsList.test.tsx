@@ -3,27 +3,32 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom'; // Provides jest-dom matchers
 import { vi } from 'vitest';
-import { BrowserRouter, MemoryRouter } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 import EventsList from './EventsList';
 import { TestProvider } from './testProvider';
 import agent from '../../app/api/agent'; // Adjust path as needed
+import { SearchProvider } from '../Search/searchStatus';
 
-
+// Mock window.scrollTo
 beforeAll(() => {
   window.scrollTo = vi.fn();
 });
 
-
-
+// Mock lottie-web
 vi.mock('lottie-web');
 
+// Corrected Mock for agent.Events.list
 vi.mock('../../app/api/agent', () => {
   const listMock = vi.fn((queryParams) => {
-    if (queryParams && queryParams.includes('Skip=15')) {
-      // Simulate second page data (Events 16-30)
-      return Promise.resolve(
-        Array.from({ length: 15 }, (_, i) => ({
+    const params = new URLSearchParams(queryParams);
+    const skip = parseInt(params.get('Skip') || '0', 10);
+    
+    if (skip === 15) {
+      // Second page: Events 16-30
+      return Promise.resolve({
+        totalCount: 30,
+        concerts: Array.from({ length: 15 }, (_, i) => ({
           id: i + 16,
           title: `Event ${i + 16}`,
           details: '',
@@ -32,12 +37,14 @@ vi.mock('../../app/api/agent', () => {
           photo: '',
           category: '',
           rating: 0,
-        }))
-      );
+        })),
+      });
     }
-    // Simulate first call with 30 events to have totalPages = 2
-    return Promise.resolve(
-      Array.from({ length: 30 }, (_, i) => ({
+    
+    // First page: Events 1-15
+    return Promise.resolve({
+      totalCount: 30,
+      concerts: Array.from({ length: 15 }, (_, i) => ({
         id: i + 1,
         title: `Event ${i + 1}`,
         details: '',
@@ -46,8 +53,8 @@ vi.mock('../../app/api/agent', () => {
         photo: '',
         category: '',
         rating: 0,
-      }))
-    );
+      })),
+    });
   });
 
   return {
@@ -58,8 +65,10 @@ vi.mock('../../app/api/agent', () => {
     },
   };
 });
+
+// Mock Pagination Component
 vi.mock('../../app/common/Pagination', () => ({
-  default: ({ count, page, onChange }: { count: number; page: number; onChange: (event: any, value: number) => void }) => {
+  default: ({ count, onChange }: { count: number; onChange: (event: any, value: number) => void }) => {
     const pages = Array.from({ length: count }, (_, i) => i + 1); // Create an array of page numbers
     return (
       <div>
@@ -77,8 +86,6 @@ vi.mock('../../app/common/Pagination', () => ({
   },
 }));
 
-
-
 describe('EventsList Component', () => {
   beforeEach(() => {
     // Reset all mock calls before each test
@@ -86,98 +93,93 @@ describe('EventsList Component', () => {
   });
 
   it('should display the correct title when visiting /events/recent', async () => {
-    // Set up a resolved mock for agent.Events.list
-    // (agent.Events.list as vi.Mock).mockResolvedValue([]);
-    const { Events } = vi.mocked(agent)
-    vi.mocked(Events.list).mockRejectedValueOnce(new Error('API error'));
+    // Simulate a rejected API call
+    vi.mocked(agent.Events.list).mockRejectedValueOnce(new Error('API error'));
 
     render(
       <MemoryRouter initialEntries={['/events/recent']}>
         <TestProvider>
-          <EventsList />
+          <SearchProvider>
+            <EventsList />
+          </SearchProvider>
         </TestProvider>
       </MemoryRouter>
     );
 
-    // Because EventsList sets title in a useEffect based on route,
-    // if you want it to detect “recent”, you can manually mock
-    // the location or pass initial route. 
-    // Or if your component uses location directly, you might
-    // need MemoryRouter with initialEntries.
-
-    // Wait for any asynchronous side effects
+    // Wait for the title to appear despite the API error
     await waitFor(() => {
-      // If you expect the heading 'جدیدترین رویدادها' to appear
       expect(screen.getByText('جدیدترین رویدادها')).toBeInTheDocument();
     });
   });
 
   it('should display events fetched from the API', async () => {
-
     render(
       <MemoryRouter initialEntries={['/events/recent']}>
         <TestProvider>
-          <EventsList />
+          <SearchProvider>
+            <EventsList />
+          </SearchProvider>
         </TestProvider>
       </MemoryRouter>
     );
 
-    // Wait for the component to finish loading events
+    // Wait for the first page events to load
     await waitFor(() => {
-      const oneMatches = screen.queryAllByText('Event 1');
-      const twoMatches = screen.queryAllByText('Event 2');
-      expect(oneMatches.length).toBeGreaterThan(0);
-      expect(twoMatches.length).toBeGreaterThan(0);
+      expect(screen.getByText('Event 1')).toBeInTheDocument();
+      expect(screen.getByText('Event 2')).toBeInTheDocument();
     });
   });
 
   it('should handle pagination click', async () => {
-
-
     render(
       <MemoryRouter initialEntries={['/events/recent']}>
         <TestProvider>
-          <EventsList />
+          <SearchProvider>
+            <EventsList />
+          </SearchProvider>
         </TestProvider>
       </MemoryRouter>
     );
 
-    // Page 1 items
+    // Wait for the first page events to load
     await waitFor(() => {
-      const oneMatches = screen.queryAllByText('Event 1');
-      const twoMatches = screen.queryAllByText('Event 15');
-      expect(oneMatches.length).toBeGreaterThan(0);
-      expect(twoMatches.length).toBeGreaterThan(0);
+      expect(screen.getByText('Event 1')).toBeInTheDocument();
+      expect(screen.getByText('Event 15')).toBeInTheDocument();
     });
 
     const page2Button = screen.getByTestId("pagination-button-2");
     fireEvent.click(page2Button);
 
-
+    // Wait for the second page events to load
     await waitFor(() => {
-      const oneMatches = screen.queryAllByText('Event 16');
-      const twoMatches = screen.queryAllByText('Event 29');
-      expect(oneMatches.length).toBeGreaterThan(0);
-      expect(twoMatches.length).toBeGreaterThan(0);
+      expect(screen.getByText('Event 16')).toBeInTheDocument();
+      expect(screen.getByText('Event 29')).toBeInTheDocument();
     });
+
+    // Ensure first page events are no longer present
     expect(screen.queryByText('Event 1')).not.toBeInTheDocument();
   });
+
   it('should display fallback message when no events are fetched', async () => {
-    const { Events } = vi.mocked(agent);
-    (Events.list as jest.Mock).mockResolvedValue([]);
-  
+    // Mock the API to return no events
+    vi.mocked(agent.Events.list).mockResolvedValueOnce({
+      totalCount: 0,
+      concerts: [],
+    });
+
     render(
       <MemoryRouter initialEntries={['/events/recent']}>
         <TestProvider>
-          <EventsList />
+          <SearchProvider>
+            <EventsList />
+          </SearchProvider>
         </TestProvider>
       </MemoryRouter>
     );
-  
-    // Wait for the fallback message
+
+    // Wait for the fallback message to appear
     await waitFor(() => {
-      expect(screen.getByText('رویدادی یافت نشد.')).toBeInTheDocument();
+      expect(screen.getByText('متاسفانه رویدادی یافت نشد.')).toBeInTheDocument();
     });
   });
-
 });
