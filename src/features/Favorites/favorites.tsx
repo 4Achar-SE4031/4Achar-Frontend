@@ -7,6 +7,7 @@ import animationData from "../user/concertDetailsPage/Animation - 1715854965467.
 import PageNotFound from "../user/concertDetailsPage/PageNotFound/PageNotFound";
 
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../user/login/authProvider";
 
 const Favorites: React.FC = () => {
   const [data, setData] = useState<any>(null); 
@@ -15,7 +16,7 @@ const Favorites: React.FC = () => {
   const [hasError, setHasError] = useState(false);
 
   const navigate = useNavigate();
-  
+  const auth = useAuth();
   const defaultOptions = {
       loop: true,
       autoplay: true,
@@ -30,25 +31,25 @@ const Favorites: React.FC = () => {
   }
   useEffect(() => {
     const fetchData = async () => {
-      console.log("Fetching data...");
+      console.log("Fetching favorites data...");
 
       try {
         
         const response = await axios.get(
-          `https://api-concertify.darkube.app/Concert/search?searchTerm=محمد`, 
+          `https://api.concertify.ir/Account/bookmarked_concerts`, 
           {
             headers: {
               "Content-Type": "application/json",
-              accept: "text/plain",
+              Authorization: `Bearer ${auth.token}`, 
             },
           }
         );
         // throw new Error("Server Internal Error");
 
         setTimeout(() => {
-          if (response.data && Object.keys(response.data).length > 0){
+          if (response.data && Object.keys(response.data["concerts"]).length > 0){
             setData(response.data); 
-            console.log("Data to show "+response.data);
+            console.log("Data to show " + JSON.stringify(response.data, null, 2));
             setIsLoading(false);
             setIsLoaded(true);
             setHasError(false);
@@ -97,8 +98,24 @@ const Favorites: React.FC = () => {
         </div>
     );
   }
-  if(!isLoading && !hasError && !isLoaded){
-    return <PageNotFound />;
+  if(!hasError && !isLoaded && !isLoading){
+    return (
+      <div className="event-details">
+        <Navbar />
+        <div style={{ 
+          display: "flex", 
+          justifyContent: "center", 
+          alignItems: "center", 
+          height: "100vh", 
+          fontSize: "24px", 
+          fontWeight: "bold",
+          textAlign: "center"
+        }}>
+          کنسرتی را ذخیره نکرده اید
+        </div>
+      </div>
+    );
+    // return <PageNotFound />;
   }
   if(isLoading ){
     return (
@@ -128,7 +145,7 @@ const Favorites: React.FC = () => {
       <Navbar />
       <div className="searchpage">
         <div className="results">
-          {data.map((item: any) => (
+          {data["concerts"].map((item: any) => (
             <div
               key={item.id}
               className="concert-card"

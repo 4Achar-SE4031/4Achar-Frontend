@@ -403,14 +403,14 @@ const Navbar: React.FC = () => {
 
             {showDrawer && auth.token && (
               <>
-                <li className="auth-link-li">
+                <li className="auth-link">
                   <NavLink to="/user-info">حساب کاربری</NavLink>
                 </li>
                 {/* <li className="auth-link-li" style={{ marginRight: "15px" }}>
                   <Wallet balance={userData?.balance || 0} />
                 </li> */}
                 <li
-                  className="auth-link-li pb-1"
+                  className="auth-link pb-1"
                   onClick={() => {
                     toast.error("از حساب کاربری خارج شدید");
                     setTimeout(() => {
@@ -418,6 +418,7 @@ const Navbar: React.FC = () => {
                       setIsLoggedIn(false);
                     }, 4000);
                   }}
+                  style={{ cursor: "pointer",fontSize:"14px" }}
                 >
                   خروج
                 </li>
