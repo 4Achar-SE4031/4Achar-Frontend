@@ -63,7 +63,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
     }
     return translatedTime;
   };
-
+  
   // ---------------------------------------------------------------------------------------
   // EFFECT: Fetch Comments on Mount (if token exists)
   // ---------------------------------------------------------------------------------------
@@ -457,7 +457,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
         ))}
 
         {/* If the user is logged in, show the new comment form; otherwise, prompt to login */}
-        {userData ? (
+        {userData.userName ? (
           <NewComment addNewComment={addNewComment} currentUser={userData.userName} />
         ) : (
           <div className="row">
