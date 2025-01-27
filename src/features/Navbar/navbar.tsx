@@ -57,22 +57,26 @@ const Navbar: React.FC = () => {
   ];
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const fetchSuggestions = async (query: string) => {
-    try {
-      // const response = await axios.get(`your-api-endpoint?query=${query}`);
-      // setSuggestions(response.data);
-      const filteredSuggestions = mockSuggestions.filter((suggestion) =>
-        suggestion.toLowerCase().includes(query.toLowerCase())
-      );
-
-      setSuggestions(filteredSuggestions.slice(0,5));
-
-    } catch (error) {
-      console.error("Error fetching suggestions:", error);
-      setSuggestions([]);
-    }
-    
-  };
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      if (searchBoxText === "") return;
+  
+      try {
+        const filteredSuggestions = mockSuggestions.filter((suggestion) =>
+          suggestion.toLowerCase().includes(searchBoxText.toLowerCase())
+        );
+  
+        setSuggestions(filteredSuggestions.slice(0, 5));
+        setIsSuggestionsOpen(filteredSuggestions.length > 0);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+        setSuggestions([]);
+        setIsSuggestionsOpen(false);
+      }
+    };
+  
+    fetchSuggestions();
+  }, [searchBoxText]);
   
 
   useEffect(() => {
@@ -143,21 +147,14 @@ const Navbar: React.FC = () => {
     }
   };
 
-  const handleSearchInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let query = e.target.value;
-    setSearchBoxText(query);
-    query = query.trim()
-    if (query === "") {
+    setSearchBoxText(query.trim());
+  
+    if (query.trim() === "") {
       setSuggestions([]);
       setIsSuggestionsOpen(false);
       setSelectedIndex(0);
-      return;
-    }
-    await fetchSuggestions(query);
-    if(suggestions.length==0){
-      setIsSuggestionsOpen(false);
-    }else{
-      setIsSuggestionsOpen(true);
     }
   };
   
@@ -406,14 +403,14 @@ const Navbar: React.FC = () => {
 
             {showDrawer && auth.token && (
               <>
-                <li className="auth-link-li">
+                <li className="auth-link">
                   <NavLink to="/user-info">حساب کاربری</NavLink>
                 </li>
                 {/* <li className="auth-link-li" style={{ marginRight: "15px" }}>
                   <Wallet balance={userData?.balance || 0} />
                 </li> */}
                 <li
-                  className="auth-link-li pb-1"
+                  className="auth-link pb-1"
                   onClick={() => {
                     toast.error("از حساب کاربری خارج شدید");
                     setTimeout(() => {
@@ -421,6 +418,7 @@ const Navbar: React.FC = () => {
                       setIsLoggedIn(false);
                     }, 4000);
                   }}
+                  style={{ cursor: "pointer",fontSize:"14px" }}
                 >
                   خروج
                 </li>

@@ -1,7 +1,8 @@
+// DeleteModal.tsx
+import React from "react";
 import { useAuth } from "../user/login/authProvider";
 import "./deleteModal.css";
-import axios from "axios";
-
+import agent from "../../app/api/agent";
 
 interface DeleteModalProps {
   id: number;
@@ -19,13 +20,11 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   setInitialFetchDone,
 }) => {
   const auth = useAuth();
-  // axios.defaults.headers.common["Authorization"] = `JWT ${auth.token}`;
+  // agent.Comments هم توکن را از interceptor مدیریت می‌کند
 
   const deleteComment = async (commentId: number) => {
-    const baseUrl = `https://api-concertify.darkube.app/api/comments/${commentId}/`;
-
     try {
-      await axios.delete(baseUrl);
+      await agent.Comments.deleteComment(commentId);
       setDeleteComment(false);
       setData(data);
       setInitialFetchDone(false);

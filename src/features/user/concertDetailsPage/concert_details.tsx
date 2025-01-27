@@ -9,7 +9,6 @@ import PageNotFound from "./PageNotFound/PageNotFound.tsx";
 
 import Navbar from "../../Navbar/navbar.tsx";
 import "./c_details.css";
-import OrganizerInfoModal from "./organizer-contact-info.tsx";
 
 import MainComment from "../../Comment/MainComment.tsx";
 
@@ -52,16 +51,14 @@ const ConcertDetails: React.FC = () => {
     const [isFavorite, setIsFavorite] = useState(false);
 
     const toggleFavorite = async () => {
-        setIsFavorite(!isFavorite);
         try {
             console.log("Sending favorite request...");
             if(auth.token === "") {
                 toast.error("برای افزودن به علاقه مندی ها باید وارد سیستم شوید!");
                 return;
             }
-            setIsFavorite(!isFavorite);
             const response = await axios.post(
-                "https://api-concertify.darkube.app/favorite",
+                `https://api.concertify.ir/Concert/${id}/bookmark`,
                 { concertId: id },  
                 {
                     headers: {
@@ -70,11 +67,10 @@ const ConcertDetails: React.FC = () => {
                     },
                 }
             );
-    
+            setIsFavorite(!isFavorite);
             console.log("Favorite response:", response.data);
         } catch (error) {
             console.error("Error adding to favorites:", error);
-            setIsFavorite(false);
         } finally {
             console.log("Favorite request completed.");
         }
@@ -127,6 +123,7 @@ const ConcertDetails: React.FC = () => {
         description: "",
         url: "",
         tags: [],
+        isBookmarked:false
     });
 
     const parseDateTime = (dateTimeStr: string) => {
@@ -184,6 +181,7 @@ const ConcertDetails: React.FC = () => {
                     description: data.description || "",
                     tags: [], // API doesn't provide tags
                     url: data.url || "https://google.com",
+                    isBookmarked:data.isBookmarked
                 });
 
                 // useEffect(() => {
@@ -192,7 +190,7 @@ const ConcertDetails: React.FC = () => {
                 //     setEventDateTime(parsedDateTime);
                 // }
                 // }, [data.startDateTime]);
-
+                setIsFavorite(data.isBookmarked);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching concert details:", error);
