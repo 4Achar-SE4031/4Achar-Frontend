@@ -134,7 +134,7 @@ const MapComponent: React.FC<MapComponentProps> = ({
 
     return (
         <div className={`map-component ${classes}`}>
-            <MapContainer className="map-component__map" {...mapOptions}>
+            <MapContainer className="map-component__map" {...mapOptions} data-testid="map-container" >
                 <TileLayer
                     attribution=""
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
