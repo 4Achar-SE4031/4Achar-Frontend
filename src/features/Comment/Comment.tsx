@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// Comment.tsx
+import React, { useEffect, useState } from "react";
 import NewReply from "./NewReply";
 import "./comment.css";
 import deleteIcon from "../../assets/Images/icon-delete.svg";
@@ -7,27 +8,25 @@ import replyIcon from "../../assets/Images/icon-reply.svg";
 import liked from "../../assets/Images/liked.png";
 import unliked from "../../assets/Images/unliked.png";
 import profile from "../../assets/Images/profile.png";
+import CommentData from "./types";
 
 interface CommentProps {
   id: number;
   currentUser: string;
-  parent: number;
+  parent: number | null;
   comment: string;
   image: string;
   username: string;
   timeSince: string;
   score: number;
-  replies: Reply[];
+  replies: CommentData[]; // We'll store the *nested* children here
   updateScore: (id: number, action: "upvote" | "downvote") => void;
   updateComment: (content: string, id: number) => void;
   setDeleteComment: (id: number | false) => void;
   addNewReply: (id: number, content: string) => void;
   hasLiked: boolean;
-}
-
-interface Reply extends CommentProps {
-  parent: number;
-  replyingTo: number;
+  replyingTo: number | null | undefined;
+  replyingToName: string | null | undefined;
 }
 
 const Comment: React.FC<CommentProps> = ({
@@ -45,27 +44,30 @@ const Comment: React.FC<CommentProps> = ({
   setDeleteComment,
   addNewReply,
   hasLiked,
+  replyingTo,
+  replyingToName,
 }) => {
   const [newReply, setNewReply] = useState<boolean>(false);
-  const [vote, setVote] = useState<"upvote" | "downvote" | undefined>();
   const [edit, setEdit] = useState<string | false>(false);
-  const [current, setCurrent] = useState<boolean>(false);
 
-  const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  if (!userData.profile_picture) {
-    userData.profile_picture = profile;
-  }
+  const isAuthor = String(username) === String(currentUser);
+  console.log("commentUserName =", username, "loggedInUserName =", currentUser);
+  console.log("isAuthor =", isAuthor);
 
-  useEffect(() => {
-    setCurrent(username === currentUser);
-  }, [currentUser, username]);
+
+
+  // Toggle reply box
+  const handleReply = () => {
+    setNewReply(true);
+  };
 
   return (
     <>
       <div className="comment comment-content">
         <div className="scoreColumn">
-          {current ? (
+          {isAuthor ? (
             <>
+              {/* Disabled like if it's your own comment */}
               <img className="flex-item upvote disabled-upvote" src={unliked} alt="upvote" />
               <span className="flex-item">{score}</span>
             </>
@@ -76,12 +78,10 @@ const Comment: React.FC<CommentProps> = ({
                 src={hasLiked ? liked : unliked}
                 alt="upvote"
                 onClick={() => {
-                  if (vote !== "upvote" && !hasLiked) {
+                  if (!hasLiked) {
                     updateScore(id, "upvote");
-                    setVote("upvote");
                   } else {
                     updateScore(id, "downvote");
-                    setVote("downvote");
                   }
                 }}
               />
@@ -92,13 +92,14 @@ const Comment: React.FC<CommentProps> = ({
 
         <div className="contentColumn text-right">
           <div className="commentHeader">
-            <div className="row justify-content-center align-items-center pb-3">
-              <img className="avatar" src={image} alt="avatar" />
+            <div className="row align-items-center pb-3">
+              <img className="avatar" src={image || profile} alt="avatar" />
               <div className="username">{username}</div>
-              {current && <div className="youTag">شما</div>}
+              {isAuthor && <div className="youTag">شما</div>}
               <div className="timestamp">{timeSince}</div>
             </div>
-            {current ? (
+            {isAuthor ? (
+              // If user is author, show edit/delete
               edit !== false ? (
                 <>
                   <div className="deleteButton disabled">
@@ -123,7 +124,8 @@ const Comment: React.FC<CommentProps> = ({
                 </>
               )
             ) : (
-              <div className="replyButton" onClick={() => setNewReply(true)}>
+              // Otherwise show "پاسخ دادن"
+              <div className="replyButton" onClick={handleReply}>
                 <img src={replyIcon} alt="reply" />
                 <span> پاسخ دادن</span>
               </div>
@@ -134,10 +136,10 @@ const Comment: React.FC<CommentProps> = ({
             <>
               <div className="updateInput">
                 <textarea
-                  defaultValue={edit}
+                  value={edit}
                   onChange={(e) => setEdit(e.target.value)}
                   className="replyInput"
-                  placeholder="ثبت دیدگاه ..."
+                  placeholder="ویرایش دیدگاه..."
                 />
               </div>
 
@@ -155,30 +157,51 @@ const Comment: React.FC<CommentProps> = ({
             </>
           ) : (
             <div className="commentContent">
-              {parent > 0 && <span className="reply-username">@{parent} </span>}
+              {/* If it's a reply, show mention */}
+              {replyingToName && parent !== null && (
+                <span className="reply-username">@{replyingToName} </span>
+              )}
               {comment}
             </div>
           )}
         </div>
       </div>
 
+      {/* If "reply" was clicked, show the new reply box */}
       {newReply && (
         <NewReply
           parentId={id}
-          // parent={username}
           setNewReply={setNewReply}
           addNewReply={addNewReply}
-          currentUser={userData}
+          currentUser={currentUser}
         />
       )}
 
-      {replies?.length > 0 &&
-        replies.map((reply) => (
-          <div className="commentReplies" key={reply.id}>
-            <div className="verticalLine"></div>
-            <Comment {...reply} currentUser={currentUser} />
-          </div>
-        ))}
+      {/* Now render the *children* (nested replies) - 
+          we do NOT check replyingTo !== null */}
+      {replies.map((r) => (
+        <div className="commentReplies" key={r.id}>
+          <div className="verticalLine"></div>
+          <Comment
+            id={r.id}
+            currentUser={currentUser}
+            parent={r.parentId ?? null}
+            comment={r.text}
+            image={profile} // or load from user
+            username={r.username}
+            timeSince={r.createdAt}
+            score={r.score}
+            replies={r.replies} // nested
+            updateScore={updateScore}
+            updateComment={updateComment}
+            setDeleteComment={setDeleteComment}
+            addNewReply={addNewReply}
+            hasLiked={r.hasLiked}
+            replyingTo={r.replyingTo}
+            replyingToName={r.replyingToName}
+          />
+        </div>
+      ))}
     </>
   );
 };

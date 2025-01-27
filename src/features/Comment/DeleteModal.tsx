@@ -22,7 +22,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
   // axios.defaults.headers.common["Authorization"] = `JWT ${auth.token}`;
 
   const deleteComment = async (commentId: number) => {
-    const baseUrl = `https://eventify.liara.run/comments/${commentId}/`;
+    const baseUrl = `https://api-concertify.darkube.app/api/comments/${commentId}/`;
 
     try {
       await axios.delete(baseUrl);
