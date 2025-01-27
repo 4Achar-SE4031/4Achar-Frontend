@@ -6,7 +6,7 @@ import { SearchProvider } from './searchStatus';
 import '@testing-library/jest-dom';
 import axios from 'axios';
 import Lottie from 'react-lottie';
-
+import AuthProvider from '../user/login/authProvider';
 // Mocking axios
 vi.mock('axios');
 
@@ -14,7 +14,9 @@ vi.mock('axios');
 const renderWithSearchProvider = (ui: React.ReactElement) => {
   return render(
     <BrowserRouter>
+    <AuthProvider>
       <SearchProvider>{ui}</SearchProvider>
+      </AuthProvider>
     </BrowserRouter>
   );
 };

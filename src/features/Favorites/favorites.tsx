@@ -111,8 +111,8 @@ const Favorites: React.FC = () => {
           fontWeight: "bold",
           textAlign: "center"
         }}>
-          کنسرتی را ذخیره نکرده اید
-        </div>
+            <p data-testid="no-concerts-message">کنسرتی را ذخیره نکرده اید</p>
+          </div>
       </div>
     );
     // return <PageNotFound />;
@@ -192,9 +192,7 @@ const Favorites: React.FC = () => {
         </div>
       </div>
     </>
-
   );
-  
 };
 
 export default Favorites;
