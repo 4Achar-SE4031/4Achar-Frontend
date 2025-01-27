@@ -168,13 +168,13 @@
 
   .suggestions-container {
     position: absolute;
+    z-index: 999 !important;
     top: 100%; 
     left: 0;
     width: 100%; 
     background-color: #fef9e5 !important;
     border-radius: 0 0 20px 20px !important;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    z-index: 10;
     color: #12141d !important;
     height: auto !important; /* اجازه نمایش تمام محتوا */
     max-height: unset; /* حذف محدودیت ارتفاع */
@@ -223,7 +223,7 @@
     flex-direction: row !important;
     justify-content: space-between !important; 
     max-width: 1400px;
-    padding: 0 15px;
+    padding: 0 0px !important;
     height: 100%;  
   }
 
@@ -294,7 +294,7 @@
     .container {
       display: flex !important; 
       justify-content: space-around !important; 
-      padding: 0 15px;
+      padding: 0 0px !important;
       align-items: center;
       height: 100%;
     }
@@ -330,7 +330,7 @@
     .container {
       display: flex !important; 
       justify-content: center !important; 
-      padding: 0 15px;
+      padding: 0 0px !important;
       align-items: center;
       height: 100%;
     }
@@ -427,25 +427,25 @@
       font-size: large !important;
       color:#FFFFFF;
     }
-
     .search-bar{
-      width: 75%;
+      width: 100%;
       height: 40px;
       overflow: hidden;
       margin-bottom: 15px;
     }
-    
+    .custom-col{
+      width: 80% !important;
+    }
     
 
-    .container{
+    /* .container{
       justify-content: space-between !important;
-      
-    }
+    } */
 
     .menu-icon {
       display:block;
       cursor: pointer; 
-      margin-left: 15%; 
+      margin-left: 5px; 
       margin-bottom:  5px;
     }
 
