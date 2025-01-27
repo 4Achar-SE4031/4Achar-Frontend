@@ -21,7 +21,7 @@ describe('NewReply Component', () => {
 
     expect(screen.getByPlaceholderText('ثبت دیدگاه')).toBeInTheDocument();
     expect(screen.getByText('پاسخ دادن')).toBeInTheDocument();
-    expect(screen.getByAltText('current user avatar')).toHaveAttribute('src', 'profile.png');
+    expect(screen.getByAltText('current user avatar')).toHaveAttribute('src', '/src/assets/Images/profile.png');
   });
 
   it('calls addNewReply with correct input when reply button is clicked', () => {

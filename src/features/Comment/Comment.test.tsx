@@ -1,7 +1,7 @@
 // Comment.test.tsx
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { vi } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Comment from './Comment';
 import { BrowserRouter } from 'react-router-dom';
 import agent from '../../app/api/agent';
@@ -25,7 +25,7 @@ describe('Comment Component', () => {
     parent: null,
     comment: 'This is a test comment',
     image: 'profile.png',
-    username: 'testUser',
+    username: 'otherUser', // Set to a different user to make isAuthor=false
     timeSince: '2 hours ago',
     score: 10,
     replies: [],
@@ -39,7 +39,7 @@ describe('Comment Component', () => {
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    vi.resetAllMocks(); // Reset all mocks before each test
   });
 
   it('renders comment content correctly', () => {
@@ -51,7 +51,7 @@ describe('Comment Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByText('testUser')).toBeInTheDocument();
+    expect(screen.getByText('otherUser')).toBeInTheDocument();
     expect(screen.getByText('This is a test comment')).toBeInTheDocument();
     expect(screen.getByText('2 hours ago')).toBeInTheDocument();
     expect(screen.getByText('10')).toBeInTheDocument();
@@ -64,7 +64,6 @@ describe('Comment Component', () => {
         <TestProvider>
           <Comment {...mockProps} />
         </TestProvider>
-
       </BrowserRouter>
     );
 
@@ -91,10 +90,12 @@ describe('Comment Component', () => {
   });
 
   it('shows edit and delete buttons for the author', () => {
+    // For this test, set username to currentUser
+    const authorProps = { ...mockProps, username: 'testUser' };
     render(
       <BrowserRouter>
         <TestProvider>
-          <Comment {...mockProps} />
+          <Comment {...authorProps} />
         </TestProvider>
       </BrowserRouter>
     );
@@ -104,10 +105,11 @@ describe('Comment Component', () => {
   });
 
   it('handles delete button click', () => {
+    const authorProps = { ...mockProps, username: 'testUser' };
     render(
       <BrowserRouter>
         <TestProvider>
-          <Comment {...mockProps} />
+          <Comment {...authorProps} />
         </TestProvider>
       </BrowserRouter>
     );
@@ -119,10 +121,11 @@ describe('Comment Component', () => {
   });
 
   it('handles edit functionality', async () => {
+    const authorProps = { ...mockProps, username: 'testUser' };
     render(
       <BrowserRouter>
         <TestProvider>
-          <Comment {...mockProps} />
+          <Comment {...authorProps} />
         </TestProvider>
       </BrowserRouter>
     );

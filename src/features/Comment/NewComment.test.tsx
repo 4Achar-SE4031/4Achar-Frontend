@@ -19,7 +19,7 @@ describe('NewComment Component', () => {
 
     expect(screen.getByPlaceholderText('ثبت دیدگاه ...')).toBeInTheDocument();
     expect(screen.getByText('ارسال')).toBeInTheDocument();
-    expect(screen.getByAltText('current user avatar')).toHaveAttribute('src', 'profile.png');
+    expect(screen.getByAltText('current user avatar')).toHaveAttribute('src', '/src/assets/Images/profile.png');
   });
 
   it('calls addNewComment with correct input when send button is clicked', () => {
