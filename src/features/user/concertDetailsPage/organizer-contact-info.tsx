@@ -9,7 +9,7 @@ import EmojiModal from "./emojiPicker";
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { useAuth } from "../Authentication/authProvider";
+import { useAuth } from "../login/authProvider";
 
 type OrganizerInfoModalProps = {
   show: boolean;

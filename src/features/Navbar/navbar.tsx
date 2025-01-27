@@ -162,10 +162,12 @@ const Navbar: React.FC = () => {
   };
   
   const searchHandler = (query: string) => {
-    console.log("searching: "+ query);
-    setSearchStatus("Loading");
-    console.log("search status in NAVBAR: "+searchStatus);
-    navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
+    if(query.trim()!==""){
+      console.log("searching: "+ query);
+      setSearchStatus("Loading");
+      console.log("search status in NAVBAR: "+searchStatus);
+      navigate(`/singer/`+query.trim().replace(/[\s\u200C]+/g, "-"));
+    }
   };
 
   const closeSuggestions = () => {
@@ -231,72 +233,70 @@ const Navbar: React.FC = () => {
             />
           </NavLink>
         </div>
-        <div className="centered-column" ref={suggestionsRef}>
-          <div className="col" style={{paddingLeft:"0px", paddingRight:"0px"}}>
-            <div className={`search-bar ${isSuggestionsOpen && suggestions.length > 0 ? "open" : ""}`} >
-              <input
-                type="text"
-                placeholder="جستجو..."
-                className="search-input"
-                value={searchBoxText}
-                onChange={handleSearchInputChange}
-                onKeyDown={handleKeyDown} // اضافه کردن رویداد
+        <div className="custom-col">
+        <div ref={suggestionsRef} className="col" style={{paddingLeft:"0px", paddingRight:"0px"}}>
+          <div className={`search-bar ${isSuggestionsOpen && suggestions.length > 0 ? "open" : ""}`} >
+            <input
+              type="text"
+              placeholder="جستجو..."
+              className="search-input"
+              value={searchBoxText}
+              onChange={handleSearchInputChange}
+              onKeyDown={handleKeyDown} // اضافه کردن رویداد
 
-              />
-              <button className="search-button" onClick={() => {
-                          searchHandler(searchBoxText);
-                        }}>
-                <p className="bi bi-search search-icon"></p>
-              </button>
-            </div>
-            <div style={{paddingLeft:"15px", paddingRight:"15px"}}>
-            <div className="suggestions-container" >
-              {isSuggestionsOpen && suggestions.length > 0 && (
-                <ul className="suggestions-list">
-                  {suggestions.map((suggestion, index) => (
-                    <li
-                    key={index}
-                    className={`suggestion-item ${
-                      index === selectedIndex ? "selected" : ""
-                    }`}
+            />
+            <button className="search-button" onClick={() => {
+                        searchHandler(searchBoxText);
+                      }}>
+              <p className="bi bi-search search-icon"></p>
+            </button>
+          </div>
+          <div style={{paddingLeft:"15px", paddingRight:"15px"}}>
+          <div className="suggestions-container" >
+            {isSuggestionsOpen && suggestions.length > 0 && (
+              <ul className="suggestions-list">
+                {suggestions.map((suggestion, index) => (
+                  <li
+                  key={index}
+                  className={`suggestion-item ${
+                    index === selectedIndex ? "selected" : ""
+                  }`}
+                  style={{
+                    fontFamily: "iransansweb",
+                    backgroundColor: index === selectedIndex ? "#f9d966" : "#fef9e5", // استایل برجسته
+                    display: "flex", // چینش افقی
+                    justifyContent: "space-between", // فاصله بین آیکون و متن
+                    alignItems: "center", // هم‌تراز کردن متن و آیکون
+                    padding: "8px", // فضای داخلی برای آیتم‌ها
+                  }}
+                  onMouseEnter={()=>{
+                    console.log("Mouse enter")
+                    setSelectedIndex(index);
+                  }}
+                  onClick={() => {
+                    setSearchBoxText(suggestion);
+                    searchHandler(suggestion);
+                    closeSuggestions();
+                  }}
+                >
+                  <span style={{ flex: 1, textAlign: "right" }}>{suggestion}</span>
+                
+                  <span
+                    className="bi bi-chevron-left"
                     style={{
-                      fontFamily: "iransansweb",
-                      backgroundColor: index === selectedIndex ? "#f9d966" : "#fef9e5", // استایل برجسته
-                      display: "flex", // چینش افقی
-                      justifyContent: "space-between", // فاصله بین آیکون و متن
-                      alignItems: "center", // هم‌تراز کردن متن و آیکون
-                      padding: "8px", // فضای داخلی برای آیتم‌ها
+                      marginLeft: "15px", // فاصله از متن
+                      fontSize: "1.2rem", // اندازه آیکون
+                      color: "#666", // رنگ آیکون
                     }}
-                    onMouseEnter={()=>{
-                      console.log("Mouse enter")
-                      setSelectedIndex(index);
-                    }}
-                    onClick={() => {
-                      setSearchBoxText(suggestion);
-                      searchHandler(suggestion);
-                      closeSuggestions();
-                    }}
-                  >
-                    <span style={{ flex: 1, textAlign: "right" }}>{suggestion}</span>
-                  
-                    <span
-                      className="bi bi-chevron-left"
-                      style={{
-                        marginLeft: "15px", // فاصله از متن
-                        fontSize: "1.2rem", // اندازه آیکون
-                        color: "#666", // رنگ آیکون
-                      }}
-                    ></span>
-                  </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-            </div>
+                  ></span>
+                </li>
+                ))}
+              </ul>
+            )}
+          </div>
           </div>
         </div>
-
-        
+        </div>
         
 
         <div className="menu-icon" onClick={handleShowDrawer}>
@@ -316,12 +316,22 @@ const Navbar: React.FC = () => {
             <li>
               <NavLink to="/create-event">ویترین</NavLink>
             </li>
-            <li>
-              <NavLink to="/create-event"> خرید ها</NavLink>
-            </li>
+            
             {/* <li>
               <NavLink to="/create-event">ایجاد کنسرت </NavLink>
             </li> */}
+            {showBorder &&
+              <li>
+                <i className="bi bi-heart-fill" style={{color: "red",fontSize:"22px",cursor:"pointer"}} onClick={() => window.location.href = "/favorites"}></i>
+              </li>
+            }
+            {!showBorder && 
+            <li >
+              <NavLink to="/favorites">موردعلاقه‌ها</NavLink>
+            </li>
+
+            }
+            
             
             {!showDrawer && !auth.token && showBorder && (
               <div className="auth-link">
@@ -334,6 +344,7 @@ const Navbar: React.FC = () => {
             )}
 
                 {!showDrawer && auth.token && 
+                
                         <div className="dropdown-container" onMouseEnter={() => setIsOpen(true)}>
                         
                         <div className="row" >

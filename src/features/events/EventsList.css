@@ -104,15 +104,15 @@ body {
   }
 
   button {
-    background-color: #1f2029 !important;
-    border: 1px solid #ffeba7 !important;
-    color: #ffeba7 !important;
-    border-radius: 10px !important;
-    padding: 5px, 10px !important;
+    background-color: #1f2029 ;
+    border: 1px solid #ffeba7 ;
+    color: #ffeba7 ;
+    border-radius: 10px ;
+    padding: 5px, 10px;
   }
   button:hover {
-    background-color: #ffeba7 !important;
-    color: #1f2029 !important;
+    background-color: #ffeba7 ;
+    color: #1f2029 ;
   }
   .items {
     font-family: "iransansweb";
@@ -189,7 +189,12 @@ body {
       border-radius: 10px;
       transition: transform 0.3s, filter 0.3s;
     }
-
+    .event-info__details,
+    .event-info__address,
+    .event-info__date,
+    .event-info__price {
+      margin-left: 1rem; /* if using RTL, margin-left visually pushes them to the right */
+    }
     .event-info {
       position: absolute;
       display: none;
@@ -210,7 +215,6 @@ body {
       margin: 0 1rem;
       margin-top: 10px;
     }
-/* styles.css یا فایل CSS مربوطه */
 .truncate {
   white-space: nowrap;
   overflow: hidden;
@@ -221,7 +225,7 @@ body {
       color: #ffeba7;
       font-size: 10px;
       font-weight: 300;
-      margin: 5px 1rem;
+      margin: 5px 0rem;
     }
     .item h5 {
       color: #ffeba7;
@@ -259,6 +263,7 @@ body {
       height: 0.5px;
       transform: scale(0.5);
       top: 4px;
+      right: 6px;
     }
     .input-icon {
       color: #ffeba7;
@@ -269,6 +274,7 @@ body {
       display: flex;
       flex-direction: row-reverse;
       justify-content: center;
+      right: 5px;
     }
     .event-info__address {
       display: flex;
