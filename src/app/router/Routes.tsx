@@ -37,12 +37,18 @@ export const routes: RouteObject[] = [
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
        {path:"/user-info", element: <UserInfo />},
-       {path:"/favorites", element: <Favorites />},
       {
         path: "/user-info",
         element: <PrivateRoute />,
         children: [
           { path: "", element: <UserInfo /> },
+        ],
+      },
+      {
+        path: "/favorites",
+        element: <PrivateRoute />,
+        children: [
+          { path: "", element: <Favorites /> },
         ],
       },
        {path:"/events", element: <EventsList />},
