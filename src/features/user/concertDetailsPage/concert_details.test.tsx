@@ -4,8 +4,8 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer } from 'react-toastify';
-import ConcertDetails from './concertDetail';
-import { useAuth } from '../Authentication/authProvider';
+import ConcertDetails from './concert_details';
+import { useAuth } from '../login/authProvider';
 
 jest.mock('../Authentication/authProvider', () => ({
     useAuth: jest.fn(),
