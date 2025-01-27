@@ -1,3 +1,5 @@
+// FiveEvents.test.tsx
+
 import { vi } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom'; // Provides jest-dom matchers
@@ -36,7 +38,7 @@ vi.mock('../../app/common/Card/Card', () => ({
 // **Step 5: Mock lottie-web if FiveEvents uses it (even if commented out)**
 vi.mock('lottie-web');
 
-// **Step 6: Mock the agent module**
+// **Step 6: Mock the agent module correctly**
 vi.mock('../../app/api/agent', () => {
   const listMock = vi.fn((queryParams: string) => {
     const params = new URLSearchParams(queryParams);
@@ -55,7 +57,10 @@ vi.mock('../../app/api/agent', () => {
       rating: 0,
     }));
 
-    return Promise.resolve(events);
+    return Promise.resolve({
+      totalCount: 20, // Total number of events
+      concerts: events, // The fetched events
+    });
   });
 
   return {
@@ -104,7 +109,7 @@ describe('FiveEvents Component', () => {
 
     // Wait for recent events to be rendered
     await waitFor(() => {
-      // Recent Events: IDs 1-10 (but only first 5 are visible as per eventsToShow)
+      // Recent Events: IDs 1-10 (but only first 5 are visible as per eventsToShow=5)
       for (let i = 1; i <= 5; i++) {
         expect(screen.getByTestId(`event-item-${i}`)).toBeInTheDocument();
         expect(screen.getByText(`Event ${i}`)).toBeInTheDocument();
@@ -113,7 +118,7 @@ describe('FiveEvents Component', () => {
 
     // Wait for popular events to be rendered
     await waitFor(() => {
-      // Popular Events: IDs 11-20 (only first 5 are visible)
+      // Popular Events: IDs 11-20 (only first 5 are visible as per eventsToShow=5)
       for (let i = 11; i <= 15; i++) {
         expect(screen.getByTestId(`event-item-${i}`)).toBeInTheDocument();
         expect(screen.getByText(`Event ${i}`)).toBeInTheDocument();
@@ -240,11 +245,11 @@ describe('FiveEvents Component', () => {
       </MemoryRouter>
     );
 
-    // Assuming you have a loading indicator, e.g., a spinner or text
     // Since loading UI is commented out in FiveEvents, adjust accordingly
-    // For demonstration, let's assume there's a text 'Loading...'
+    // For demonstration, let's assume there's a console log or no UI change
+    // If you have a loading indicator, uncomment and adjust the following lines
 
-    // Uncomment and adjust the following lines if a loading indicator exists
+    // Example:
     // expect(screen.getByText('Loading...')).toBeInTheDocument();
 
     // Restore the original mock
@@ -273,6 +278,8 @@ describe('FiveEvents Component', () => {
       expect(screen.queryByTestId('event-item-11')).not.toBeInTheDocument();
     });
 
-
+    // Optionally, you can check if an error message is displayed if implemented
+    // Example:
+    // expect(screen.getByText('Failed to load events.')).toBeInTheDocument();
   });
 });
