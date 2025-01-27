@@ -1,18 +1,19 @@
 // Register.test.tsx
 import React from "react";
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Register from "../Register";
+import Register from "./Register";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../Authentication/authProvider";
+import { useAuth } from "../login/authProvider";
+import { vi } from 'vitest';
 
 // 1. Mock external dependencies //
 vi.mock("react-router-dom", () => ({ useNavigate: vi.fn() }));
 
-vi.mock("../../Authentication/authProvider", () => ({ useAuth: vi.fn() }));
+vi.mock("../login/authProvider", () => ({ useAuth: vi.fn() }));
 
 vi.mock("axios");
 

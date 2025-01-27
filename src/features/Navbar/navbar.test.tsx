@@ -55,7 +55,7 @@ describe('Navbar Component', () => {
     expect(screen.getByText('خانه')).toBeInTheDocument();
     expect(screen.getByText('ویترین')).toBeInTheDocument();
   });
-
+  
   it('changes logo when the window is resized', () => {
     // Initial render with small screen size
     renderWithAuthProvider(<Navbar />);

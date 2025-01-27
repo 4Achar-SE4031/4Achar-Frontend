@@ -10,8 +10,8 @@ import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
 import { ToastContainer, toast } from 'react-toastify'; // Import after mocking
 
-import Login from '../Login';
-import AuthProvider, { useAuth } from '../authProvider';
+import Login from './Login';
+import AuthProvider, { useAuth } from './authProvider';
 
 
 
