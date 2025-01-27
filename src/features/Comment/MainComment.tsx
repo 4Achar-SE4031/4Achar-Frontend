@@ -1,8 +1,6 @@
 // MainComment.tsx
-
 import React, { useState, useEffect, useRef } from "react";
 import "./MainComment.css";
-import axios from "axios";
 import moment from "moment-timezone";
 
 import Comment from "./Comment";
@@ -10,7 +8,8 @@ import NewComment from "./NewComment";
 import DeleteModal from "./DeleteModal";
 import profile from "../../assets/Images/profile.png";
 import { useAuth } from "../user/login/authProvider";
-import CommentData from "./types"; // Correct default import
+import CommentData from "./types";
+import agent from "../../app/api/agent";
 
 interface MainCommentProps {
   id: number;
@@ -24,30 +23,57 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
   const [initialFetchDone, setInitialFetchDone] = useState<boolean>(false);
   const initialDataLength = useRef<number | null>(null);
 
-  // If auth.token exists, apply the Authorization header
+  // If auth.token exists, apply the Authorization header via agent's interceptor
   useEffect(() => {
-    if (auth.token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${auth.token}`;
-    }
+    // agent already handles the token via interceptor
   }, [auth.token]);
 
   // Attempt to parse user data from localStorage
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
   console.log("User Data:", userData);
 
+  const translateTime = (time: string): string => {
+    let translatedTime = moment.utc(time).local().fromNow();
+    const translations: Record<string, string> = {
+      ago: "قبل",
+      "in a few seconds": "لحظاتی قبل",
+      "a few seconds": "لحظاتی",
+      days: "روز",
+      an: "یک",
+      a: "یک",
+      day: "روز",
+      months: "ماه",
+      month: "ماه",
+      years: "سال",
+      year: "سال",
+      weeks: "هفته",
+      week: "هفته",
+      minutes: "دقیقه",
+      minute: "دقیقه",
+      hours: "ساعت",
+      hour: "ساعت",
+      seconds: "ثانیه",
+      few: "چند",
+    };
+
+    for (const key in translations) {
+      if (translatedTime.includes(key)) {
+        translatedTime = translatedTime.replace(key, translations[key]);
+      }
+    }
+    return translatedTime;
+  };
+  
   // ---------------------------------------------------------------------------------------
   // EFFECT: Fetch Comments on Mount (if token exists)
   // ---------------------------------------------------------------------------------------
   useEffect(() => {
     const fetchComments = async () => {
-      // Only fetch if we haven't fetched yet and we have a token
       if (!initialFetchDone && auth.token) {
-        const baseUrl = `https://api-concertify.darkube.app/api/comments/event/${id}`;
-
         try {
-          const response = await axios.get(baseUrl);
-          console.log("API Response:", response.data);
-          const comments: CommentData[] = response.data.comments;
+          const response = await agent.Comments.fetchComments(id);
+          console.log("API Response:", response.comments);
+          const comments: CommentData[] = response.comments;
 
           initialDataLength.current = comments.length;
 
@@ -71,53 +97,13 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
           });
 
           // Translate timestamps
-          const translateTime = (time: string): string => {
-            let translatedTime = moment.utc(time).local().fromNow();
-            const translations: Record<string, string> = {
-              ago: "قبل",
-              "a few seconds": "لحظاتی",
-              days: "روز",
-              an: "یک",
-              a: "یک",
-              day: "روز",
-              months: "ماه",
-              month: "ماه",
-              years: "سال",
-              year: "سال",
-              weeks: "هفته",
-              week: "هفته",
-              minutes: "دقیقه",
-              minute: "دقیقه",
-              hours: "ساعت",
-              hour: "ساعت",
-              seconds: "ثانیه",
-              few: "چند",
-            };
-
-            for (const key in translations) {
-              if (translatedTime.includes(key)) {
-                translatedTime = translatedTime.replace(key, translations[key]);
-              }
-            }
-            return translatedTime;
-          };
-
-          // Adjust timestamps for each comment & reply
-          // groupedComments.forEach((comment) => {
-          //   comment.createdAt = translateTime(comment.createdAt);
-          //   comment.replies.forEach((reply) => {
-          //     reply.createdAt = translateTime(reply.createdAt);
-          //   });
-          // });
-
-          // setData(groupedComments);
           const translateTimeForComment = (comment: CommentData) => {
-  comment.createdAt = translateTime(comment.createdAt);
-  comment.replies.forEach(translateTimeForComment);
-};
-topLevelComments.forEach(translateTimeForComment);
+            comment.createdAt = translateTime(comment.createdAt);
+            comment.replies.forEach(translateTimeForComment);
+          };
+          topLevelComments.forEach(translateTimeForComment);
 
-setData(topLevelComments);
+          setData(topLevelComments);
           setInitialFetchDone(true);
         } catch (error) {
           console.error("Error fetching comments:", error);
@@ -131,32 +117,48 @@ setData(topLevelComments);
   // ---------------------------------------------------------------------------------------
   // HELPER BACKEND CALLS for CREATE, UPDATE, LIKE, REPLY
   // ---------------------------------------------------------------------------------------
-  const addNewCommentBack = async (content: string) => {
+  const addNewCommentBack = async (content: string, tempId: number) => {
     try {
       console.log("Sending POST request to add new comment...");
-      const baseUrl = "https://api-concertify.darkube.app/api/comments";
-      const response = await axios.post(baseUrl, {
+      const response = await agent.Comments.addComment({
         eventId: id,
         text: content,
       });
-      console.log("New comment added:", response.data);
+      console.log("New comment added:", response);
+
+      const translatedCreatedAt = translateTime(response.createdAt);
 
       // Update the local state with the created comment from the backend
-      const newComment: CommentData = response.data;
-      setData((prevData) => [...prevData, { ...newComment, replies: [] }]);
+      const newComment: CommentData = {
+        ...response,
+        createdAt: translatedCreatedAt,
+        replies: [],
+      };
+      setData((prevData) =>
+        prevData.map((comment) =>
+          comment.id === tempId
+            ? { ...newComment, replies: [] } // Replace temp comment
+            : comment
+        )
+      );
     } catch (error) {
+      setData((prevData) =>
+        prevData.filter((comment) => comment.id !== tempId)
+      );
       console.error("Error adding comment:", error);
     }
   };
 
-  const updateCommentBack = async (commentId: number, updatedContent: string) => {
+  const updateCommentBack = async (
+    commentId: number,
+    updatedContent: string
+  ) => {
     try {
       console.log(`Sending PUT request to update comment ID ${commentId}...`);
-      const baseUrl = `https://api-concertify.darkube.app/api/comments/${commentId}`;
-      const response = await axios.put(baseUrl, {
+      const response = await agent.Comments.updateComment(commentId, {
         newText: updatedContent,
       });
-      console.log(`Comment ID ${commentId} updated:`, response.data);
+      console.log(`Comment ID ${commentId} updated:`, response);
 
       // Update the local state with the updated comment
       setData((prevData) =>
@@ -164,11 +166,13 @@ setData(topLevelComments);
           comment.id === commentId
             ? { ...comment, text: updatedContent }
             : {
-              ...comment,
-              replies: comment.replies.map((reply) =>
-                reply.id === commentId ? { ...reply, text: updatedContent } : reply
-              ),
-            }
+                ...comment,
+                replies: comment.replies.map((reply) =>
+                  reply.id === commentId
+                    ? { ...reply, text: updatedContent }
+                    : reply
+                ),
+              }
         )
       );
     } catch (error) {
@@ -179,31 +183,30 @@ setData(topLevelComments);
   const updateScoreBack = async (commentId: number) => {
     try {
       console.log(`Sending POST request to toggle like for comment ID ${commentId}...`);
-      const baseUrl = `https://api-concertify.darkube.app/api/comments/${commentId}/toggle-like`;
-      const response = await axios.post(baseUrl);
-      console.log(`Like toggled for comment ID ${commentId}:`, response.data);
+      const response = await agent.Comments.toggleLike(commentId);
+      console.log(`Like toggled for comment ID ${commentId}:`, response);
 
       // Update the local state based on the response
       setData((prevData) =>
         prevData.map((comment) =>
           comment.id === commentId
             ? {
-              ...comment,
-              hasLiked: response.data.hasLiked,
-              score: response.data.score,
-            }
+                ...comment,
+                hasLiked: response.hasLiked,
+                score: response.score,
+              }
             : {
-              ...comment,
-              replies: comment.replies.map((reply) =>
-                reply.id === commentId
-                  ? {
-                    ...reply,
-                    hasLiked: response.data.hasLiked,
-                    score: response.data.score,
-                  }
-                  : reply
-              ),
-            }
+                ...comment,
+                replies: comment.replies.map((reply) =>
+                  reply.id === commentId
+                    ? {
+                        ...reply,
+                        hasLiked: response.hasLiked,
+                        score: response.score,
+                      }
+                    : reply
+                ),
+              }
         )
       );
     } catch (error) {
@@ -211,27 +214,54 @@ setData(topLevelComments);
     }
   };
 
-  const addNewReplyBack = async (parentId: number, content: string) => {
+  const addNewReplyBack = async (
+    parentId: number,
+    content: string,
+    tempId: number
+  ) => {
     try {
       console.log(`Sending POST request to add reply to comment ID ${parentId}...`);
-      const baseUrl = "https://api-concertify.darkube.app/api/comments";
-      const response = await axios.post(baseUrl, {
+      const response = await agent.Comments.addReply({
         eventId: id,
         text: content,
         parentId: parentId,
       });
-      console.log(`Reply added to comment ID ${parentId}:`, response.data);
+      console.log(`Reply added to comment ID ${parentId}:`, response);
+
+      const translatedCreatedAt = translateTime(response.createdAt);
 
       // Update the local state with the created reply from the backend
-      const newReply: CommentData = response.data;
+      const newReply: CommentData = {
+        ...response,
+        createdAt: translatedCreatedAt,
+        replies: [],
+      };
+
       setData((prevData) =>
         prevData.map((comment) =>
           comment.id === parentId
-            ? { ...comment, replies: [...comment.replies, newReply] }
+            ? {
+                ...comment,
+                replies: comment.replies.map((reply) =>
+                  reply.id === tempId ? newReply : reply
+                ),
+              }
             : comment
         )
       );
     } catch (error) {
+      setData((prevData) =>
+        prevData.map((comment) =>
+          comment.id === parentId
+            ? {
+                ...comment,
+                replies: comment.replies.filter(
+                  (reply) => reply.id !== tempId
+                ),
+              }
+            : comment
+        )
+      );
       console.error(`Error adding reply to comment ID ${parentId}:`, error);
     }
   };
@@ -240,7 +270,9 @@ setData(topLevelComments);
   // LOCAL STATE UPDATES
   // ---------------------------------------------------------------------------------------
   const updateScore = (commentId: number, action: "upvote" | "downvote") => {
-    console.log(`updateScore called for comment ID ${commentId} with action ${action}`);
+    console.log(
+      `updateScore called for comment ID ${commentId} with action ${action}`
+    );
     const temp = [...data];
 
     for (const comment of temp) {
@@ -275,7 +307,9 @@ setData(topLevelComments);
   };
 
   const updateComment = (updatedContent: string, commentId: number) => {
-    console.log(`updateComment called for comment ID ${commentId} with content "${updatedContent}"`);
+    console.log(
+      `updateComment called for comment ID ${commentId} with content "${updatedContent}"`
+    );
     const temp = [...data];
 
     for (const comment of temp) {
@@ -299,7 +333,9 @@ setData(topLevelComments);
   };
 
   const addNewReply = (parentId: number, content: string) => {
-    console.log(`addNewReply called with parentId: ${parentId}, content: "${content}"`);
+    console.log(
+      `addNewReply called with parentId: ${parentId}, content: "${content}"`
+    );
     if (!/\S/.test(content)) return;
 
     // Optimistic UI update: add reply to local state immediately
@@ -310,7 +346,7 @@ setData(topLevelComments);
           const newReply: CommentData = {
             id: Date.now(), // Temporary ID; backend should provide a real one
             text: content,
-            createdAt: moment().toISOString(),
+            createdAt: translateTime(moment().toISOString()),
             score: 0,
             userId: userData.userId || "", // Adjust based on userData structure
             username: userData.username || "",
@@ -336,9 +372,10 @@ setData(topLevelComments);
 
     findAndAddReply(temp);
     setData(temp);
+    const tempId = Date.now();
 
     // Send the reply to the backend
-    addNewReplyBack(parentId, content);
+    addNewReplyBack(parentId, content, tempId);
   };
 
   // Create a new top-level comment
@@ -348,12 +385,13 @@ setData(topLevelComments);
       console.log("Comment content is empty. Not adding comment.");
       return;
     }
+    const tempId = Date.now();
 
     // Optimistic UI update: add comment to local state
     const newComment: CommentData = {
       id: Date.now(), // Temporary ID; backend should provide a real one
       text: content,
-      createdAt: moment().toISOString(),
+      createdAt: translateTime(moment().toISOString()),
       score: 0,
       userId: userData.userId || "",
       username: userData.username || "",
@@ -369,7 +407,7 @@ setData(topLevelComments);
     console.log("Added new comment to local state:", newComment);
 
     // Send the new comment to the backend
-    await addNewCommentBack(content);
+    await addNewCommentBack(content, tempId);
   };
 
   // ---------------------------------------------------------------------------------------
@@ -419,7 +457,7 @@ setData(topLevelComments);
         ))}
 
         {/* If the user is logged in, show the new comment form; otherwise, prompt to login */}
-        {userData ? (
+        {userData.userName ? (
           <NewComment addNewComment={addNewComment} currentUser={userData.userName} />
         ) : (
           <div className="row">

@@ -35,7 +35,7 @@ const NewComment: React.FC<NewCommentProps> = ({ addNewComment, currentUser }) =
       </div>
 
       <div className="sendColumn">
-        <button className="sendButton" onClick={handleSendClick}>
+        <button className="sendButton" onClick={handleSendClick} disabled={!/\S/.test(newComment)}>
           ارسال
         </button>
       </div>

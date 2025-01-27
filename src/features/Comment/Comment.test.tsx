@@ -1,15 +1,31 @@
+// Comment.test.tsx
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi } from 'vitest';
+import '@testing-library/jest-dom';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import Comment from './Comment';
+import { BrowserRouter } from 'react-router-dom';
+import agent from '../../app/api/agent';
+import { TestProvider } from '../events/testProvider';
+
+// Mock necessary modules
+vi.mock('../../app/api/agent', () => ({
+  default: {
+    Comments: {
+      deleteComment: vi.fn(),
+      toggleLike: vi.fn(),
+      updateComment: vi.fn(),
+    },
+  },
+}));
 
 describe('Comment Component', () => {
   const mockProps = {
     id: 1,
     currentUser: 'testUser',
-    parent: 0,
+    parent: null,
     comment: 'This is a test comment',
-    image: 'test-image.jpg',
-    username: 'testUser',
+    image: 'profile.png',
+    username: 'otherUser', // Set to a different user to make isAuthor=false
     timeSince: '2 hours ago',
     score: 10,
     replies: [],
@@ -18,31 +34,129 @@ describe('Comment Component', () => {
     setDeleteComment: vi.fn(),
     addNewReply: vi.fn(),
     hasLiked: false,
+    replyingTo: null,
+    replyingToName: null,
   };
 
-  it('renders the comment correctly', () => {
-    render(<Comment {...mockProps} />);
+  beforeEach(() => {
+    vi.resetAllMocks(); // Reset all mocks before each test
+  });
+
+  it('renders comment content correctly', () => {
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...mockProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('otherUser')).toBeInTheDocument();
     expect(screen.getByText('This is a test comment')).toBeInTheDocument();
     expect(screen.getByText('2 hours ago')).toBeInTheDocument();
+    expect(screen.getByText('10')).toBeInTheDocument();
+    expect(screen.getByAltText('avatar')).toHaveAttribute('src', 'profile.png');
   });
 
-//   it('handles upvote correctly', () => {
-//     render(<Comment {...mockProps} />);
-//     const upvoteButton = screen.getByAltText('upvote');
-//     fireEvent.click(upvoteButton);
-//     expect(mockProps.updateScore).toHaveBeenCalledWith(1, 'upvote');
-//   });
+  it('handles upvote correctly', () => {
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...mockProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
 
-  it('disables actions for the current user', () => {
-    render(<Comment {...mockProps} />);
-    expect(screen.getByText('ویرایش')).toBeInTheDocument();
+    const upvoteButton = screen.getByAltText('upvote');
+    fireEvent.click(upvoteButton);
+
+    expect(mockProps.updateScore).toHaveBeenCalledWith(1, 'upvote');
+  });
+
+  it('handles downvote correctly when already liked', () => {
+    const likedProps = { ...mockProps, hasLiked: true };
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...likedProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
+
+    const downvoteButton = screen.getByAltText('upvote');
+    fireEvent.click(downvoteButton);
+
+    expect(mockProps.updateScore).toHaveBeenCalledWith(1, 'downvote');
+  });
+
+  it('shows edit and delete buttons for the author', () => {
+    // For this test, set username to currentUser
+    const authorProps = { ...mockProps, username: 'testUser' };
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...authorProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
+
     expect(screen.getByText('حذف')).toBeInTheDocument();
+    expect(screen.getByText('ویرایش')).toBeInTheDocument();
   });
 
-  it('triggers delete action', () => {
-    render(<Comment {...mockProps} />);
+  it('handles delete button click', () => {
+    const authorProps = { ...mockProps, username: 'testUser' };
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...authorProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
+
     const deleteButton = screen.getByText('حذف');
     fireEvent.click(deleteButton);
+
     expect(mockProps.setDeleteComment).toHaveBeenCalledWith(1);
+  });
+
+  it('handles edit functionality', async () => {
+    const authorProps = { ...mockProps, username: 'testUser' };
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...authorProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
+
+    const editButton = screen.getByText('ویرایش');
+    fireEvent.click(editButton);
+
+    const textarea = screen.getByPlaceholderText('ویرایش دیدگاه...');
+    expect(textarea).toBeInTheDocument();
+
+    fireEvent.change(textarea, { target: { value: 'Updated comment' } });
+
+    const confirmButton = screen.getByText('تایید');
+    fireEvent.click(confirmButton);
+
+    expect(mockProps.updateComment).toHaveBeenCalledWith('Updated comment', 1);
+  });
+
+  it('shows reply box when reply button is clicked', () => {
+    const nonAuthorProps = { ...mockProps, username: 'otherUser' };
+    render(
+      <BrowserRouter>
+        <TestProvider>
+          <Comment {...nonAuthorProps} />
+        </TestProvider>
+      </BrowserRouter>
+    );
+
+    const replyButton = screen.getByText('پاسخ دادن');
+    fireEvent.click(replyButton);
+
+    expect(screen.getByPlaceholderText('ثبت دیدگاه')).toBeInTheDocument();
   });
 });
