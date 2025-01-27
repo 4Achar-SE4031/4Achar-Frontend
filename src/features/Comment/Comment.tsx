@@ -1,4 +1,3 @@
-// Comment.tsx
 import React, { useEffect, useState } from "react";
 import NewReply from "./NewReply";
 import "./comment.css";
@@ -51,8 +50,6 @@ const Comment: React.FC<CommentProps> = ({
   const [edit, setEdit] = useState<string | false>(false);
 
   const isAuthor = String(username) === String(currentUser);
-  console.log("commentUserName =", username, "loggedInUserName =", currentUser);
-  console.log("isAuthor =", isAuthor);
 
 
 
@@ -92,12 +89,15 @@ const Comment: React.FC<CommentProps> = ({
 
         <div className="contentColumn text-right">
           <div className="commentHeader">
+          <div className="userInfo">
             <div className="row align-items-center pb-3">
               <img className="avatar" src={image || profile} alt="avatar" />
               <div className="username">{username}</div>
               {isAuthor && <div className="youTag">شما</div>}
               <div className="timestamp">{timeSince}</div>
             </div>
+            </div>
+            <div className="actionButtons">
             {isAuthor ? (
               // If user is author, show edit/delete
               edit !== false ? (
@@ -130,6 +130,7 @@ const Comment: React.FC<CommentProps> = ({
                 <span> پاسخ دادن</span>
               </div>
             )}
+            </div>
           </div>
 
           {edit !== false ? (
