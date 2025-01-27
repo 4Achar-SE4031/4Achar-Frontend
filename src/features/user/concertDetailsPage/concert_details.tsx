@@ -9,7 +9,6 @@ import PageNotFound from "./PageNotFound/PageNotFound.tsx";
 
 import Navbar from "../../Navbar/navbar.tsx";
 import "./c_details.css";
-import OrganizerInfoModal from "./organizer-contact-info.tsx";
 
 import MainComment from "../../Comment/MainComment.tsx";
 
