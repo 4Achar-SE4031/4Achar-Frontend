@@ -2,6 +2,7 @@ import axios, { AxiosResponse } from "axios";
 import { ChangePassword, UpdateUser, User, UserForgetFormValues, UserFormValues, UserResponse } from "../models/user";
 import { Event } from "../models/event";
 import { ConcertsResponse } from "../models/concertResponse";
+import CommentData, { CreateCommentDto, UpdateCommentDto } from "../../features/Comment/types";
 const sleep = (delay: number) => {
     return new Promise((resolve) => {
         setTimeout(resolve, delay);
@@ -52,12 +53,29 @@ const Events = {
 };
 
 const Comments = {
-    
-}
+    fetchComments: (eventId: number): Promise<{ comments: CommentData[] }> =>
+      requests.get<{ comments: CommentData[] }>(`/api/comments/event/${eventId}`),
+  
+    addComment: (comment: CreateCommentDto): Promise<CommentData> =>
+      requests.post<CommentData>("/api/comments", comment),
+  
+    updateComment: (commentId: number, updatedContent: UpdateCommentDto): Promise<CommentData> =>
+      requests.put<CommentData>(`/api/comments/${commentId}`, updatedContent),
+  
+    toggleLike: (commentId: number): Promise<{ hasLiked: boolean; score: number }> =>
+      requests.post<{ hasLiked: boolean; score: number }>(`/api/comments/${commentId}/toggle-like`, {}),
+  
+    addReply: (comment: CreateCommentDto): Promise<CommentData> =>
+      requests.post<CommentData>("/api/comments", comment),
+  
+    deleteComment: (commentId: number): Promise<void> =>
+      requests.delete<void>(`/api/comments/${commentId}`),
+  };
 
 const agent = {
     Account,
-    Events
+    Events,
+    Comments
 };
 
 export default agent;
