@@ -30,7 +30,6 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
 
   // Attempt to parse user data from localStorage
   const userData = JSON.parse(localStorage.getItem("userData") || "{}");
-  console.log("User Data:", userData);
 
   const translateTime = (time: string): string => {
     let translatedTime = moment.utc(time).local().fromNow();
@@ -72,7 +71,6 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
       if (!initialFetchDone && auth.token) {
         try {
           const response = await agent.Comments.fetchComments(id);
-          console.log("API Response:", response.comments);
           const comments: CommentData[] = response.comments;
 
           initialDataLength.current = comments.length;
@@ -119,12 +117,10 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
   // ---------------------------------------------------------------------------------------
   const addNewCommentBack = async (content: string, tempId: number) => {
     try {
-      console.log("Sending POST request to add new comment...");
       const response = await agent.Comments.addComment({
         eventId: id,
         text: content,
-      });
-      console.log("New comment added:", response);
+      })
 
       const translatedCreatedAt = translateTime(response.createdAt);
 
@@ -154,11 +150,9 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
     updatedContent: string
   ) => {
     try {
-      console.log(`Sending PUT request to update comment ID ${commentId}...`);
       const response = await agent.Comments.updateComment(commentId, {
         newText: updatedContent,
       });
-      console.log(`Comment ID ${commentId} updated:`, response);
 
       // Update the local state with the updated comment
       setData((prevData) =>
@@ -182,9 +176,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
 
   const updateScoreBack = async (commentId: number) => {
     try {
-      console.log(`Sending POST request to toggle like for comment ID ${commentId}...`);
       const response = await agent.Comments.toggleLike(commentId);
-      console.log(`Like toggled for comment ID ${commentId}:`, response);
 
       // Update the local state based on the response
       setData((prevData) =>
@@ -220,13 +212,11 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
     tempId: number
   ) => {
     try {
-      console.log(`Sending POST request to add reply to comment ID ${parentId}...`);
       const response = await agent.Comments.addReply({
         eventId: id,
         text: content,
         parentId: parentId,
       });
-      console.log(`Reply added to comment ID ${parentId}:`, response);
 
       const translatedCreatedAt = translateTime(response.createdAt);
 
@@ -270,9 +260,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
   // LOCAL STATE UPDATES
   // ---------------------------------------------------------------------------------------
   const updateScore = (commentId: number, action: "upvote" | "downvote") => {
-    console.log(
-      `updateScore called for comment ID ${commentId} with action ${action}`
-    );
+
     const temp = [...data];
 
     for (const comment of temp) {
@@ -307,9 +295,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
   };
 
   const updateComment = (updatedContent: string, commentId: number) => {
-    console.log(
-      `updateComment called for comment ID ${commentId} with content "${updatedContent}"`
-    );
+
     const temp = [...data];
 
     for (const comment of temp) {
@@ -333,9 +319,7 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
   };
 
   const addNewReply = (parentId: number, content: string) => {
-    console.log(
-      `addNewReply called with parentId: ${parentId}, content: "${content}"`
-    );
+
     if (!/\S/.test(content)) return;
 
     // Optimistic UI update: add reply to local state immediately
@@ -358,7 +342,6 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
             replyingToName: comment.username,
           };
           comment.replies.push(newReply);
-          console.log("Added new reply to local state:", newReply);
           return true;
         }
         if (comment.replies.length > 0) {
@@ -380,7 +363,6 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
 
   // Create a new top-level comment
   const addNewComment = async (content: string) => {
-    console.log(`addNewComment called with content: "${content}"`);
     if (!/\S/.test(content)) {
       console.log("Comment content is empty. Not adding comment.");
       return;
@@ -404,7 +386,6 @@ const MainComment: React.FC<MainCommentProps> = ({ id }) => {
     };
 
     setData((prevData) => [...prevData, newComment]);
-    console.log("Added new comment to local state:", newComment);
 
     // Send the new comment to the backend
     await addNewCommentBack(content, tempId);
