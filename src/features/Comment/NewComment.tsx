@@ -20,7 +20,7 @@ const NewComment: React.FC<NewCommentProps> = ({ addNewComment, currentUser }) =
       <div className="avatarColumn">
         <img
           className="avatarReply"
-          src={currentUser.profile_picture || profile}
+          src={profile}
           alt="current user avatar"
         />
       </div>

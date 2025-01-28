@@ -9,7 +9,6 @@ import PageNotFound from "./PageNotFound/PageNotFound.tsx";
 
 import Navbar from "../../Navbar/navbar.tsx";
 import "./c_details.css";
-import OrganizerInfoModal from "./organizer-contact-info.tsx";
 
 import MainComment from "../../Comment/MainComment.tsx";
 
@@ -20,7 +19,7 @@ import Lottie from "react-lottie";
 // import { toast } from "react-toastify";
 import MapComponent from "./MapComponent/MapComponent.tsx";
 
-import { useAuth } from "../Authentication/authProvider.tsx";
+import { useAuth } from "../login/authProvider.tsx";
 import HoverRating from "./Rating.tsx";
 import MusicNotes from "./MusicNotes.tsx";
 import Footer from "../../../app/layout/Footer.tsx";
@@ -31,13 +30,14 @@ import { height } from "@mui/system";
 import Suggestion from "./Suggestion.tsx";
 import YektanetAnalytics from "./YektanetAds.tsx";
 import ExpandablePrice from "./ExpandablePrice.tsx";
-import { parseDateTimeToJalali } from './dateParserToJalali.tsx';
+import { parseDateTimeToJalali } from "./dateParserToJalali.tsx";
 
 const ConcertDetails: React.FC = () => {
     const [show, setShow] = useState(false);
     const [canPurchase, setCanPurchase] = useState(true);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const auth = useAuth();
     const currentUrl = window.location.href;
     const defaultOptions = {
         loop: true,
@@ -48,6 +48,34 @@ const ConcertDetails: React.FC = () => {
     const navigator = useNavigate();
     let { id } = useParams<{ id: string }>();
 
+    const [isFavorite, setIsFavorite] = useState(false);
+
+    const toggleFavorite = async () => {
+        try {
+            console.log("Sending favorite request...");
+            if(auth.token === "") {
+                toast.error("برای افزودن به علاقه مندی ها باید وارد سیستم شوید!");
+                return;
+            }
+            const response = await axios.post(
+                `https://api.concertify.ir/Concert/${id}/bookmark`,
+                { concertId: id },  
+                {
+                    headers: {
+                        Authorization: `Bearer ${auth.token}`, 
+                        "Content-Type": "application/json",
+                    },
+                }
+            );
+            setIsFavorite(!isFavorite);
+            console.log("Favorite response:", response.data);
+        } catch (error) {
+            console.error("Error adding to favorites:", error);
+        } finally {
+            console.log("Favorite request completed.");
+        }
+    };
+    
     const [eventDateTime, setEventDateTime] = useState({
         startWeekDay: "جمعه",
         startMonth: "آذر",
@@ -95,19 +123,20 @@ const ConcertDetails: React.FC = () => {
         description: "",
         url: "",
         tags: [],
+        isBookmarked:false
     });
 
     const parseDateTime = (dateTimeStr: string) => {
         // Create moment-jalaali instance from UTC string
         const m = moment(dateTimeStr);
-        
+
         // Convert to Tehran timezone (UTC+3:30)
-        m.utcOffset('+03:30');
-    
+        m.utcOffset("+03:30");
+
         return {
-            startWeekDay: m.format('dddd'), // Returns Persian weekday name
+            startWeekDay: m.format("dddd"), // Returns Persian weekday name
             startMonth: m.jMonth(), // Returns Persian month (0-11)
-            startTime: m.format('HH:mm'),
+            startTime: m.format("HH:mm"),
             startYear: m.jYear().toString(), // Returns Persian year
             startDay: m.jDate().toString(), // Returns Persian day of month
         };
@@ -124,10 +153,12 @@ const ConcertDetails: React.FC = () => {
                 // const response = await axios.get(`https://api-concertify.darkube.app/Concert/1`);
                 const data = response.data;
                 if (data.startDateTime) {
-                    const parsedDateTime = parseDateTimeToJalali(data.startDateTime);
+                    const parsedDateTime = parseDateTimeToJalali(
+                        data.startDateTime
+                    );
                     setEventDateTime(parsedDateTime);
                 }
-    
+
                 // Transform API data to match your component's state structure
                 setEventDetails({
                     title: data.title || "",
@@ -139,7 +170,7 @@ const ConcertDetails: React.FC = () => {
                     photo: data.coverImage || "/img.png", // Default value since API doesn't provide this
                     // photo: "/img.png" || "/img2.png", // Default value since API doesn't provide this
                     category: data.category || "",
-                    organizer_photo:    "/profile2.png", // Default value
+                    organizer_photo: "/profile2.png", // Default value
                     organizer_name: "", // Not provided by API
                     organizer_phone: "", // Not provided by API
                     organizer_email: "", // Not provided by API
@@ -150,6 +181,7 @@ const ConcertDetails: React.FC = () => {
                     description: data.description || "",
                     tags: [], // API doesn't provide tags
                     url: data.url || "https://google.com",
+                    isBookmarked:data.isBookmarked
                 });
 
                 // useEffect(() => {
@@ -158,7 +190,7 @@ const ConcertDetails: React.FC = () => {
                 //     setEventDateTime(parsedDateTime);
                 // }
                 // }, [data.startDateTime]);
-
+                setIsFavorite(data.isBookmarked);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching concert details:", error);
@@ -172,7 +204,6 @@ const ConcertDetails: React.FC = () => {
         }
     }, [id]);
 
-    const auth = useAuth();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
     const [isBookmarked, setBookmark] = useState(false);
@@ -425,15 +456,15 @@ const ConcertDetails: React.FC = () => {
                         >
                             {/* Left Section */}
                             <div className="col-md-2 left-section">
-                                <AdvertisementCard
+                                {/* <AdvertisementCard
                                     title="Special Offer"
                                     description="Get 50% off on all premium features this week!"
                                     linkUrl="https://www.digikala.com/product/dkp-13969461/%DA%AF%D9%88%D8%B4%DB%8C-%D9%85%D9%88%D8%A8%D8%A7%DB%8C%D9%84-%D8%B3%D8%A7%D9%85%D8%B3%D9%88%D9%86%DA%AF-%D9%85%D8%AF%D9%84-galaxy-a15-%D8%AF%D9%88-%D8%B3%DB%8C%D9%85-%DA%A9%D8%A7%D8%B1%D8%AA-%D8%B8%D8%B1%D9%81%DB%8C%D8%AA-128-%DA%AF%DB%8C%DA%AF%D8%A7%D8%A8%D8%A7%DB%8C%D8%AA-%D9%88-%D8%B1%D9%85-6-%DA%AF%DB%8C%DA%AF%D8%A7%D8%A8%D8%A7%DB%8C%D8%AA-%D9%88%DB%8C%D8%AA%D9%86%D8%A7%D9%85/"
                                     linkText="Claim Offer"
                                     imageUrl={ads_sample_image1}
-                                />
+                                /> */}
+                                <div id="pos-article-display-104218"></div>
                                 {/* <YektanetAnalytics/> */}
-                                <div id="pos-article-display-103849"></div>
                             </div>
 
                             <div
@@ -445,12 +476,27 @@ const ConcertDetails: React.FC = () => {
                                     overflow: "visible",
                                 }}
                             >
-                                <p className="pb-3 ed-message text-right">
-                                    {eventDateTime.startDay}{" "}
-                                    {eventDateTime.startMonth}{" "}
-                                    {eventDateTime.startYear} ساعت{" "}
-                                    {eventDateTime.startTime}{" "}
-                                </p>
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <p className="pb-3 ed-message text-right mb-0">
+                                        {eventDateTime.startDay}{" "}
+                                        {eventDateTime.startMonth}{" "}
+                                        {eventDateTime.startYear} ساعت{" "}
+                                        {eventDateTime.startTime}{" "}
+                                    </p>
+                                    <i
+                                        className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}
+                                        style={{
+                                        fontSize: "25px",
+                                        padding: "5px",
+                                        transition: "all 0.3s ease",
+                                        cursor: "pointer",
+                                        backgroundColor: "transparent",
+                                        color:  "red",
+                                        }}
+                                        onClick={toggleFavorite}
+                                    ></i>
+                                </div>
+
                                 <h2 className=" pb-3 text-right">
                                     {" "}
                                     {eventDetails.title}{" "}
@@ -461,7 +507,11 @@ const ConcertDetails: React.FC = () => {
                                         {eventDetails.ticket_price.toLocaleString()}{" "}
                                         تومان
                                     </p> */}
-                                    {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                {eventDetails.ticketPrice.length > 0 && (
+                                    <ExpandablePrice
+                                        prices={eventDetails.ticketPrice}
+                                    />
+                                )}
                                 {/* </div> */}
 
                                 <div className="row px-3 mb-2">
@@ -504,17 +554,6 @@ const ConcertDetails: React.FC = () => {
                                 </div>
                                 <center>
                                     <HoverRating />
-                                </center>
-                                <center>
-                                    <button
-                                        className="btn  mt-1 mx-1"
-                                        onClick={handleShow}
-                                    >
-                                        <div className="row">
-                                            <h6 className="bi bi-bookmark-plus mb-0"></h6>
-                                            بعدا یادآوری کن
-                                        </div>
-                                    </button>
                                 </center>
                             </div>
 
@@ -656,7 +695,7 @@ const ConcertDetails: React.FC = () => {
                                     style={{
                                         width: "765px",
                                         maxWidth: "100%",
-                                        height: "480px",
+                                        height: "460px",
                                         zIndex: 10,
                                         position: "relative",
                                     }}
@@ -686,7 +725,7 @@ const ConcertDetails: React.FC = () => {
                                     >
                                         {canPurchase && (
                                             <button
-                                                className="btn  mt-1 mx-1"
+                                                className="btn  mt-1 mx-1" 
                                                 // onClick={(e) =>
                                                 //     navigator(
                                                 //     eventDetails.url
@@ -723,14 +762,15 @@ const ConcertDetails: React.FC = () => {
 
                             {/* Right Section */}
                             <div className="col-md-2 left-section">
-                                <AdvertisementCard
+                                {/* <AdvertisementCard
                                     title=""
                                     description=""
                                     linkUrl="https://www.snapptrip.com/"
                                     linkText="با اسنپ خیالت از سفر راحته!"
                                     imageUrl={ads_sample_image2}
                                     height="480px"
-                                />
+                                /> */}
+                                <div id="pos-article-display-104219"></div>
                             </div>
                         </div>
                     </>
@@ -926,12 +966,26 @@ const ConcertDetails: React.FC = () => {
                                             marginLeft: "10px",
                                         }}
                                     >
-                                        <p className="pb-3 ed-message text-right">
-                                            {eventDateTime.startDay}{" "}
-                                            {eventDateTime.startMonth}{" "}
-                                            {eventDateTime.startYear} ساعت{" "}
-                                            {eventDateTime.startTime}{" "}
-                                        </p>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <p className="pb-3 ed-message text-right mb-0">
+                                                {eventDateTime.startDay}{" "}
+                                                {eventDateTime.startMonth}{" "}
+                                                {eventDateTime.startYear} ساعت{" "}
+                                                {eventDateTime.startTime}{" "}
+                                            </p>
+                                            <i
+                                                className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}
+                                                style={{
+                                                fontSize: "25px",
+                                                padding: "5px",
+                                                transition: "all 0.3s ease",
+                                                cursor: "pointer",
+                                                backgroundColor: "transparent",
+                                                color:  "red",
+                                                }}
+                                                onClick={toggleFavorite}
+                                            ></i>
+                                        </div>
                                         <h4 className=" pb-3 text-right">
                                             {" "}
                                             {eventDetails.title}{" "}
@@ -942,7 +996,14 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                        {eventDetails.ticketPrice.length >
+                                            0 && (
+                                            <ExpandablePrice
+                                                prices={
+                                                    eventDetails.ticketPrice
+                                                }
+                                            />
+                                        )}
                                         {/* </div> */}
                                         <div className="row px-3">
                                             <i className="bi bi-geo-alt-fill icons-style"></i>
@@ -993,17 +1054,6 @@ const ConcertDetails: React.FC = () => {
                                             <center>
                                                 <HoverRating />
                                             </center>
-                                            <center>
-                                                <button
-                                                    className="btn  mt-1 mx-1"
-                                                    onClick={handleShow}
-                                                >
-                                                    <div className="row">
-                                                        <h6 className="bi bi-bookmark-plus mb-0"></h6>
-                                                        بعدا یادآوری کن
-                                                    </div>
-                                                </button>
-                                            </center>
                                         </div>
                                     </div>
                                 </div>
@@ -1021,12 +1071,26 @@ const ConcertDetails: React.FC = () => {
                                             position: "relative",
                                         }}
                                     >
-                                        <p className="pb-3 ed-message text-right">
-                                            {eventDateTime.startDay}{" "}
-                                            {eventDateTime.startMonth}{" "}
-                                            {eventDateTime.startYear} ساعت{" "}
-                                            {eventDateTime.startTime}{" "}
-                                        </p>
+                                        <div className="d-flex justify-content-between align-items-center">
+                                            <p className="pb-3 ed-message text-right mb-0">
+                                                {eventDateTime.startDay}{" "}
+                                                {eventDateTime.startMonth}{" "}
+                                                {eventDateTime.startYear} ساعت{" "}
+                                                {eventDateTime.startTime}{" "}
+                                            </p>
+                                            <i
+                                                className={`bi ${isFavorite ? "bi-heart-fill" : "bi-heart"}`}
+                                                style={{
+                                                fontSize: "22px",
+                                                padding: "5px",
+                                                transition: "all 0.3s ease",
+                                                cursor: "pointer",
+                                                backgroundColor: "transparent",
+                                                color:  "red",
+                                                }}
+                                                onClick={toggleFavorite}
+                                            ></i>
+                                        </div>
                                         <h4 className=" pb-3 text-right">
                                             {" "}
                                             {eventDetails.title}{" "}
@@ -1037,7 +1101,14 @@ const ConcertDetails: React.FC = () => {
                                                 {eventDetails.ticketPrice.toLocaleString()}{" "}
                                                 تومان
                                             </p> */}
-                                            {((eventDetails.ticketPrice).length > 0) && <ExpandablePrice prices={eventDetails.ticketPrice} />}
+                                        {eventDetails.ticketPrice.length >
+                                            0 && (
+                                            <ExpandablePrice
+                                                prices={
+                                                    eventDetails.ticketPrice
+                                                }
+                                            />
+                                        )}
                                         {/* </div> */}
 
                                         <div className="row px-3">
@@ -1087,17 +1158,6 @@ const ConcertDetails: React.FC = () => {
                                             }}
                                         >
                                             <HoverRating />
-                                            <center>
-                                                <button
-                                                    className="btn  mt-1 mx-1"
-                                                    onClick={handleShow}
-                                                >
-                                                    <div className="row">
-                                                        <h6 className="bi bi-bookmark-plus mb-0"></h6>
-                                                        بعدا یادآوری کن
-                                                    </div>
-                                                </button>
-                                            </center>
                                         </div>
                                     </div>
 

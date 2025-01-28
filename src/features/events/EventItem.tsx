@@ -66,6 +66,10 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
       key={event.id}
       className="concert-card"
       style={{ backgroundImage: `url(${event.cardImage}) `,marginBottom:"20px", marginTop:"20px"}}
+      onClick={() => {
+        navigate(`/concertDetail/${event.id}`)
+        // setSearchStatus("loading")
+      }}
     >
       <div className="card-content">
         <h2>{event.title}</h2>
@@ -73,8 +77,11 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
           <i className="bi bi-geo-alt" style={{ marginLeft: '5px', fontSize: "13px"}}></i>
           {event.location}
         </p>
+        <div className="row">
+          <p style={{marginTop:"6px",}}>
+            <i className="bi bi-calendar-week" style={{ marginLeft: '5px', fontSize: "13px",marginRight:"15px"}}></i>
+          </p>
         <p>
-          <i className="bi bi-calendar-week" ></i>
           {`${new Date(event.startDateTime).toLocaleString("fa-IR", {
             weekday: "long",
           })} ${new Date(event.startDateTime).toLocaleDateString("fa-IR", {
@@ -86,6 +93,8 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
             minute: "2-digit",
           })}`}
         </p>
+        </div>
+        
         
         <button className="buy-button" onClick={() => {
           navigate(`/concertDetail/${event.id}`)

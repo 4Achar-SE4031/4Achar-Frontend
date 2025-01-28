@@ -4,7 +4,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from "axios";
-import { useAuth } from "../Authentication/authProvider";
+import { useAuth } from "../login/authProvider";
 import { useLocation } from 'react-router-dom';
 import OTPInput from "./otp";
 

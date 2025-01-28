@@ -7,7 +7,6 @@ import AuthProvider from "../../features/user/login/authProvider";
 import Register from "../../features/user/register/Register";
 import UserInfo from "../../features/user/Profile/UserInfo";
 import EventsList from "../../features/events/EventsList";
-import EventDetails from "../../features/user/concertDetailsPage/concertDetail";
 import PageNotFound from '../../features/user/concertDetailsPage/PageNotFound/PageNotFound'
 
 import FiveEvents from "../../features/events/FiveEvents";
@@ -15,6 +14,8 @@ import ResetPassword from "../../features/user/forgetPassword/ResetPassword";
 import Home from "../layout/Home";
 import ConcertDetails from "../../features/user/concertDetailsPage/concert_details";
 import SearchBar from "../../features/Search/search";
+import PrivateRoute from "../../features/user/login/privateRoute"
+import Favorites from "../../features/Favorites/favorites";
 
 export const routes: RouteObject[] = [
     {
@@ -32,11 +33,24 @@ export const routes: RouteObject[] = [
     //    <Route path="event-details/:id" element={<EventDetails />}
        {path:"/concertDetail/:id",  element: <ConcertDetails />},
        {path:"/login",  element: <Login />},
-       {path:"/d",  element: <EventDetails />},
        {path:"/register",  element: <Register />},
        {path:"/forget-password",  element:<ForgetPassword />},
        {path:"/verify",  element:<Verification />},
        {path:"/user-info", element: <UserInfo />},
+      {
+        path: "/user-info",
+        element: <PrivateRoute />,
+        children: [
+          { path: "", element: <UserInfo /> },
+        ],
+      },
+      {
+        path: "/favorites",
+        element: <PrivateRoute />,
+        children: [
+          { path: "", element: <Favorites /> },
+        ],
+      },
        {path:"/events", element: <EventsList />},
        {path:"not-found",  element: <PageNotFound />},
        {path:"/events/recent", element: <EventsList />},
