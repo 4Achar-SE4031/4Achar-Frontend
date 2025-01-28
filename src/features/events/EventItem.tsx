@@ -51,8 +51,8 @@ const EventItem: React.FC<EventItemProps> = ({ event }) => {
     const maxPrice = Math.max(...prices);
     return { minPrice, maxPrice };
   };
-  console.log("-----------")
-  console.log(event)
+  // console.log("-----------")
+  // console.log(event)
   return (
     // <div>
     //   <img src={event.cardImage || photo1} alt={event.title} />
