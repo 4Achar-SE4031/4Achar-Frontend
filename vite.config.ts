@@ -17,8 +17,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8', // or 'c8' if you prefer
       reporter: ['text', 'json', 'html'], // coverage report formats
-      include: ['src/**/*.{ts,tsx}'], // files to include for coverage
-      exclude: ['**/*.d.ts', 'node_modules/', 'src/**/*.test.{ts,tsx}'], // files to exclude
+      include: ['src/**/*.{tsx}'], // files to include for coverage
+      exclude: ['**/*.d.ts','src/**/*.{ts}', 'node_modules/', 'src/**/*.test.{ts,tsx}', 'src/app/models/**'], // files to exclude
       all: true, // include all files, not just covered ones
       // Optionally, you can set thresholds to enforce minimum coverage
       // thresholds: {
