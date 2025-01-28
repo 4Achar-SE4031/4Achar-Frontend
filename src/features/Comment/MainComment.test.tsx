@@ -140,6 +140,52 @@ describe('MainComment Component', () => {
 
     consoleError.mockRestore();
   });
+  it('rolls back UI when adding a new comment fails', async () => {
+    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    
+    // Mock the addComment API to reject
+    (agent.Comments.addComment as vi.Mock).mockRejectedValueOnce(new Error('API error'));
+
+    // Pre-populate comments
+    const initialComments = {
+      comments: [],
+    };
+    (agent.Comments.fetchComments as vi.Mock).mockResolvedValueOnce(initialComments);
+
+    // Mock user data in localStorage
+    const userData = { userName: 'user1', userId: 'user1' };
+    localStorage.setItem('userData', JSON.stringify(userData));
+
+    render(<MainComment id={100} />);
+
+    // Wait for fetch to complete
+    await waitFor(() => {
+      expect(agent.Comments.fetchComments).toHaveBeenCalledWith(100);
+    });
+
+    // Find the new comment form
+    const textarea = screen.getByPlaceholderText('ثبت دیدگاه ...');
+    const sendButton = screen.getByText('ارسال');
+
+    // Add a new comment
+    fireEvent.change(textarea, { target: { value: 'Failed comment' } });
+    fireEvent.click(sendButton);
+
+    // Optimistic UI should show the new comment
+    expect(screen.getByText('Failed comment')).toBeInTheDocument();
+
+    // Wait for the API call to fail and rollback
+    await waitFor(() => {
+      expect(agent.Comments.addComment).toHaveBeenCalledWith({
+        eventId: 100,
+        text: 'Failed comment',
+      });
+      expect(consoleError).toHaveBeenCalledWith('Error adding comment:', new Error('API error'));
+      expect(screen.queryByText('Failed comment')).not.toBeInTheDocument();
+    });
+
+    consoleError.mockRestore();
+  });
 
   // Additional tests can be added for updating comments, deleting comments, liking, etc.
 });
