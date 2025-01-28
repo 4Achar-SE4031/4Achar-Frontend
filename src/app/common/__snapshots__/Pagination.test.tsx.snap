@@ -1,0 +1,113 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Pagination Component > matches the snapshot 1`] = `
+<DocumentFragment>
+  <nav
+    aria-label="pagination navigation"
+    class="MuiPagination-root MuiPagination-text css-1xra8g6-MuiPagination-root"
+  >
+    <ul
+      class="MuiPagination-ul css-1c5o7vy-MuiPagination-ul"
+    >
+      <li>
+        <button
+          aria-label="Go to previous page"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular MuiPaginationItem-previousNext css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-previous"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-8uzxat-MuiSvgIcon-root-MuiPaginationItem-icon"
+            data-testid="NavigateBeforeIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"
+            />
+          </svg>
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Go to page 1"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular MuiPaginationItem-page css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-1"
+          tabindex="0"
+          type="button"
+        >
+          ۱
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Go to page 2"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular MuiPaginationItem-page css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-2"
+          tabindex="0"
+          type="button"
+        >
+          ۲
+        </button>
+      </li>
+      <li>
+        <button
+          aria-current="true"
+          aria-label="page 3"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular Mui-selected MuiPaginationItem-page css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-3"
+          tabindex="0"
+          type="button"
+        >
+          ۳
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Go to page 4"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular MuiPaginationItem-page css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-4"
+          tabindex="0"
+          type="button"
+        >
+          ۴
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Go to page 5"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular MuiPaginationItem-page css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-5"
+          tabindex="0"
+          type="button"
+        >
+          ۵
+        </button>
+      </li>
+      <li>
+        <button
+          aria-label="Go to next page"
+          class="MuiButtonBase-root MuiPaginationItem-root MuiPaginationItem-sizeMedium MuiPaginationItem-text MuiPaginationItem-circular MuiPaginationItem-previousNext css-1l5xwdx-MuiButtonBase-root-MuiPaginationItem-root"
+          data-testid="pagination-button-next"
+          tabindex="0"
+          type="button"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiPaginationItem-icon css-8uzxat-MuiSvgIcon-root-MuiPaginationItem-icon"
+            data-testid="NavigateNextIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+            />
+          </svg>
+        </button>
+      </li>
+    </ul>
+  </nav>
+</DocumentFragment>
+`;
