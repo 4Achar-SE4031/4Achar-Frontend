@@ -1,0 +1,36 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Home Component > matches the snapshot 1`] = `
+<DocumentFragment>
+  <div>
+    <div
+      data-testid="navbar"
+    >
+      Navbar Component
+    </div>
+    <div
+      class="home-page"
+    >
+      <div
+        id="mainScrollContainer"
+      >
+        <div
+          data-testid="hero-section"
+        >
+          HeroSection Component
+        </div>
+        <div
+          data-testid="five-events"
+        >
+          FiveEvents Component
+        </div>
+        <div
+          data-testid="footer"
+        >
+          FooterComponent
+        </div>
+      </div>
+    </div>
+  </div>
+</DocumentFragment>
+`;
