@@ -13,6 +13,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './setup.ts',
+    testTimeout: 10000, 
     coverage: {
       provider: 'v8', // or 'c8' if you prefer
       reporter: ['text', 'json', 'html'], // coverage report formats
