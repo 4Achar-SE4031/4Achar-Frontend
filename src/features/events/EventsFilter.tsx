@@ -53,10 +53,18 @@ const provinces = [
   "خراسان جنوبی",
   "البرز",
 ];
+interface Filters {
+  priceFrom: string;
+  priceTo: string;
+  province: string;
+  category: string;
+  sortType: string;
+  dateRange: (string | null)[];
+}
 
 const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
   // استیت فیلترها: [startShamsi, endShamsi] = ["۱۴۰۲/۷/۱۳", "۱۴۰۲/۷/۲۰"] (مثال)
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<Filters>({
     priceFrom: "",
     priceTo: "",
     province: "",
@@ -71,10 +79,18 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
   // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
   //    تابع مشترک برای اعمال فیلترها و تبدیل تاریخ برای سرور (میلادی)
   // ـــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــــ
-  const handleInputChange = (field: string, value: any) => {
+    // A little helper to compare old vs new values so we don’t call onFilterChange when unchanged
+    const isSame = (field: keyof Filters, newVal: any): boolean => {
+      const oldVal = filters[field];
+      // For arrays (dateRange) do a shallow string check, for strings do equality
+      return JSON.stringify(oldVal) === JSON.stringify(newVal);
+    };
+  const handleInputChange = (field: keyof Filters, value: any) => {
     const updatedFilters = { ...filters, [field]: value };
     setFilters(updatedFilters);
-
+    if (isSame(field, value)) {
+      return;
+    }
     // تبدیل تاریخ شمسی به میلادی قبل از ارسال
     const [startShamsi, endShamsi] = updatedFilters.dateRange;
     let startMiladi = null;
@@ -256,6 +272,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
 
         {/* استان */}
         <TextField
+        test-id="province"
           label="استان"
           variant="outlined"
           value={filters.province}
@@ -306,6 +323,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
         {/* تاریخ شروع و پایان به صورت شمسی در UI */}
         <Box display="flex" gap="8px" flex="1">
           <DatePicker
+            data-testid="start-date-picker"
             value={getDateObject(filters.dateRange[0])} // تبدیل استرینگ به DateObject
             onChange={handleStartDateChange}
             calendar={persian}
@@ -325,6 +343,7 @@ const EventsFilter: React.FC<EventsFilterProps> = ({ onFilterChange }) => {
           />
 
           <DatePicker
+            data-testid="end-date-picker"
             value={getDateObject(filters.dateRange[1])}
             onChange={handleEndDateChange}
             calendar={persian}

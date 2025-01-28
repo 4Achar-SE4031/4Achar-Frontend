@@ -378,3 +378,13 @@ body {
     }
   }
 }
+
+@media screen and (max-width: 500px){
+  .slider-arrow.left {
+    left: -30px !important; /* Position slightly inside on the left */
+  }
+  
+  .slider-arrow.right {
+    right: -30px !important; /* Position slightly inside on the right */
+  }
+}

@@ -106,7 +106,7 @@ const Search: React.FC = () => {
   }
   if(searchStatus == "Loading"){
     return (
-      <div className="event-details">
+      <div className="event-details loading">
           <Navbar />
 
           <div
@@ -117,7 +117,7 @@ const Search: React.FC = () => {
                   marginTop: "15%",
               }}
           >
-              <Lottie options={defaultOptions} />
+              <Lottie  options={defaultOptions} />
           </div>
       </div>
   );

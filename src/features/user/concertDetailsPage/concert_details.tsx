@@ -99,7 +99,7 @@ const ConcertDetails: React.FC = () => {
         category: string;
         ticketPrice: number[];
         latitude: number;
-        longtitude: number;
+        longitude: number;
         coverImage: string;
         url: string;
     }
@@ -158,7 +158,6 @@ const ConcertDetails: React.FC = () => {
                     );
                     setEventDateTime(parsedDateTime);
                 }
-
                 // Transform API data to match your component's state structure
                 setEventDetails({
                     title: data.title || "",
@@ -175,7 +174,7 @@ const ConcertDetails: React.FC = () => {
                     organizer_phone: "", // Not provided by API
                     organizer_email: "", // Not provided by API
                     location_lat: data.latitude?.toString() || "",
-                    location_lon: data.longitude?.toString() || "",
+                    location_lon: data.longtitude?.toString() || "",
                     address: data.address || "",
                     // address: "تهران، خیابان حافظ، تالار وحدت",
                     description: data.description || "",
@@ -183,8 +182,9 @@ const ConcertDetails: React.FC = () => {
                     url: data.url || "https://google.com",
                     isBookmarked:data.isBookmarked
                 });
+                console.log(eventDetails)
 
-                // useEffect(() => {
+                // useEffect(() => {    
                 // if (data.startDateTime) {
                 //     const parsedDateTime = parseToJalali(data.startDateTime);
                 //     setEventDateTime(parsedDateTime);
@@ -645,7 +645,7 @@ const ConcertDetails: React.FC = () => {
                                         long={eventDetails.location_lon}
                                         onlyShow={true}
                                         name="EventDetails"
-                                        address={eventDetails.address}
+                                        address={eventDetails.address}  
                                     />
                                 </>
 
